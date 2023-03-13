@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:svg="clr-namespace:Xamarin.Forms.Svg;assembly=SvgImageSource"
+             x:Class="WaiterMobile.Views.Auth"
+             Shell.NavBarIsVisible="false">
+
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Padding="5, 5, 5, 5">
+                <Label Text="Добрый день!"
+                       HorizontalOptions="Center"
+                       Margin="0, 200, 0, 0"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="Black"/>
+                
+                <Label Text="Введите код сотрудника"
+                    HorizontalOptions="Center"/>
+
+                <Label x:Name="_userCode"
+                       Text=""
+                       HorizontalOptions="Center"
+                       Margin="0, 10, 0, 0"
+                       FontSize="30"/>
+            </StackLayout>
+
+            <Grid HorizontalOptions="Center" Margin="0, 10, 0, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="75"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Text="1"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="2"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="3"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="4"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="5"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="6"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="7"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="8"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="9"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <Button Text="ок"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        BackgroundColor="White"
+                        FontSize="30"/>
+
+                <Button Text="0"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        BackgroundColor="White"
+                        FontSize="30"
+                        Clicked="OnNumberButtonClick"/>
+
+                <ImageButton Grid.Row="3"
+                        Grid.Column="2"
+                        BackgroundColor="White">
+                    <ImageButton.Source>
+                        <svg:SvgImageSource Source="resource://WaiterMobile.Resources.backspace.svg" Width="75" Height="75"/>
+                    </ImageButton.Source>
+                </ImageButton>
+            </Grid>
+
+            <Button Text="Настройки"
+                    HorizontalOptions="Center"
+                    BackgroundColor="White"
+                    Clicked="OnButtonSettingsClick"/>
+        </StackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>

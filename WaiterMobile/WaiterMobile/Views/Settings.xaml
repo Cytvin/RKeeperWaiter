@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:WaiterMobile.Controls"
+             x:Class="WaiterMobile.Views.Settings"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="HasShadow" Value="False"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="BorderColor" Value="AliceBlue"/>
+            </Style>
+
+            <Style x:Key="EntryStyle" TargetType="Entry">
+                <Setter Property="HeightRequest" Value="40"/>
+                <Setter Property="Margin" Value="5, 0, 0, 0"/>
+            </Style>
+
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Text="&lt;"
+                        BackgroundColor="White"
+                        FontSize="30"/>
+            </Grid>
+            
+            <StackLayout Margin="20, 0">
+                <Label Text="Заполните поля ниже, &#10;для подключения к серверу"/>
+            </StackLayout>
+            
+            <StackLayout Margin="20, 0" VerticalOptions="Center">
+                <Label Text="Идентификатор станции"
+                   Style="{StaticResource LabelStyle}"/>
+
+                <Frame Style="{StaticResource FrameStyle}">
+                    <controls:StandartEntry x:Name="_stationId"
+                       Keyboard="Numeric"
+                       Visual="Material"
+                       Style="{StaticResource EntryStyle}"/>
+                </Frame>
+
+                <Label Text="Адрес сервера"
+                   Style="{StaticResource LabelStyle}"/>
+
+                <Frame Style="{StaticResource FrameStyle}">
+                    <controls:StandartEntry x:Name="_ip"
+                       Visual="Material"
+                       Style="{StaticResource EntryStyle}"/>
+                </Frame>
+
+                <Label Text="Номер порта"
+                   Style="{StaticResource LabelStyle}"/>
+
+                <Frame Style="{StaticResource FrameStyle}">
+                    <controls:StandartEntry x:Name="_port"
+                       Keyboard="Numeric"
+                       Visual="Material"
+                       Style="{StaticResource EntryStyle}"/>
+                </Frame>
+
+                <Label Text="Логин пользователя"
+                   Style="{StaticResource LabelStyle}"/>
+
+                <Frame Style="{StaticResource FrameStyle}">
+                    <controls:StandartEntry x:Name="_login"
+                       Visual="Material"
+                       Style="{StaticResource EntryStyle}"/>
+                </Frame>
+
+                <Label Text="Пароль пользователя"
+                   Style="{StaticResource LabelStyle}"/>
+
+                <Frame Style="{StaticResource FrameStyle}">
+                    <controls:StandartEntry x:Name="_password"
+                       Visual="Material"
+                       Style="{StaticResource EntryStyle}"
+                       IsPassword="true"/>
+                </Frame>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
