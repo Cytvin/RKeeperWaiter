@@ -12,7 +12,7 @@ namespace WaiterMobile
         public App()
         {
             InitializeComponent();
-            FolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+            FolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
             MainPage = new AppShell();
         }
 

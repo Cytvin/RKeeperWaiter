@@ -101,11 +101,11 @@
                         FontSize="30"
                         Clicked="OnNumberButtonClick"/>
 
-                <Button Text="ок"
-                        Grid.Row="3"
+                <ImageButton Grid.Row="3"
                         Grid.Column="0"
                         BackgroundColor="White"
-                        FontSize="30"/>
+                        Padding="20, 20, 20, 20"
+                        Source="check_square.png"/>
 
                 <Button Text="0"
                         Grid.Row="3"
@@ -116,8 +116,10 @@
 
                 <ImageButton Grid.Row="3"
                         Grid.Column="2"
-                        BackgroundColor="White">
-                </ImageButton>
+                        BackgroundColor="White"
+                        Padding="20,20,20,20"
+                        Clicked="OnButtonDeleteClick"
+                        Source="backspace.png"/>
             </Grid>
 
             <Button Text="Настройки"

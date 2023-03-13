@@ -28,22 +28,28 @@
     
     <ContentPage.Content>
         <StackLayout>
-            <Grid>
+            <Grid Margin="10,10,0,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Text="&lt;"
-                        BackgroundColor="White"
-                        FontSize="30"/>
+                <ImageButton BackgroundColor="White"
+                        Source="back_box_arrow.png"
+                        Clicked="OnBackButtonClick"/>
+
+                <Label Text="Настройки"
+                       Grid.Column="1"
+                       FontSize="20"
+                       TextColor="Black"
+                       VerticalOptions="Center"/>
             </Grid>
             
-            <StackLayout Margin="20, 0">
+            <StackLayout Margin="20, 10">
                 <Label Text="Заполните поля ниже, &#10;для подключения к серверу"/>
             </StackLayout>
             
@@ -96,6 +102,12 @@
                        IsPassword="true"/>
                 </Frame>
             </StackLayout>
+
+
+            <Button Text="Сохранить"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    Clicked="OnSaveButtonClick"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
