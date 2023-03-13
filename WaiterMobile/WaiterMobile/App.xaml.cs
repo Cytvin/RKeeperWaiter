@@ -2,7 +2,6 @@
 using System.IO;
 using WaiterMobile;
 using Xamarin.Forms;
-using Xamarin.Forms.Svg;
 
 namespace WaiterMobile
 {

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:svg="clr-namespace:Xamarin.Forms.Svg;assembly=SvgImageSource"
              x:Class="WaiterMobile.Views.Auth"
              Shell.NavBarIsVisible="false">
 
@@ -118,9 +117,6 @@
                 <ImageButton Grid.Row="3"
                         Grid.Column="2"
                         BackgroundColor="White">
-                    <ImageButton.Source>
-                        <svg:SvgImageSource Source="resource://WaiterMobile.Resources.backspace.svg" Width="75" Height="75"/>
-                    </ImageButton.Source>
                 </ImageButton>
             </Grid>
 
