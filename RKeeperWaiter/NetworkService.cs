@@ -5,6 +5,8 @@ using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RKeeperWaiter
 {
@@ -44,7 +46,7 @@ namespace RKeeperWaiter
             SetAuthorization();
         }
 
-        public XDocument SendRequest(StringBuilder xmlContent)
+        public async Task<XDocument> SendRequest(StringBuilder xmlContent)
         {
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
@@ -65,8 +67,9 @@ namespace RKeeperWaiter
                 httpRequestMessage.Headers.Add("Authorization", "Basic " + _authorizationString);
                 httpRequestMessage.Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.ToString())));
 
-                HttpResponseMessage response = httpClient.SendAsync(httpRequestMessage).Result;
+                httpClient.Timeout = TimeSpan.FromSeconds(10);
 
+                HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
                 HttpStatusCode httpStatusCode = response.StatusCode;
 
                 if (httpStatusCode == HttpStatusCode.OK)
