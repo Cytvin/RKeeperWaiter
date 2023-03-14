@@ -13,23 +13,26 @@
                        TextColor="Black"
                        FontSize="20"/>
             </Grid>
-            
-            <ScrollView>
-                <Grid x:Name="_ordersGrid"
-                      VerticalOptions="Start"
-                      HorizontalOptions="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="150"/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
-            </ScrollView>
+
+            <StackLayout>
+                <ScrollView>
+                    <Grid x:Name="_ordersGrid"
+                        VerticalOptions="Start"
+                        HorizontalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ScrollView>
+            </StackLayout>
 
             <Button Text="Новый заказ"
                     Margin="20, 0, 20, 20"
                     BackgroundColor="Black"
                     TextColor="White"
-                    VerticalOptions="EndAndExpand"/>
+                    VerticalOptions="EndAndExpand"
+                    Clicked="OnCreateOrderClick"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

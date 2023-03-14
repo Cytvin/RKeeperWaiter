@@ -18,6 +18,9 @@ namespace WaiterMobile.Views
 
         private void LoadOrders()
         {
+            _ordersGrid.Children.Clear();
+            _ordersGrid.RowDefinitions.Clear();
+
             List<Order> orders = App.Waiter.GetOrderList();
 
             int ordersCount = 0, columnNumber = 0, rowNumber = 0;
@@ -50,6 +53,12 @@ namespace WaiterMobile.Views
                     rowNumber++;
                 }
             }
+        }
+
+        private void OnCreateOrderClick(object sender, System.EventArgs e)
+        {
+            App.Waiter.MakeTestOrder();
+            LoadOrders();
         }
     }
 }
