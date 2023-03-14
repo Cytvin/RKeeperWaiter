@@ -5,7 +5,16 @@
              Shell.NavBarIsVisible="false">
     <ContentPage.Content>
         <StackLayout>
-            <Grid Margin="0, 0, 0, 20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                
                 <Label x:Name="_userName"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"
@@ -31,7 +40,7 @@
                     Margin="20, 0, 20, 20"
                     BackgroundColor="Black"
                     TextColor="White"
-                    VerticalOptions="EndAndExpand"
+                    VerticalOptions="End"
                     Clicked="OnCreateOrderClick"/>
         </StackLayout>
     </ContentPage.Content>
