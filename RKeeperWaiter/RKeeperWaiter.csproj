@@ -41,10 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dish.cs" />
-    <Compile Include="Category.cs" />
-    <Compile Include="GuestType.cs" />
-    <Compile Include="MenuCategory.cs" />
+    <Compile Include="Models\Dish.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\GuestType.cs" />
+    <Compile Include="Models\MenuCategory.cs" />
     <Compile Include="GetWaiterList.cs" />
     <Compile Include="RequestType.cs" />
     <Compile Include="Waiter.cs" />

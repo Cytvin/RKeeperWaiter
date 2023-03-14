@@ -11,23 +11,20 @@ namespace WaiterMobile.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Settings : ContentPage
 	{
-        private string _settingsPath;
-
 		public Settings ()
 		{
 			InitializeComponent ();
-            _settingsPath = Path.Combine(App.FolderPath, "settings.xml");
             LoadSettings();
         }
 
         private void LoadSettings()
         {
-            if (File.Exists(_settingsPath) == false)
+            if (File.Exists(App.SettingsFile) == false)
             {
                 return;
             }
 
-            XDocument settings = XDocument.Load(_settingsPath);
+            XDocument settings = XDocument.Load(App.SettingsFile);
 
             XElement root = settings.Root;
 
@@ -78,7 +75,7 @@ namespace WaiterMobile.Views
 
             XmlDocument settings = new XmlDocument ();
             settings.LoadXml(stringBuilder.ToString());
-            settings.Save(_settingsPath);
+            settings.Save(App.SettingsFile);
 
             Shell.Current.GoToAsync("..", true);
         }
