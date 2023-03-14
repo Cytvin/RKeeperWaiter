@@ -5,6 +5,9 @@ using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Net.Security;
 
 namespace RKeeperWaiter
 {
@@ -59,14 +62,14 @@ namespace RKeeperWaiter
             //requestContent.Save($"D:\\sqllog\\Request_{requestSaveTime.Year}{requestSaveTime.Month}{requestSaveTime.Day}_" +
             //    $"{requestSaveTime.Hour}{requestSaveTime.Minute}{requestSaveTime.Second}{requestSaveTime.Millisecond}.xml");
 
-            using (HttpClient httpClient = new HttpClient(httpClientHandler))
+            using (HttpClient httpClient = new HttpClient())
             {
-                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, _uri);
-                httpRequestMessage.Headers.Add("Authorization", "Basic " + _authorizationString);
-                httpRequestMessage.Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.ToString())));
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + _authorizationString);
+                httpClient.Timeout = TimeSpan.FromSeconds(10);
 
-                HttpResponseMessage response = httpClient.SendAsync(httpRequestMessage).Result;
+                StreamContent requestContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.ToString())));
 
+                HttpResponseMessage response = httpClient.PostAsync(_uri, requestContent).Result;
                 HttpStatusCode httpStatusCode = response.StatusCode;
 
                 if (httpStatusCode == HttpStatusCode.OK)
