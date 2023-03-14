@@ -1,4 +1,4 @@
-﻿namespace RKeeperWaiter
+﻿namespace RKeeperWaiter.Models
 {
     internal class GuestType
     {

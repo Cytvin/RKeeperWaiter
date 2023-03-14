@@ -105,7 +105,8 @@
                         Grid.Column="0"
                         BackgroundColor="White"
                         Padding="20, 20, 20, 20"
-                        Source="check_square.png"/>
+                        Source="check_square.png"
+                        Clicked="OnButtonEnterClick"/>
 
                 <Button Text="0"
                         Grid.Row="3"

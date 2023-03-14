@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 using RKeeperWaiter;
+using RKeeperWaiter.Models;
 
 namespace RKeeperWaiterTest
 {
@@ -32,31 +33,34 @@ namespace RKeeperWaiterTest
 
         static void Main(string[] args)
         {
-            //_waiter = new Waiter();
+            _waiter = new Waiter();
 
-            //string userCode = "15";
-            //string stationId = "";
+            string userCode = "15";
+            string stationId = "";
 
-            //_waiter.SetUrl("", "");
-            //_waiter.SetAuthorization("IT", "10");
+            _waiter.NetworkService.SetParameters("", "", "IT", "10");
 
-            //_waiter.UserAuthorization(userCode);
+            _waiter.UserAuthorization(userCode);
+            _waiter.GetOrderList();
             //_waiter.SetStationId(stationId);
             //_waiter.CreateReferences();
 
+            //_waiter.MakeTestOrder();
+            //_waiter.MakeTestOrder();
+
             //Menu();
 
-            XmlRequestBuilder builder = new XmlRequestBuilder();
+            //XmlRequestBuilder builder = new XmlRequestBuilder();
 
-            GetWaiterList getWaiterList = new GetWaiterList();
+            //GetWaiterList getWaiterList = new GetWaiterList();
 
-            getWaiterList.CreateRequest(builder);
+            //getWaiterList.CreateRequest(builder);
 
-            XmlDocument xmlDocument = new XmlDocument();
+            //XmlDocument xmlDocument = new XmlDocument();
 
-            xmlDocument.LoadXml(builder.GetRequestText());
+            //xmlDocument.LoadXml(builder.GetRequestText());
 
-            xmlDocument.Save("D:\\sqllog\\test.xml");
+            //xmlDocument.Save("D:\\sqllog\\test.xml");
 
             Console.ReadLine();
         }

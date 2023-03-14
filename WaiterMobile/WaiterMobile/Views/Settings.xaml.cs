@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using RKeeperWaiter;
+using System;
 using System.Text;
 using System.Xml;
-using System.Xml.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,20 +18,13 @@ namespace WaiterMobile.Views
 
         private void LoadSettings()
         {
-            if (File.Exists(App.SettingsFile) == false)
-            {
-                return;
-            }
+            NetworkService networkService = App.Waiter.NetworkService;
 
-            XDocument settings = XDocument.Load(App.SettingsFile);
-
-            XElement root = settings.Root;
-
-            _stationId.Text = root.Element("StationId").Value;
-            _ip.Text = root.Element("ServerIp").Value;
-            _port.Text = root.Element("ServerPort").Value;
-            _login.Text = root.Element("UserLogin").Value;
-            _password.Text = root.Element("UserPassword").Value;
+            _stationId.Text = App.Waiter.StationId.ToString();
+            _ip.Text = networkService.Ip;
+            _port.Text = networkService.Port;
+            _login.Text = networkService.Login;
+            _password.Text = networkService.Password;
         }
 
         private void OnBackButtonClick(object sender, EventArgs e)
@@ -42,6 +34,9 @@ namespace WaiterMobile.Views
 
         private void OnSaveButtonClick(object sender, EventArgs e)
         {
+            App.Waiter.SetStationId(_stationId.Text);
+            App.Waiter.NetworkService.SetParameters(_ip.Text, _port.Text, _login.Text, _password.Text);
+
             StringBuilder stringBuilder = new StringBuilder();
 
             using (XmlWriter writer = XmlWriter.Create(stringBuilder)) 

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -43,7 +38,22 @@ namespace WaiterMobile.Views
 
         private void OnButtonSettingsClick(object sender, EventArgs e)
         {
-            Shell.Current.GoToAsync($"{nameof(Settings)}");
+            Shell.Current.GoToAsync(nameof(Settings));
+        }
+
+        private void OnButtonEnterClick(object sender, EventArgs e)
+        {
+            try
+            {
+                App.Waiter.UserAuthorization(_userCode.Text);
+            }
+            catch (InvalidOperationException ex) 
+            {
+                DisplayAlert("Вход не выполнен", "Не найден пользователь с таким кодом", "OK");
+                return;
+            }
+
+            Shell.Current.GoToAsync(nameof(Orders));
         }
     }
 }

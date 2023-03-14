@@ -1,34 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using RKeeperWaiter.Models;
 
 namespace RKeeperWaiter
 {
     public class Waiter
     {
-        private Uri _uri;
-        private string _authorizationString;
         private int _stationId;
-        private int _userId;
 
         private List<Category> _categories;
         private List<Dish> _dishes;
         private List<GuestType> _guestTypes;
 
-        public void SetUrl(string ip, string port)
-        {
-            _uri = new Uri($"https://{ip}:{port}/rk7api/v0/xmlinterface.xml");
-        }
+        private User _user;
 
-        public void SetAuthorization(string username, string password)
+        public int StationId { get { return _stationId; } }
+        public NetworkService NetworkService { get; private set; }
+        public User CurrentUser { get { return _user; } }
+
+        public Waiter()
         {
-            _authorizationString = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{username}:{password}"));
+            NetworkService = new NetworkService();
         }
 
         public void SetStationId(string stationId)
@@ -80,16 +76,103 @@ namespace RKeeperWaiter
                 writer.WriteStartElement("RK7Command");
                 writer.WriteAttributeString("CMD", "GetWaiterList");
                 writer.WriteAttributeString("checkrests", "false");
+                writer.WriteAttributeString("RegisteredOnly", "1");
                 writer.WriteEndElement();
 
                 writer.WriteEndElement();
             }
 
-            XDocument usersList = SendRequest(stringBuilder);
+            XDocument usersList = NetworkService.SendRequest(stringBuilder);
 
-            string userIdentificator = usersList.Root.Element("CommandResult").Element("Waiters").Elements("waiter").Where(x => x.Attribute("Code").Value == userCode).Single().Attribute("ID").Value;
+            string userIdentificator;
 
-            _userId = Convert.ToInt32(userIdentificator);
+            try
+            {
+                userIdentificator = usersList.Root.Element("CommandResult").Element("Waiters").Elements("waiter").Where(x => x.Attribute("Code").Value == userCode).Single().Attribute("ID").Value;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw ex;
+            }
+
+            int userId = Convert.ToInt32(userIdentificator);
+
+            GetUserData(userId);
+        }
+
+        private void GetUserData(int userId)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("RK7Query");
+
+                writer.WriteStartElement("RK7Command");
+                writer.WriteAttributeString("CMD", "GetRefData");
+                writer.WriteAttributeString("RefName", "EMPLOYEES");
+                writer.WriteAttributeString("RefItemIdent", userId.ToString());
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+            }
+
+            XDocument xDocument = NetworkService.SendRequest(stringBuilder);
+
+            XElement userDataXml = xDocument.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Element("Item");
+
+            string userName = userDataXml.Attribute("Name").Value;
+            int userCode = Convert.ToInt32(userDataXml.Attribute("Code").Value);
+            Guid userGuid = Guid.Parse(userDataXml.Attribute("GUIDString").Value);
+
+            _user = new User(userId, userName, userCode, userGuid);
+        }
+
+        public List<Order> GetOrderList()
+        {
+            List<Order> orders = new List<Order>();
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("RK7Query");
+
+                writer.WriteStartElement("RK7Command");
+                writer.WriteAttributeString("CMD", "GetOrderList");
+                writer.WriteAttributeString("onlyOpened", "true");
+
+                writer.WriteStartElement("Waiter");
+                writer.WriteAttributeString("id", _user.Id.ToString());
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+            }
+
+            XDocument ordersXml = NetworkService.SendRequest(stringBuilder);
+
+            IEnumerable<XElement> visitList = ordersXml.Root.Element("CommandResult").Elements("Visit");
+
+            foreach (XElement visit in visitList)
+            {
+                int visitId = Convert.ToInt32(visit.Attribute("VisitID").Value);
+
+                XElement order = visit.Element("Orders").Element("Order");
+
+                int orderId = Convert.ToInt32(order.Attribute("OrderID").Value);
+                Guid orderGuid = Guid.Parse(order.Attribute("guid").Value);
+                string orderName = order.Attribute("OrderName").Value;
+
+                Order newOrder = new Order(orderId, visitId, orderGuid, orderName);
+
+                orders.Add(newOrder);
+            }
+
+            return orders;
         }
 
         public void MakeTestOrder()
@@ -109,7 +192,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
 
                 writer.WriteStartElement("Waiter");
-                writer.WriteAttributeString("id", _userId.ToString());
+                writer.WriteAttributeString("id", _user.Id.ToString());
                 writer.WriteEndElement();
 
                 writer.WriteStartElement("Station");
@@ -133,7 +216,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument newOrder = SendRequest(stringBuilder);
+            XDocument newOrder = NetworkService.SendRequest(stringBuilder);
         }
 
         public void DeleteOrder(int visitId)
@@ -154,7 +237,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument closeOrder = SendRequest(stringBuilder);
+            XDocument closeOrder = NetworkService.SendRequest(stringBuilder);
         }
 
         private List<Category> GetCategories()
@@ -177,7 +260,7 @@ namespace RKeeperWaiter
 
             List<Category> menuCategories = new List<Category>();
 
-            XDocument menuCategoriesXml = SendRequest(stringBuilder);
+            XDocument menuCategoriesXml = NetworkService.SendRequest(stringBuilder);
 
             IEnumerable<XElement> menuCategoriesXElement = menuCategoriesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -215,7 +298,7 @@ namespace RKeeperWaiter
 
             List<Dish> dishes = new List<Dish>();
 
-            XDocument dishesXml = SendRequest(stringBuilder);
+            XDocument dishesXml = NetworkService.SendRequest(stringBuilder);
 
             IEnumerable<XElement> dishesXElements = dishesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -273,7 +356,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument guestTypesXml = SendRequest(stringBuilder);
+            XDocument guestTypesXml = NetworkService.SendRequest(stringBuilder);
 
             IEnumerable<XElement> guestTypes = guestTypesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -309,7 +392,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
 
                 writer.WriteStartElement("Waiter");
-                writer.WriteAttributeString("id", _userId.ToString());
+                writer.WriteAttributeString("id", _user.Id.ToString());
                 writer.WriteEndElement();
 
                 writer.WriteEndElement();
@@ -317,7 +400,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument orderMenu = SendRequest(stringBuilder);
+            XDocument orderMenu = NetworkService.SendRequest(stringBuilder);
             Dictionary<int, decimal> prices = new Dictionary<int, decimal>();
 
             IEnumerable<XElement> pricesXml = orderMenu.Root.Element("CommandResult").Element("Dishes").Elements("Item");
@@ -331,53 +414,6 @@ namespace RKeeperWaiter
             }
 
             return prices;
-        }
-
-        private XDocument SendRequest(StringBuilder xmlContent)
-        {
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
-            {
-                return true;
-            };
-
-            XmlDocument requestContent = new XmlDocument();
-            requestContent.LoadXml(xmlContent.ToString());
-
-            DateTime requestSaveTime = DateTime.Now;
-            requestContent.Save($"D:\\sqllog\\Request_{requestSaveTime.Year}{requestSaveTime.Month}{requestSaveTime.Day}_" +
-                $"{requestSaveTime.Hour}{requestSaveTime.Minute}{requestSaveTime.Second}{requestSaveTime.Millisecond}.xml");
-
-            using (HttpClient httpClient = new HttpClient(httpClientHandler))
-            {
-                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, _uri);
-
-                httpRequestMessage.Headers.Add("Authorization", "Basic " + _authorizationString);
-
-                httpRequestMessage.Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.ToString())));
-
-                HttpResponseMessage response = httpClient.SendAsync(httpRequestMessage).Result;
-
-                HttpStatusCode httpStatusCode = response.StatusCode;
-
-                if (httpStatusCode == HttpStatusCode.OK)
-                {
-                    XDocument responseContent = XDocument.Parse(response.Content.ReadAsStringAsync().Result);
-
-                    DateTime responseSaveTime = DateTime.Now;
-
-                    responseContent.Save($"D:\\sqllog\\Response_{responseSaveTime.Year}{responseSaveTime.Month}{responseSaveTime.Day}_" +
-                        $"{responseSaveTime.Hour}{responseSaveTime.Minute}{responseSaveTime.Second}{responseSaveTime.Millisecond}.xml");
-
-                    return responseContent;
-                }
-                else if (httpStatusCode == HttpStatusCode.Unauthorized)
-                {
-                    throw new Exception();
-                }
-
-                throw new Exception();
-            }
         }
     }
 }

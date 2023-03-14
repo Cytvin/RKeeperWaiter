@@ -45,11 +45,14 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\GuestType.cs" />
     <Compile Include="Models\MenuCategory.cs" />
-    <Compile Include="GetWaiterList.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="NetworkService.cs" />
+    <Compile Include="XmlRequests\GetWaiterList.cs" />
     <Compile Include="RequestType.cs" />
     <Compile Include="Waiter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlRequestBuilder.cs" />
+    <Compile Include="XmlRequests\XmlRequestBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

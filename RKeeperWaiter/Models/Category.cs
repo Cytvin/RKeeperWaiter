@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RKeeperWaiter
+namespace RKeeperWaiter.Models
 {
     public class Category
     {
