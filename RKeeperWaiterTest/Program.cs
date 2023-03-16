@@ -38,10 +38,10 @@ namespace RKeeperWaiterTest
             string userCode = "15";
             string stationId = "";
 
-            _waiter.NetworkService.SetParameters("", "", "IT", "10");
+            //_waiter.NetworkService.SetParameters("", "", "IT", "10");
 
-            _waiter.UserAuthorization(userCode);
-            _waiter.GetOrderList();
+            //_waiter.UserAuthorization(userCode);
+            //_waiter.GetOrderList();
             //_waiter.SetStationId(stationId);
             //_waiter.CreateReferences();
 
@@ -61,6 +61,14 @@ namespace RKeeperWaiterTest
             //xmlDocument.LoadXml(builder.GetRequestText());
 
             //xmlDocument.Save("D:\\sqllog\\test.xml");
+
+            ReferenceRequestBuilder referenceRequestBuilder = new ReferenceRequestBuilder();
+            referenceRequestBuilder.AddElement("RK7Command");
+            referenceRequestBuilder.AddAttribute("CMD", "GetRefData");
+
+            XmlDocument doc = referenceRequestBuilder.GetXml();
+
+            doc.Save("D:\\sqllog\\test.xml");
 
             Console.ReadLine();
         }

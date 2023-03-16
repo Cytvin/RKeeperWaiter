@@ -10,14 +10,14 @@ namespace RKeeperWaiter
     {
         public GetWaiterList() { }
         
-        public void CreateRequest(XmlRequestBuilder builder)
-        {
-            builder.AddElement("RK7Query");
-            builder.AddElement("RK7Command");
-            builder.AddAttribute("CMD", "GetWaiterList");
-            builder.AddAttribute("checkrests", "false");
-            builder.AddEndElement();
-            builder.AddEndElement();
-        }
+        //public void CreateRequest(ReferenceRequestBuilder builder)
+        //{
+        //    builder.AddElement("RK7Query");
+        //    builder.AddElement("RK7Command");
+        //    builder.AddAttribute("CMD", "GetWaiterList");
+        //    builder.AddAttribute("checkrests", "false");
+        //    builder.AddEndElement();
+        //    builder.AddEndElement();
+        //}
     }
 }
