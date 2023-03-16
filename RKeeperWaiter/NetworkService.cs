@@ -5,8 +5,6 @@ using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace RKeeperWaiter
 {
@@ -46,7 +44,7 @@ namespace RKeeperWaiter
             SetAuthorization();
         }
 
-        public async Task<XDocument> SendRequest(StringBuilder xmlContent)
+        public XDocument SendRequest(StringBuilder xmlContent)
         {
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
@@ -63,13 +61,12 @@ namespace RKeeperWaiter
 
             using (HttpClient httpClient = new HttpClient(httpClientHandler))
             {
-                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, _uri);
-                httpRequestMessage.Headers.Add("Authorization", "Basic " + _authorizationString);
-                httpRequestMessage.Content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.ToString())));
-
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + _authorizationString);
                 httpClient.Timeout = TimeSpan.FromSeconds(10);
 
-                HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+                StreamContent requestContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.ToString())));
+
+                HttpResponseMessage response = httpClient.PostAsync(_uri, requestContent).Result;
                 HttpStatusCode httpStatusCode = response.StatusCode;
 
                 if (httpStatusCode == HttpStatusCode.OK)

@@ -40,7 +40,7 @@
                     Margin="20, 0, 20, 20"
                     BackgroundColor="Black"
                     TextColor="White"
-                    VerticalOptions="End"
+                    VerticalOptions="EndAndExpand"
                     Clicked="OnCreateOrderClick"/>
         </StackLayout>
     </ContentPage.Content>

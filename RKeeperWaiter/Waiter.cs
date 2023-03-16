@@ -82,7 +82,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument usersList = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument usersList = NetworkService.SendRequest(stringBuilder);
 
             string userIdentificator;
 
@@ -118,7 +118,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument xDocument = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument xDocument = NetworkService.SendRequest(stringBuilder);
 
             XElement userDataXml = xDocument.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Element("Item");
 
@@ -153,7 +153,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument ordersXml = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument ordersXml = NetworkService.SendRequest(stringBuilder);
 
             IEnumerable<XElement> visitList = ordersXml.Root.Element("CommandResult").Elements("Visit");
 
@@ -216,7 +216,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument newOrder = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument newOrder = NetworkService.SendRequest(stringBuilder);
         }
 
         public void DeleteOrder(int visitId)
@@ -237,7 +237,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument closeOrder = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument closeOrder = NetworkService.SendRequest(stringBuilder);
         }
 
         private List<Category> GetCategories()
@@ -260,7 +260,7 @@ namespace RKeeperWaiter
 
             List<Category> menuCategories = new List<Category>();
 
-            XDocument menuCategoriesXml = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument menuCategoriesXml = NetworkService.SendRequest(stringBuilder);
 
             IEnumerable<XElement> menuCategoriesXElement = menuCategoriesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -298,7 +298,7 @@ namespace RKeeperWaiter
 
             List<Dish> dishes = new List<Dish>();
 
-            XDocument dishesXml = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument dishesXml = NetworkService.SendRequest(stringBuilder);
 
             IEnumerable<XElement> dishesXElements = dishesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -356,7 +356,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument guestTypesXml = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument guestTypesXml = NetworkService.SendRequest(stringBuilder);
 
             IEnumerable<XElement> guestTypes = guestTypesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -400,7 +400,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
             }
 
-            XDocument orderMenu = NetworkService.SendRequest(stringBuilder).Result;
+            XDocument orderMenu = NetworkService.SendRequest(stringBuilder);
             Dictionary<int, decimal> prices = new Dictionary<int, decimal>();
 
             IEnumerable<XElement> pricesXml = orderMenu.Root.Element("CommandResult").Element("Dishes").Elements("Item");
