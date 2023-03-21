@@ -71,7 +71,6 @@ namespace RKeeperWaiter
                     XDocument responseContent = XDocument.Parse(response.Content.ReadAsStringAsync().Result);
 
                     //DateTime responseSaveTime = DateTime.Now;
-
                     //responseContent.Save($"D:\\sqllog\\Response_{responseSaveTime.Year}{responseSaveTime.Month}{responseSaveTime.Day}_" +
                     //    $"{responseSaveTime.Hour}{responseSaveTime.Minute}{responseSaveTime.Second}{responseSaveTime.Millisecond}.xml");
 

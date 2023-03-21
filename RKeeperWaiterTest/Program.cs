@@ -43,11 +43,24 @@ namespace RKeeperWaiterTest
             _waiter.NetworkService.SetParameters("", "", "IT", "10");
 
             _waiter.UserAuthorization(userCode);
-            _waiter.GetOrderList();
-            _waiter.SetStationId(stationId);
-            _waiter.CreateReferences();
+            //_waiter.GetOrderList();
+            //_waiter.SetStationId(stationId);
+            //_waiter.CreateReferences();
 
-            Menu();
+            Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
+
+            List<Hall> halls = _waiter.GetHalls();
+
+            foreach (Hall hall in halls)
+            {
+                Console.WriteLine($"Зал ({hall.Id}): {hall.Name}");
+                foreach (Table table in hall.Tables)
+                {
+                    Console.WriteLine($"Стол ({table.Id}): {table.Name}");
+                }
+            }
+
+            //Menu();
             Console.ReadLine();
         }
     }

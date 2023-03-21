@@ -57,8 +57,7 @@ namespace WaiterMobile.Views
 
         private void OnCreateOrderClick(object sender, System.EventArgs e)
         {
-            //App.Waiter.MakeTestOrder();
-            LoadOrders();
+            Shell.Current.GoToAsync(nameof(Tables));
         }
     }
 }

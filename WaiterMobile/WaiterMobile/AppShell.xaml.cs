@@ -10,6 +10,7 @@ namespace WaiterMobile
             InitializeComponent();
             Routing.RegisterRoute(nameof(Settings), typeof(Settings));
             Routing.RegisterRoute(nameof(Orders), typeof(Orders));
+            Routing.RegisterRoute(nameof(Tables), typeof(Tables));
         }
     }
 }
