@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using RKeeperWaiter.Models;
+using RKeeperWaiter.XmlRequests;
 
 namespace RKeeperWaiter
 {
@@ -66,23 +67,12 @@ namespace RKeeperWaiter
 
         public void UserAuthorization(string userCode)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            RequestBuilder requestBuilder = new RequestBuilder();
 
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
+            GetWaiterList getWaiterList = new GetWaiterList();
+            getWaiterList.CreateRequest(requestBuilder);
 
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "GetWaiterList");
-                writer.WriteAttributeString("checkrests", "false");
-                writer.WriteAttributeString("RegisteredOnly", "1");
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-
-            XDocument usersList = NetworkService.SendRequest(stringBuilder);
+            XDocument usersList = NetworkService.SendRequest(requestBuilder.GetXml());
 
             string userIdentificator;
 
@@ -102,23 +92,12 @@ namespace RKeeperWaiter
 
         private void GetUserData(int userId)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            RequestBuilder requestBuilder = new RequestBuilder();
+            
+            GetRefData getRefData = new GetRefData("EMPLOYEES", userId.ToString(), null, null);
+            getRefData.CreateRequest(requestBuilder);
 
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
-
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "GetRefData");
-                writer.WriteAttributeString("RefName", "EMPLOYEES");
-                writer.WriteAttributeString("RefItemIdent", userId.ToString());
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-
-            XDocument xDocument = NetworkService.SendRequest(stringBuilder);
+            XDocument xDocument = NetworkService.SendRequest(requestBuilder.GetXml());
 
             XElement userDataXml = xDocument.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Element("Item");
 
@@ -242,25 +221,14 @@ namespace RKeeperWaiter
 
         private List<Category> GetCategories()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            RequestBuilder requestBuilder = new RequestBuilder();
 
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
-
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "GetRefData");
-                writer.WriteAttributeString("RefName", "CategList");
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
+            GetRefData getRefData = new GetRefData("CategList", null, null, null);
+            getRefData.CreateRequest(requestBuilder);
 
             List<Category> menuCategories = new List<Category>();
 
-            XDocument menuCategoriesXml = NetworkService.SendRequest(stringBuilder);
+            XDocument menuCategoriesXml = NetworkService.SendRequest(requestBuilder.GetXml());
 
             IEnumerable<XElement> menuCategoriesXElement = menuCategoriesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -280,25 +248,14 @@ namespace RKeeperWaiter
 
         private List<Dish> GetDishes()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            RequestBuilder requestBuilder = new RequestBuilder();
 
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
-
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "GetRefData");
-                writer.WriteAttributeString("RefName", "MenuItems");
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
+            GetRefData getRefData = new GetRefData("MenuItems", null, null, null);
+            getRefData.CreateRequest(requestBuilder);
 
             List<Dish> dishes = new List<Dish>();
 
-            XDocument dishesXml = NetworkService.SendRequest(stringBuilder);
+            XDocument dishesXml = NetworkService.SendRequest(requestBuilder.GetXml());
 
             IEnumerable<XElement> dishesXElements = dishesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -309,7 +266,7 @@ namespace RKeeperWaiter
                 int parentId = Convert.ToInt32(dishesXElement.Attribute("MainParentIdent").Value);
                 string guidString = dishesXElement.Attribute("GUIDString").Value;
 
-                Guid dishGuid = guidString == "" ? Guid.NewGuid() : Guid.Parse(guidString); 
+                Guid dishGuid = guidString == "" ? Guid.NewGuid() : Guid.Parse(guidString);
 
                 Dish dish = new Dish(dishId, dishGuid, dishName, parentId);
 
@@ -337,26 +294,14 @@ namespace RKeeperWaiter
 
         private List<GuestType> GetGuestTypes()
         {
+            RequestBuilder requestBuilder = new RequestBuilder();
+
+            GetRefData getRefData = new GetRefData("GUESTTYPES", null, "Items.(Ident, Name, Code)", null);
+            getRefData.CreateRequest(requestBuilder);
+
             List<GuestType> guestTypesList = new List<GuestType>();
 
-            StringBuilder stringBuilder = new StringBuilder();
-
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
-
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "GetRefData");
-                writer.WriteAttributeString("RefName", "GUESTTYPES");
-                writer.WriteAttributeString("PropMask", "Items.(Ident,Name,Code)");
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-
-            XDocument guestTypesXml = NetworkService.SendRequest(stringBuilder);
+            XDocument guestTypesXml = NetworkService.SendRequest(requestBuilder.GetXml());
 
             IEnumerable<XElement> guestTypes = guestTypesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
@@ -396,7 +341,7 @@ namespace RKeeperWaiter
                 writer.WriteEndElement();
 
                 writer.WriteEndElement();
-                
+
                 writer.WriteEndElement();
             }
 
@@ -410,7 +355,7 @@ namespace RKeeperWaiter
                 int dishId = Convert.ToInt32(priceXelement.Attribute("Ident").Value);
                 decimal price = Convert.ToDecimal(priceXelement.Attribute("Price").Value);
 
-                prices.Add(dishId, price); 
+                prices.Add(dishId, price);
             }
 
             return prices;

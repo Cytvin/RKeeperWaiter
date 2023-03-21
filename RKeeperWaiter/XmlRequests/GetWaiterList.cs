@@ -4,20 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RKeeperWaiter
+namespace RKeeperWaiter.XmlRequests
 {
-    public class GetWaiterList
+    public class GetWaiterList : IRequest
     {
-        public GetWaiterList() { }
-        
-        //public void CreateRequest(ReferenceRequestBuilder builder)
-        //{
-        //    builder.AddElement("RK7Query");
-        //    builder.AddElement("RK7Command");
-        //    builder.AddAttribute("CMD", "GetWaiterList");
-        //    builder.AddAttribute("checkrests", "false");
-        //    builder.AddEndElement();
-        //    builder.AddEndElement();
-        //}
+        public void CreateRequest(RequestBuilder builder)
+        {
+            builder.AddElementToRoot("RK7Command");
+            builder.AddAttribute("CMD", "GetWaiterList");
+            builder.AddAttribute("checkrests", "false");
+            builder.AddAttribute("RegisteredOnly", "1");
+        }
     }
 }

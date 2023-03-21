@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Xml;
 using RKeeperWaiter;
 using RKeeperWaiter.Models;
@@ -62,11 +63,11 @@ namespace RKeeperWaiterTest
 
             //xmlDocument.Save("D:\\sqllog\\test.xml");
 
-            ReferenceRequestBuilder referenceRequestBuilder = new ReferenceRequestBuilder();
-            referenceRequestBuilder.AddElement("RK7Command");
-            referenceRequestBuilder.AddAttribute("CMD", "GetRefData");
+            RequestBuilder refRequestBuilder = new RequestBuilder();
+            GetRefData gwl = new GetRefData("EMPLOYEES", "1033231", null, null);
+            gwl.CreateRequest(refRequestBuilder);
 
-            XmlDocument doc = referenceRequestBuilder.GetXml();
+            XmlDocument doc = refRequestBuilder.GetXml();
 
             doc.Save("D:\\sqllog\\test.xml");
 

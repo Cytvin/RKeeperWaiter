@@ -44,7 +44,7 @@ namespace RKeeperWaiter
             SetAuthorization();
         }
 
-        public XDocument SendRequest(StringBuilder xmlContent)
+        public XDocument SendRequest(XmlDocument xmlContent)
         {
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
@@ -52,11 +52,8 @@ namespace RKeeperWaiter
                 return true;
             };
 
-            //XmlDocument requestContent = new XmlDocument();
-            //requestContent.LoadXml(xmlContent.ToString());
-
             //DateTime requestSaveTime = DateTime.Now;
-            //requestContent.Save($"D:\\sqllog\\Request_{requestSaveTime.Year}{requestSaveTime.Month}{requestSaveTime.Day}_" +
+            //xmlContent.Save($"D:\\sqllog\\Request_{requestSaveTime.Year}{requestSaveTime.Month}{requestSaveTime.Day}_" +
             //    $"{requestSaveTime.Hour}{requestSaveTime.Minute}{requestSaveTime.Second}{requestSaveTime.Millisecond}.xml");
 
             using (HttpClient httpClient = new HttpClient(httpClientHandler))
@@ -64,7 +61,7 @@ namespace RKeeperWaiter
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + _authorizationString);
                 httpClient.Timeout = TimeSpan.FromSeconds(10);
 
-                StreamContent requestContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.ToString())));
+                StreamContent requestContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.OuterXml)));
 
                 HttpResponseMessage response = httpClient.PostAsync(_uri, requestContent).Result;
                 HttpStatusCode httpStatusCode = response.StatusCode;
