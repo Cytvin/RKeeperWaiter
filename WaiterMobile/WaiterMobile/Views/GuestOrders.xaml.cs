@@ -17,7 +17,7 @@ namespace WaiterMobile.Views
         {
             InitializeComponent();
 
-            _orderLabel.Text = App.Waiter.NewOrder.Hall.Name + "|";
+            _orderLabel.Text = App.Waiter.NewOrder.Hall.Name + " | ";
             _orderLabel.Text += App.Waiter.NewOrder.Table.Name;
 
             OrderTypesPickerInitialize();
@@ -31,6 +31,16 @@ namespace WaiterMobile.Views
             }
 
             _orderTypePicker.SelectedIndex = 1;
+        }
+
+        private void OnCreateOrderClick(object sender, EventArgs e) 
+        {
+            if (_guestSwitch.IsToggled)
+            {
+                App.Waiter.NewOrder.SetGuestCount(0);
+            }
+
+
         }
     }
 }

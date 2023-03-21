@@ -44,7 +44,8 @@
                            TextColor="Black"
                            Grid.Column="0"/>
 
-                    <Switch Grid.Column="1"/>
+                    <Switch x:Name="_guestSwitch"
+                        Grid.Column="1"/>
                 </Grid>
 
                 <Picker Margin="30, 100, 30, 10"
@@ -52,6 +53,13 @@
                         x:Name="_orderTypePicker">
                 </Picker>
             </StackLayout>
+
+            <Button Text="Создать заказ"
+                    Margin="20, 0, 20, 20"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    VerticalOptions="EndAndExpand"
+                    Clicked="OnCreateOrderClick"/>
         </StackLayout>
   </ContentPage.Content>
 </ContentPage>
