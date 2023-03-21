@@ -36,6 +36,7 @@ namespace RKeeperWaiter
             _guestTypes = new List<GuestType>();
             _halls = new List<Hall>();
             _newOrder = new NewOrder();
+            _orderTypes = new List<OrderType>();
             NetworkService = new NetworkService();
         }
 

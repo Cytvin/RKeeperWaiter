@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RKeeperWaiter.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,18 @@ namespace WaiterMobile.Views
 
             _orderLabel.Text = App.Waiter.NewOrder.Hall.Name + "|";
             _orderLabel.Text += App.Waiter.NewOrder.Table.Name;
+
+            OrderTypesPickerInitialize();
+        }
+
+        private void OrderTypesPickerInitialize()
+        {
+            foreach (OrderType orderType in App.Waiter.OrderTypes)
+            {
+                _orderTypePicker.Items.Add(orderType.Name);
+            }
+
+            _orderTypePicker.SelectedIndex = 1;
         }
     }
 }
