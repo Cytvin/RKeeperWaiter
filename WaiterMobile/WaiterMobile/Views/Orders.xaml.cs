@@ -11,7 +11,7 @@ namespace WaiterMobile.Views
         public Orders()
         {
             InitializeComponent();
-            App.Waiter.CreateReferences();
+            App.Waiter.DownloadReferences();
             LoadOrders();
             _userName.Text = App.Waiter.CurrentUser.Name;
         }

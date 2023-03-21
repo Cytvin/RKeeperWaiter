@@ -43,13 +43,12 @@ namespace RKeeperWaiterTest
             _waiter.NetworkService.SetParameters("", "", "IT", "10");
 
             _waiter.UserAuthorization(userCode);
-            //_waiter.GetOrderList();
-            //_waiter.SetStationId(stationId);
-            //_waiter.CreateReferences();
+            _waiter.SetStationId(stationId);
+            _waiter.DownloadReferences();
 
             Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
 
-            List<Hall> halls = _waiter.GetHalls();
+            IEnumerable<Hall> halls = _waiter.Halls;
 
             foreach (Hall hall in halls)
             {

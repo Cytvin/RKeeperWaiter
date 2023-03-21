@@ -39,7 +39,7 @@
                 </Grid.ColumnDefinitions>
 
                 <ImageButton BackgroundColor="White"
-                        Source="back_box_arrow.png"
+                        Source="arrow_left_short.png"
                         Clicked="OnBackButtonClick"/>
 
                 <Label Text="Настройки"

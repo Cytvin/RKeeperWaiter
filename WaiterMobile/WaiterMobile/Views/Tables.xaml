@@ -3,9 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WaiterMobile.Views.Tables"
              Shell.NavBarIsVisible="false">
-  <ContentPage.Content>
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentPage.Content>
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid Margin="10,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+
+                <ImageButton BackgroundColor="White"
+                        Source="arrow_left_short.png"
+                        />
+
+                <Label Text="Новый заказ"
+                       Grid.Column="1"
+                       FontSize="20"
+                       TextColor="Black"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </Grid>
+            <StackLayout>
+                <Picker Margin="10, 10 , 20, 10"
+                    Title="Выберите зал"
+                    x:Name="_hallPicker"
+                    SelectedIndexChanged="OnSelectedIndexChanged">
+                </Picker>
+
+                <StackLayout x:Name="_tables">
+                    
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>
