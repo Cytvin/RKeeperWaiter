@@ -11,9 +11,9 @@ namespace RKeeperWaiter.XmlRequests
         public void CreateRequest(RequestBuilder builder)
         {
             builder.AddElementToRoot("RK7Command");
-            builder.AddAttribute("CMD", "GetWaiterList");
-            builder.AddAttribute("checkrests", "false");
-            builder.AddAttribute("RegisteredOnly", "1");
+            builder.AddAttributeToLast("CMD", "GetWaiterList");
+            builder.AddAttributeToLast("checkrests", "false");
+            builder.AddAttributeToLast("RegisteredOnly", "1");
         }
     }
 }

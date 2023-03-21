@@ -7,6 +7,7 @@ namespace RKeeperWaiter
         private XmlDocument _xmlDocument;
         private XmlElement _root;
         private XmlElement _lastElement;
+        private XmlElement _internalElement;
 
         public RequestBuilder()
         {
@@ -22,15 +23,22 @@ namespace RKeeperWaiter
 
         public void AddElementToLast(string name)
         {
-            XmlElement internalElement = _xmlDocument.CreateElement(name);
-            _lastElement.AppendChild(internalElement);
+            _internalElement = _xmlDocument.CreateElement(name);
+            _lastElement.AppendChild(_internalElement);
         }
 
-        public void AddAttribute(string name, string value)
+        public void AddAttributeToLast(string name, string value)
         {
             XmlAttribute newAttribute = _xmlDocument.CreateAttribute(name);
             newAttribute.Value = value;
             _lastElement.Attributes.Append(newAttribute);
+        }
+
+        public void AddAttributToInternal(string name, string value)
+        {
+            XmlAttribute newAttribute = _xmlDocument.CreateAttribute(name);
+            newAttribute.Value = value;
+            _internalElement.Attributes.Append(newAttribute);
         }
 
         private void AddStartDocument()

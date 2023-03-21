@@ -39,38 +39,14 @@ namespace RKeeperWaiterTest
             string userCode = "15";
             string stationId = "";
 
-            //_waiter.NetworkService.SetParameters("", "", "IT", "10");
+            _waiter.NetworkService.SetParameters("", "", "IT", "10");
 
-            //_waiter.UserAuthorization(userCode);
-            //_waiter.GetOrderList();
-            //_waiter.SetStationId(stationId);
-            //_waiter.CreateReferences();
+            _waiter.UserAuthorization(userCode);
+            _waiter.GetOrderList();
+            _waiter.SetStationId(stationId);
+            _waiter.CreateReferences();
 
-            //_waiter.MakeTestOrder();
-            //_waiter.MakeTestOrder();
-
-            //Menu();
-
-            //XmlRequestBuilder builder = new XmlRequestBuilder();
-
-            //GetWaiterList getWaiterList = new GetWaiterList();
-
-            //getWaiterList.CreateRequest(builder);
-
-            //XmlDocument xmlDocument = new XmlDocument();
-
-            //xmlDocument.LoadXml(builder.GetRequestText());
-
-            //xmlDocument.Save("D:\\sqllog\\test.xml");
-
-            RequestBuilder refRequestBuilder = new RequestBuilder();
-            GetRefData gwl = new GetRefData("EMPLOYEES", "1033231", null, null);
-            gwl.CreateRequest(refRequestBuilder);
-
-            XmlDocument doc = refRequestBuilder.GetXml();
-
-            doc.Save("D:\\sqllog\\test.xml");
-
+            Menu();
             Console.ReadLine();
         }
     }

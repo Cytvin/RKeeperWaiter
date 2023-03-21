@@ -19,11 +19,11 @@ namespace RKeeperWaiter.XmlRequests
         public void CreateRequest(RequestBuilder builder)
         {
             builder.AddElementToRoot("RK7Command");
-            builder.AddAttribute("CMD", "GetOrderList");
-            builder.AddAttribute("onlyOpened", "true");
+            builder.AddAttributeToLast("CMD", "GetOrderList");
+            builder.AddAttributeToLast("onlyOpened", "true");
 
             builder.AddElementToLast("Waiter");
-            builder.AddAttribute("id", _userId.ToString());
+            builder.AddAttributToInternal("id", _userId.ToString());
         }
     }
 }

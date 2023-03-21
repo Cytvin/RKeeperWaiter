@@ -49,6 +49,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="NetworkService.cs" />
     <Compile Include="XmlRequests\GetOrderList.cs" />
+    <Compile Include="XmlRequests\GetOrderMenu.cs" />
     <Compile Include="XmlRequests\GetRefData.cs" />
     <Compile Include="RequestType.cs" />
     <Compile Include="Waiter.cs" />

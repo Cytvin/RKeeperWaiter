@@ -138,70 +138,70 @@ namespace RKeeperWaiter
             return orders;
         }
 
-        public void MakeTestOrder()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
+        //public void MakeTestOrder()
+        //{
+        //    StringBuilder stringBuilder = new StringBuilder();
 
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
+        //    using (XmlWriter writer = XmlWriter.Create(stringBuilder))
+        //    {
+        //        writer.WriteStartDocument();
+        //        writer.WriteStartElement("RK7Query");
 
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "CreateOrder");
+        //        writer.WriteStartElement("RK7Command");
+        //        writer.WriteAttributeString("CMD", "CreateOrder");
 
-                writer.WriteStartElement("Table");
-                writer.WriteAttributeString("code", "1");
-                writer.WriteEndElement();
+        //        writer.WriteStartElement("Table");
+        //        writer.WriteAttributeString("code", "1");
+        //        writer.WriteEndElement();
 
-                writer.WriteStartElement("Waiter");
-                writer.WriteAttributeString("id", _user.Id.ToString());
-                writer.WriteEndElement();
+        //        writer.WriteStartElement("Waiter");
+        //        writer.WriteAttributeString("id", _user.Id.ToString());
+        //        writer.WriteEndElement();
 
-                writer.WriteStartElement("Station");
-                writer.WriteAttributeString("id", _stationId.ToString());
-                writer.WriteEndElement();
+        //        writer.WriteStartElement("Station");
+        //        writer.WriteAttributeString("id", _stationId.ToString());
+        //        writer.WriteEndElement();
 
-                writer.WriteStartElement("GuestType");
-                writer.WriteAttributeString("id", "1");
-                writer.WriteEndElement();
+        //        writer.WriteStartElement("GuestType");
+        //        writer.WriteAttributeString("id", "1");
+        //        writer.WriteEndElement();
 
-                writer.WriteStartElement("Guests");
+        //        writer.WriteStartElement("Guests");
 
-                writer.WriteStartElement("Guest");
-                writer.WriteAttributeString("GuestLabel", "1");
-                writer.WriteEndElement();
+        //        writer.WriteStartElement("Guest");
+        //        writer.WriteAttributeString("GuestLabel", "1");
+        //        writer.WriteEndElement();
 
-                writer.WriteEndElement();
+        //        writer.WriteEndElement();
 
-                writer.WriteEndElement();
+        //        writer.WriteEndElement();
 
-                writer.WriteEndElement();
-            }
+        //        writer.WriteEndElement();
+        //    }
 
-            XDocument newOrder = NetworkService.SendRequest(stringBuilder);
-        }
+        //    XDocument newOrder = NetworkService.SendRequest(stringBuilder);
+        //}
 
-        public void DeleteOrder(int visitId)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
+        //public void DeleteOrder(int visitId)
+        //{
+        //    StringBuilder stringBuilder = new StringBuilder();
 
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
+        //    using (XmlWriter writer = XmlWriter.Create(stringBuilder))
+        //    {
+        //        writer.WriteStartDocument();
+        //        writer.WriteStartElement("RK7Query");
 
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "CloseVisit");
-                writer.WriteAttributeString("VisitID", visitId.ToString());
+        //        writer.WriteStartElement("RK7Command");
+        //        writer.WriteAttributeString("CMD", "CloseVisit");
+        //        writer.WriteAttributeString("VisitID", visitId.ToString());
 
-                writer.WriteEndElement();
+        //        writer.WriteEndElement();
 
-                writer.WriteEndElement();
-            }
+        //        writer.WriteEndElement();
+        //    }
 
-            XDocument closeOrder = NetworkService.SendRequest(stringBuilder);
-        }
+        //    XDocument closeOrder = NetworkService.SendRequest(stringBuilder);
+        //}
 
         private List<Category> GetCategories()
         {
@@ -304,32 +304,12 @@ namespace RKeeperWaiter
 
         private Dictionary<int, decimal> GetOrderMenu()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            RequestBuilder requestBuilder = new RequestBuilder();
+            GetOrderMenu getOrderMenu = new GetOrderMenu(_stationId, _user.Id);
+            getOrderMenu.CreateRequest(requestBuilder);
 
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
+            XDocument orderMenu = NetworkService.SendRequest(requestBuilder.GetXml());
 
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "GetOrderMenu");
-                writer.WriteAttributeString("PropMask", "Dishes.(Ident,Price),Modifiers.(Ident,Price),OrderTypes.(Ident)");
-                writer.WriteAttributeString("checkrests", "false");
-
-                writer.WriteStartElement("Station");
-                writer.WriteAttributeString("id", _stationId.ToString());
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("Waiter");
-                writer.WriteAttributeString("id", _user.Id.ToString());
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-
-            XDocument orderMenu = NetworkService.SendRequest(stringBuilder);
             Dictionary<int, decimal> prices = new Dictionary<int, decimal>();
 
             IEnumerable<XElement> pricesXml = orderMenu.Root.Element("CommandResult").Element("Dishes").Elements("Item");
