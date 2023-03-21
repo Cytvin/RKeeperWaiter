@@ -44,8 +44,10 @@
     <Compile Include="Models\Dish.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\GuestType.cs" />
+    <Compile Include="Models\Hall.cs" />
     <Compile Include="Models\MenuCategory.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\Table.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="NetworkService.cs" />
     <Compile Include="XmlRequests\GetOrderList.cs" />

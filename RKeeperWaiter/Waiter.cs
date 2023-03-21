@@ -41,7 +41,7 @@ namespace RKeeperWaiter
             _categories = GetCategories();
             _dishes = GetDishes();
             _guestTypes = GetGuestTypes();
-            SetMenuPrice();
+            SetPrice();
         }
 
         public MenuCategory GetMenuCategory(int id)
@@ -92,14 +92,7 @@ namespace RKeeperWaiter
 
         private void GetUserData(int userId)
         {
-            RequestBuilder requestBuilder = new RequestBuilder();
-            
-            GetRefData getRefData = new GetRefData("EMPLOYEES", userId.ToString(), null, null);
-            getRefData.CreateRequest(requestBuilder);
-
-            XDocument xDocument = NetworkService.SendRequest(requestBuilder.GetXml());
-
-            XElement userDataXml = xDocument.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Element("Item");
+            XElement userDataXml = RequestReference("EMPLOYEES", userId.ToString(), null, null).First();
 
             string userName = userDataXml.Attribute("Name").Value;
             int userCode = Convert.ToInt32(userDataXml.Attribute("Code").Value);
@@ -205,16 +198,9 @@ namespace RKeeperWaiter
 
         private List<Category> GetCategories()
         {
-            RequestBuilder requestBuilder = new RequestBuilder();
-
-            GetRefData getRefData = new GetRefData("CategList", null, null, null);
-            getRefData.CreateRequest(requestBuilder);
-
             List<Category> menuCategories = new List<Category>();
 
-            XDocument menuCategoriesXml = NetworkService.SendRequest(requestBuilder.GetXml());
-
-            IEnumerable<XElement> menuCategoriesXElement = menuCategoriesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
+            IEnumerable<XElement> menuCategoriesXElement = RequestReference("CategList", null, null, null);
 
             foreach (XElement categoryXElement in menuCategoriesXElement)
             {
@@ -232,16 +218,9 @@ namespace RKeeperWaiter
 
         private List<Dish> GetDishes()
         {
-            RequestBuilder requestBuilder = new RequestBuilder();
-
-            GetRefData getRefData = new GetRefData("MenuItems", null, null, null);
-            getRefData.CreateRequest(requestBuilder);
-
             List<Dish> dishes = new List<Dish>();
 
-            XDocument dishesXml = NetworkService.SendRequest(requestBuilder.GetXml());
-
-            IEnumerable<XElement> dishesXElements = dishesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
+            IEnumerable<XElement> dishesXElements = RequestReference("MenuItems", null, null, null);
 
             foreach (XElement dishesXElement in dishesXElements)
             {
@@ -260,7 +239,7 @@ namespace RKeeperWaiter
             return dishes;
         }
 
-        private void SetMenuPrice()
+        private void SetPrice()
         {
             Dictionary<int, decimal> prices = GetOrderMenu();
 
@@ -278,16 +257,9 @@ namespace RKeeperWaiter
 
         private List<GuestType> GetGuestTypes()
         {
-            RequestBuilder requestBuilder = new RequestBuilder();
-
-            GetRefData getRefData = new GetRefData("GUESTTYPES", null, "Items.(Ident, Name, Code)", null);
-            getRefData.CreateRequest(requestBuilder);
-
             List<GuestType> guestTypesList = new List<GuestType>();
 
-            XDocument guestTypesXml = NetworkService.SendRequest(requestBuilder.GetXml());
-
-            IEnumerable<XElement> guestTypes = guestTypesXml.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
+            IEnumerable<XElement> guestTypes = RequestReference("GUESTTYPES", null, "Items.(Ident, Name, Code)", null);
 
             foreach (XElement guestType in guestTypes)
             {
@@ -323,6 +295,36 @@ namespace RKeeperWaiter
             }
 
             return prices;
+        }
+
+        private List<Hall> GetHalls()
+        {
+            List<Hall> halls = new List<Hall>();
+
+            IEnumerable<XElement> hallList = RequestReference("HallPlans", null, "Items.(Ident, Code, ActiveHierarchy,Status,Name,Items.(*))", "1");
+
+            foreach (XElement hall in hallList)
+            {
+                int id = Convert.ToInt32(hall.Attribute("Ident").Value);
+                int code = Convert.ToInt32(hall.Attribute("Code").Value);
+                string name = hall.Attribute("Name").Value;
+
+                Hall type = new Hall(id, code, name);
+                halls.Add(type);
+            }
+
+            return halls;
+        }
+
+        private IEnumerable<XElement> RequestReference(string refName, string refItemIdent, string propMask, string onlyActive)
+        {
+            RequestBuilder requestBuilder = new RequestBuilder();
+            GetRefData getRefData = new GetRefData(refName, refItemIdent, propMask, onlyActive);
+            getRefData.CreateRequest(requestBuilder);
+
+            XDocument reference = NetworkService.SendRequest(requestBuilder.GetXml());
+
+            return reference.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
         }
     }
 }
