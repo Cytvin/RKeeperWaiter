@@ -11,6 +11,7 @@ namespace WaiterMobile
             Routing.RegisterRoute(nameof(Settings), typeof(Settings));
             Routing.RegisterRoute(nameof(Orders), typeof(Orders));
             Routing.RegisterRoute(nameof(Tables), typeof(Tables));
+            Routing.RegisterRoute(nameof(GuestOrders), typeof(GuestOrders));
         }
     }
 }

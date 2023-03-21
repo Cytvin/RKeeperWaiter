@@ -32,17 +32,28 @@ namespace WaiterMobile.Views
             CreateTables();
         }
 
+        private void OnTableSelected(Table table, Hall hall) 
+        {
+            App.Waiter.NewOrder.SetTableAndTable(hall, table);
+            Shell.Current.GoToAsync(nameof(GuestOrders));
+        }
+
         private void CreateTables()
         {
             _tables.Children.Clear();
 
             int selectedHall = _hallPicker.SelectedIndex;
-
-            IEnumerable<Table> tables = App.Waiter.Halls.ToArray()[selectedHall].Tables;
+            Hall hall = App.Waiter.Halls.ToArray()[selectedHall];
+            IEnumerable<Table> tables = hall.Tables;
 
             foreach (Table table in tables)
             {
                 Button tableButton = new Button();
+
+                tableButton.Clicked += (s, e) => 
+                { 
+                    OnTableSelected(table, hall); 
+                };
 
                 tableButton.Text = table.Name;
 

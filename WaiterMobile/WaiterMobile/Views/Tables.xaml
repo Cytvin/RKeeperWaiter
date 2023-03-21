@@ -36,6 +36,8 @@
                 <StackLayout x:Name="_tables">
                     
                 </StackLayout>
+
+                <Label x:Name="_test"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

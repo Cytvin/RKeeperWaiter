@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WaiterMobile.Views.GuestOrders"
+             Shell.NavBarIsVisible="False">
+  <ContentPage.Content>
+        <StackLayout>
+            <Grid Margin="10,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+
+                <ImageButton BackgroundColor="White"
+                        Source="arrow_left_short.png"
+                        />
+
+                <Label x:Name="_orderLabel"
+                       Text=""
+                       Grid.Column="1"
+                       FontSize="20"
+                       TextColor="Black"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </Grid>
+
+            <StackLayout x:Name="_inputStack">
+                <Grid Padding="30, 40, 30, 10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="Общий счет:"
+                           FontSize="20"
+                           TextColor="Black"
+                           Grid.Column="0"/>
+
+                    <Switch Grid.Column="1"/>
+                </Grid>
+
+                <Picker Margin="30, 100, 30, 10"
+                        Title="Тип заказа"
+                        x:Name="_orderTypePicker">
+                </Picker>
+            </StackLayout>
+        </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

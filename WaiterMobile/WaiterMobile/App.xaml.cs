@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using WaiterMobile;
 using Xamarin.Forms;
 using RKeeperWaiter;
+using Xamarin.Essentials;
 
 namespace WaiterMobile
 {
@@ -12,6 +13,7 @@ namespace WaiterMobile
         public static string FolderPath { get; private set; }
         public static string SettingsFile { get; private set; }
         public static Waiter Waiter { get; private set; }
+        public static DisplayInfo CurrentDisplay { get; private set; }
 
         public App()
         {
@@ -22,6 +24,7 @@ namespace WaiterMobile
 
             Waiter = new Waiter();
             MainPage = new AppShell();
+            CurrentDisplay = DeviceDisplay.MainDisplayInfo;
         }
 
         protected override void OnStart()

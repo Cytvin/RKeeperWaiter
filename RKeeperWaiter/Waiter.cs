@@ -17,13 +17,17 @@ namespace RKeeperWaiter
         private List<Dish> _dishes;
         private List<GuestType> _guestTypes;
         private List<Hall> _halls;
+        private List<OrderType> _orderTypes;
 
+        private NewOrder _newOrder;
         private User _user;
 
         public int StationId { get { return _stationId; } }
         public NetworkService NetworkService { get; private set; }
         public User CurrentUser { get { return _user; } }
+        public NewOrder NewOrder { get { return _newOrder; } }
         public IEnumerable<Hall> Halls { get { return _halls; } }
+        public IEnumerable<OrderType> OrderTypes { get { return _orderTypes; } }
 
         public Waiter()
         {
@@ -31,6 +35,7 @@ namespace RKeeperWaiter
             _dishes = new List<Dish>();
             _guestTypes = new List<GuestType>();
             _halls = new List<Hall>();
+            _newOrder = new NewOrder();
             NetworkService = new NetworkService();
         }
 
@@ -48,6 +53,7 @@ namespace RKeeperWaiter
             GetDishes();
             GetGuestTypes();
             GetHalls();
+            GetOrderTypes();
             SetPrice();
         }
 
@@ -162,10 +168,6 @@ namespace RKeeperWaiter
         //        writer.WriteAttributeString("id", _stationId.ToString());
         //        writer.WriteEndElement();
 
-        //        writer.WriteStartElement("GuestType");
-        //        writer.WriteAttributeString("id", "1");
-        //        writer.WriteEndElement();
-
         //        writer.WriteStartElement("Guests");
 
         //        writer.WriteStartElement("Guest");
@@ -266,6 +268,21 @@ namespace RKeeperWaiter
 
                 GuestType type = new GuestType(id, code, name);
                 _guestTypes.Add(type);
+            }
+        }
+
+        private void GetOrderTypes()
+        {
+            IEnumerable<XElement> orderTypes = RequestReference("CHANGEABLEORDERTYPES", null, null, "1");
+
+            foreach (XElement orderType in orderTypes)
+            {
+                int id = Convert.ToInt32(orderType.Attribute("Ident").Value);
+                int code = Convert.ToInt32(orderType.Attribute("Code").Value);
+                string name = orderType.Attribute("Name").Value;
+
+                OrderType type = new OrderType(id, code, name);
+                _orderTypes.Add(type);
             }
         }
 
