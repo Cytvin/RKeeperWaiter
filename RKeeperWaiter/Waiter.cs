@@ -110,29 +110,13 @@ namespace RKeeperWaiter
 
         public List<Order> GetOrderList()
         {
+            RequestBuilder requestBuilder = new RequestBuilder();
+            GetOrderList getOrderList = new GetOrderList(_user.Id);
+            getOrderList.CreateRequest(requestBuilder);
+
             List<Order> orders = new List<Order>();
 
-            StringBuilder stringBuilder = new StringBuilder();
-
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
-
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "GetOrderList");
-                writer.WriteAttributeString("onlyOpened", "true");
-
-                writer.WriteStartElement("Waiter");
-                writer.WriteAttributeString("id", _user.Id.ToString());
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-
-            XDocument ordersXml = NetworkService.SendRequest(stringBuilder);
+            XDocument ordersXml = NetworkService.SendRequest(requestBuilder.GetXml());
 
             IEnumerable<XElement> visitList = ordersXml.Root.Element("CommandResult").Elements("Visit");
 
