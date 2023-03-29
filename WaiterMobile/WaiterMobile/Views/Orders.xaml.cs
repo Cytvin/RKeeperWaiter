@@ -11,7 +11,6 @@ namespace WaiterMobile.Views
         public Orders()
         {
             InitializeComponent();
-            App.Waiter.DownloadReferences();
             LoadOrders();
             _userName.Text = App.Waiter.CurrentUser.Name;
         }
@@ -57,7 +56,7 @@ namespace WaiterMobile.Views
 
         private void OnCreateOrderClick(object sender, System.EventArgs e)
         {
-            Shell.Current.GoToAsync(nameof(Tables));
+            Shell.Current.Navigation.PushAsync(new Tables());
         }
     }
 }

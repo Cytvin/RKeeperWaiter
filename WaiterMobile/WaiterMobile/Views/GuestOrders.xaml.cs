@@ -36,7 +36,7 @@ namespace WaiterMobile.Views
         private void OnCreateOrderClick(object sender, EventArgs e) 
         {
             App.Waiter.SendNewOrder();
-            Shell.Current.GoToAsync(nameof(Orders));
+            Shell.Current.Navigation.PushAsync(new Orders());
         }
 
         private void OnOrderTypeChanged(object sender, EventArgs e)
@@ -47,7 +47,7 @@ namespace WaiterMobile.Views
 
         private void OnBackButtonClicked(object sender, EventArgs e)
         {
-            Shell.Current.GoToAsync("..");
+            Shell.Current.Navigation.PopAsync(true);
         }
 
         private void OnGuestSwitchToggled(object sender, ToggledEventArgs e)

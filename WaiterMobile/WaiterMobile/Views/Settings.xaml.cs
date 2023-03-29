@@ -29,7 +29,7 @@ namespace WaiterMobile.Views
 
         private void OnBackButtonClick(object sender, EventArgs e)
         {
-            Shell.Current.GoToAsync("..", true);
+            Shell.Current.Navigation.PopAsync(true);
         }
 
         private void OnSaveButtonClick(object sender, EventArgs e)
@@ -72,7 +72,7 @@ namespace WaiterMobile.Views
             settings.LoadXml(stringBuilder.ToString());
             settings.Save(App.SettingsFile);
 
-            Shell.Current.GoToAsync("..", true);
+            Shell.Current.Navigation.PopAsync(true);
         }
     }
 }

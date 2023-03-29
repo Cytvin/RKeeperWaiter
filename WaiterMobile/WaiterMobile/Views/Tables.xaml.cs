@@ -35,7 +35,7 @@ namespace WaiterMobile.Views
         private void OnTableSelected(Table table, Hall hall) 
         {
             App.Waiter.NewOrder.SetTableAndTable(hall, table);
-            Shell.Current.GoToAsync(nameof(GuestOrders));
+            Shell.Current.Navigation.PushAsync(new GuestOrders());
         }
 
         private void CreateTables()
@@ -63,7 +63,7 @@ namespace WaiterMobile.Views
 
         private void OnBackButtonCLicked(object sender, EventArgs e)
         {
-            Shell.Current.GoToAsync("..");
+            Shell.Current.Navigation.PopAsync(true);
         }
     }
 }

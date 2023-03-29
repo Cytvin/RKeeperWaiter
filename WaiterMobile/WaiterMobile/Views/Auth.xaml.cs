@@ -38,7 +38,7 @@ namespace WaiterMobile.Views
 
         private void OnButtonSettingsClick(object sender, EventArgs e)
         {
-            Shell.Current.GoToAsync(nameof(Settings));
+            Shell.Current.Navigation.PushAsync(new Settings());
         }
 
         private void OnButtonEnterClick(object sender, EventArgs e)
@@ -53,7 +53,9 @@ namespace WaiterMobile.Views
                 return;
             }
 
-            Shell.Current.GoToAsync(nameof(Orders));
+            App.Waiter.DownloadReferences();
+
+            Shell.Current.Navigation.PushAsync(new Orders());
         }
     }
 }

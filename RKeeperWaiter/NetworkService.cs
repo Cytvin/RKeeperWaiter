@@ -59,7 +59,7 @@ namespace RKeeperWaiter
             using (HttpClient httpClient = new HttpClient(httpClientHandler))
             {
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + _authorizationString);
-                httpClient.Timeout = TimeSpan.FromSeconds(10);
+                httpClient.Timeout = TimeSpan.FromSeconds(30);
 
                 StreamContent requestContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.OuterXml)));
 

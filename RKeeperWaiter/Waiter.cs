@@ -51,13 +51,12 @@ namespace RKeeperWaiter
 
         public void DownloadReferences()
         {
-            GetCategories();
-            GetDishes();
-            GetGuestTypes();
-            GetHalls();
-            GetOrderTypes();
+            _categories = GetCategories();
+            _dishes = GetDishes();
+            _guestTypes = GetGuestTypes();
+            _halls = GetHalls();
+            _orderTypes = GetOrderTypes();
             SetPrice();
-            GetOrderList();
         }
 
         public MenuCategory GetMenuCategory(int id)
@@ -256,8 +255,10 @@ namespace RKeeperWaiter
         //    XDocument closeOrder = NetworkService.SendRequest(stringBuilder);
         //}
 
-        private void GetCategories()
+        private List<Category> GetCategories()
         {
+            List<Category> categories = new List<Category>();
+
             IEnumerable<XElement> menuCategoriesXElement = RequestReference("CategList", null, null, null);
 
             foreach (XElement categoryXElement in menuCategoriesXElement)
@@ -268,12 +269,16 @@ namespace RKeeperWaiter
 
                 Category category = new Category(categoryId, categoryName, parentId);
 
-                _categories.Add(category);
+                categories.Add(category);
             }
+
+            return categories;
         }
 
-        private void GetDishes()
+        private List<Dish> GetDishes()
         {
+            List<Dish> dishes = new List<Dish>();
+
             IEnumerable<XElement> dishesXElements = RequestReference("MenuItems", null, null, null);
 
             foreach (XElement dishesXElement in dishesXElements)
@@ -287,8 +292,10 @@ namespace RKeeperWaiter
 
                 Dish dish = new Dish(dishId, dishGuid, dishName, parentId);
 
-                _dishes.Add(dish);
+                dishes.Add(dish);
             }
+
+            return dishes;
         }
 
         private void SetPrice()
@@ -307,34 +314,42 @@ namespace RKeeperWaiter
             }
         }
 
-        private void GetGuestTypes()
+        private List<GuestType> GetGuestTypes()
         {
-            IEnumerable<XElement> guestTypes = RequestReference("GUESTTYPES", null, "Items.(Ident, Name, Code)", null);
+            List<GuestType> guestTypes = new List<GuestType>();
 
-            foreach (XElement guestType in guestTypes)
+            IEnumerable<XElement> xGuestTypes = RequestReference("GUESTTYPES", null, "Items.(Ident, Name, Code)", null);
+
+            foreach (XElement guestType in xGuestTypes)
             {
                 int id = Convert.ToInt32(guestType.Attribute("Ident").Value);
                 int code = Convert.ToInt32(guestType.Attribute("Code").Value);
                 string name = guestType.Attribute("Name").Value;
 
                 GuestType type = new GuestType(id, code, name);
-                _guestTypes.Add(type);
+                guestTypes.Add(type);
             }
+
+            return guestTypes;
         }
 
-        private void GetOrderTypes()
+        private List<OrderType> GetOrderTypes()
         {
-            IEnumerable<XElement> orderTypes = RequestReference("CHANGEABLEORDERTYPES", null, null, "1");
+            List<OrderType> orderTypes = new List<OrderType>();
 
-            foreach (XElement orderType in orderTypes)
+            IEnumerable<XElement> xOrderTypes = RequestReference("CHANGEABLEORDERTYPES", null, null, "1");
+
+            foreach (XElement orderType in xOrderTypes)
             {
                 int id = Convert.ToInt32(orderType.Attribute("Ident").Value);
                 int code = Convert.ToInt32(orderType.Attribute("Code").Value);
                 string name = orderType.Attribute("Name").Value;
 
                 OrderType type = new OrderType(id, code, name);
-                _orderTypes.Add(type);
+                orderTypes.Add(type);
             }
+
+            return orderTypes;
         }
 
         private Dictionary<int, decimal> GetOrderMenu()
@@ -360,8 +375,10 @@ namespace RKeeperWaiter
             return prices;
         }
 
-        private void GetHalls()
+        private List<Hall> GetHalls()
         {
+            List<Hall> halls = new List<Hall>();
+
             IEnumerable<XElement> hallList = RequestReference("HallPlans", null, "Items.(Ident, Code, ActiveHierarchy,Status,Name,Items.(*))", "1");
 
             foreach (XElement hall in hallList)
@@ -371,7 +388,7 @@ namespace RKeeperWaiter
                 string name = hall.Attribute("Name").Value;
 
                 Hall newHall = new Hall(id, code, name);
-                _halls.Add(newHall);
+                halls.Add(newHall);
             }
 
             IEnumerable<XElement> tables = RequestReference("Tables", null, "Items.(Ident, Code, Name, Hall, MaxGuests)", "1");
@@ -387,9 +404,11 @@ namespace RKeeperWaiter
 
                 Table newTabel = new Table(id, code, name, maxGuests);
 
-                Hall hall = _halls.Where(x => x.Id == hallId).Single();
+                Hall hall = halls.Where(x => x.Id == hallId).Single();
                 hall.AddTable(newTabel);
             }
+
+            return halls;
         }
 
         private IEnumerable<XElement> RequestReference(string refName, string refItemIdent, string propMask, string onlyActive)
