@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using RKeeperWaiter.Models;
@@ -56,6 +57,7 @@ namespace RKeeperWaiter
             GetHalls();
             GetOrderTypes();
             SetPrice();
+            GetOrderList();
         }
 
         public MenuCategory GetMenuCategory(int id)
@@ -139,51 +141,99 @@ namespace RKeeperWaiter
 
                 Order newOrder = new Order(orderId, visitId, orderGuid, orderName);
 
+                GetOrderInfo(newOrder);
+
                 orders.Add(newOrder);
             }
 
             return orders;
         }
 
-        //public void MakeTestOrder()
-        //{
-        //    StringBuilder stringBuilder = new StringBuilder();
+        private void GetOrderInfo(Order order)
+        {
+            RequestBuilder requestBuilder = new RequestBuilder();
+            GetOrder getOrder = new GetOrder(order.Guid);
+            getOrder.CreateRequest(requestBuilder);
+            
+            XDocument orderInfo = NetworkService.SendRequest(requestBuilder.GetXml());
 
-        //    using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-        //    {
-        //        writer.WriteStartDocument();
-        //        writer.WriteStartElement("RK7Query");
+            XElement xOrder = orderInfo.Root.Element("CommandResult").Element("Order");
 
-        //        writer.WriteStartElement("RK7Command");
-        //        writer.WriteAttributeString("CMD", "CreateOrder");
+            XElement xGuests = xOrder.Element("Guests");
 
-        //        writer.WriteStartElement("Table");
-        //        writer.WriteAttributeString("code", "1");
-        //        writer.WriteEndElement();
+            if (xGuests != null)
+            {
+                foreach (XElement xGuest in xGuests.Elements("Guest"))
+                {
+                    Guest guest = new Guest(xGuest.Attribute("guestLabel").Value);
 
-        //        writer.WriteStartElement("Waiter");
-        //        writer.WriteAttributeString("id", _user.Id.ToString());
-        //        writer.WriteEndElement();
+                    order.AddGuest(guest);
+                }
+            }
 
-        //        writer.WriteStartElement("Station");
-        //        writer.WriteAttributeString("id", _stationId.ToString());
-        //        writer.WriteEndElement();
+            XElement xSession = xOrder.Element("Session");
 
-        //        writer.WriteStartElement("Guests");
+            if (xSession != null)
+            {
+                foreach (XElement dish in xSession.Elements("Dish"))
+                {
+                    int dishId = Convert.ToInt32(dish.Attribute("id").Value);
+                    order.AddDish(_dishes.Where(d => d.Id == dishId).First());
+                }
+            }
+        }
 
-        //        writer.WriteStartElement("Guest");
-        //        writer.WriteAttributeString("GuestLabel", "1");
-        //        writer.WriteEndElement();
+        public void SendNewOrder()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
 
-        //        writer.WriteEndElement();
+            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("RK7Query");
 
-        //        writer.WriteEndElement();
+                writer.WriteStartElement("RK7Command");
+                writer.WriteAttributeString("CMD", "CreateOrder");
 
-        //        writer.WriteEndElement();
-        //    }
+                writer.WriteStartElement("Table");
+                writer.WriteAttributeString("code", _newOrder.Table.Code.ToString());
+                writer.WriteEndElement();
 
-        //    XDocument newOrder = NetworkService.SendRequest(stringBuilder);
-        //}
+                writer.WriteStartElement("Waiter");
+                writer.WriteAttributeString("id", _user.Id.ToString());
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("Station");
+                writer.WriteAttributeString("id", _stationId.ToString());
+                writer.WriteEndElement();
+
+                if (_newOrder.GuestCount > 0)
+                {
+                    writer.WriteStartElement("Guests");
+
+                    for (int i = 0; i < _newOrder.GuestCount; i++)
+                    {
+
+                        writer.WriteStartElement("Guest");
+                        writer.WriteAttributeString("GuestLabel", (i + 1).ToString());
+                        writer.WriteEndElement();
+                    }
+
+                    writer.WriteEndElement();
+                }
+
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+            }
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(stringBuilder.ToString());
+
+            XDocument newOrder = NetworkService.SendRequest(xmlDocument);
+
+            _newOrder = new NewOrder();
+        }
 
         //public void DeleteOrder(int visitId)
         //{

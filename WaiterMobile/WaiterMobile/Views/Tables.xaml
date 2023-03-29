@@ -17,6 +17,7 @@
 
                 <ImageButton BackgroundColor="White"
                         Source="arrow_left_short.png"
+                        Clicked="OnBackButtonCLicked"
                         />
 
                 <Label Text="Новый заказ"

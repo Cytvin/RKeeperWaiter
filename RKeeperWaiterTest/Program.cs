@@ -48,14 +48,23 @@ namespace RKeeperWaiterTest
 
             Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
 
-            IEnumerable<Hall> halls = _waiter.Halls;
+            List<Order> orders = _waiter.GetOrderList();
 
-            foreach (Hall hall in halls)
+            foreach (Order order in orders) 
             {
-                Console.WriteLine($"Зал ({hall.Id}): {hall.Name}");
-                foreach (Table table in hall.Tables)
+                Console.WriteLine();
+                Console.WriteLine($"{order.Id} | {order.Name}: {order.Guid}");
+                
+                Console.WriteLine("Гости: ");
+                foreach (Guest guest in order.Guests)
                 {
-                    Console.WriteLine($"Стол ({table.Id}): {table.Name}");
+                    Console.WriteLine($"Guest: {guest.Label}");
+                }
+
+                Console.WriteLine("Блюда: ");
+                foreach (Dish dish in order.Dishes)
+                {
+                    Console.WriteLine($"{dish.Id} | {dish.Name} : {dish.Price}");
                 }
             }
 

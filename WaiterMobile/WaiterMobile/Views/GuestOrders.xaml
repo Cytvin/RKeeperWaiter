@@ -17,6 +17,7 @@
 
                 <ImageButton BackgroundColor="White"
                         Source="arrow_left_short.png"
+                        Clicked="OnBackButtonClicked"
                         />
 
                 <Label x:Name="_orderLabel"
@@ -31,7 +32,7 @@
             <StackLayout x:Name="_inputStack">
                 <Grid Padding="30, 40, 30, 10">
                     <Grid.RowDefinitions>
-                        <RowDefinition />
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -45,12 +46,28 @@
                            Grid.Column="0"/>
 
                     <Switch x:Name="_guestSwitch"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        IsToggled="true"
+                        Toggled="OnGuestSwitchToggled"/>
                 </Grid>
+
+                <Label x:Name="_guestCountLable"
+                       Text="Введите количество гостей:"
+                       TextColor="Black"
+                       IsEnabled="False"
+                       IsVisible="False"
+                       Margin="30, 0, 30, 0"/>
+                
+                <Entry x:Name="_guestCountEntry"
+                       IsEnabled="False"
+                       IsVisible="False"
+                       Margin="30, 0, 30, 0"
+                       TextChanged="OnGuestEntryTextChanged"/>
 
                 <Picker Margin="30, 100, 30, 10"
                         Title="Тип заказа"
-                        x:Name="_orderTypePicker">
+                        x:Name="_orderTypePicker"
+                        SelectedIndexChanged="OnOrderTypeChanged">
                 </Picker>
             </StackLayout>
 

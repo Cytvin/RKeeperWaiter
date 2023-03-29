@@ -60,5 +60,10 @@ namespace WaiterMobile.Views
                 _tables.Children.Add(tableButton);
             }
         }
+
+        private void OnBackButtonCLicked(object sender, EventArgs e)
+        {
+            Shell.Current.GoToAsync("..");
+        }
     }
 }

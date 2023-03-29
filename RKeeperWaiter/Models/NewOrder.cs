@@ -13,6 +13,7 @@ namespace RKeeperWaiter.Models
         private int _stationId;
         private Table _table;
         private Hall _hall;
+        private int _orderType;
 
         public int GuestCount { get { return _guestCount; } }
         public Table Table { get { return _table; } }
@@ -36,13 +37,18 @@ namespace RKeeperWaiter.Models
 
         public void SetGuestCount(int guestCount)
         {
-            if (guestCount <= 0)
+            if (guestCount < 0)
             {
-                _guestCount = 1;
+                _guestCount = 0;
                 return;
             }
 
             _guestCount = guestCount;
+        }
+
+        public void SetOrderType(int orderType)
+        {
+            _orderType = orderType;
         }
     }
 }

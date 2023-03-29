@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Models\Dish.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Guest.cs" />
     <Compile Include="Models\GuestType.cs" />
     <Compile Include="Models\Hall.cs" />
     <Compile Include="Models\MenuCategory.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="Models\Table.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="NetworkService.cs" />
+    <Compile Include="XmlRequests\GetOrder.cs" />
     <Compile Include="XmlRequests\GetOrderList.cs" />
     <Compile Include="XmlRequests\GetOrderMenu.cs" />
     <Compile Include="XmlRequests\GetRefData.cs" />
