@@ -13,12 +13,14 @@ namespace WaiterMobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GuestOrders : ContentPage
     {
-        public GuestOrders()
+        private Order _newOrder;
+
+        public GuestOrders(Order newOrder, string hallTable)
         {
             InitializeComponent();
 
-            _orderLabel.Text = App.Waiter.NewOrder.Hall.Name + " | ";
-            _orderLabel.Text += App.Waiter.NewOrder.Table.Name;
+            _orderLabel.Text = hallTable;
+            _newOrder = newOrder;
 
             OrderTypesPickerInitialize();
         }
@@ -35,14 +37,17 @@ namespace WaiterMobile.Views
 
         private void OnCreateOrderClick(object sender, EventArgs e) 
         {
-            App.Waiter.SendNewOrder();
+            int guestCount = Convert.ToInt32(_guestCountEntry.Text);
+
+            App.Waiter.CreateNewOrder(_newOrder, guestCount);
+
             Shell.Current.Navigation.PushAsync(new Orders());
         }
 
         private void OnOrderTypeChanged(object sender, EventArgs e)
         {
-            int orderType = App.Waiter.OrderTypes.ToArray()[_orderTypePicker.SelectedIndex].Id;
-            App.Waiter.NewOrder.SetOrderType(orderType);
+            OrderType orderType = App.Waiter.OrderTypes.ToArray()[_orderTypePicker.SelectedIndex];
+            _newOrder.SetType(orderType);
         }
 
         private void OnBackButtonClicked(object sender, EventArgs e)
@@ -54,8 +59,6 @@ namespace WaiterMobile.Views
         {
             if (_guestSwitch.IsToggled)
             {
-                App.Waiter.NewOrder.SetGuestCount(0);
-
                 _guestCountEntry.IsEnabled = false;
                 _guestCountLable.IsEnabled = false;
 
@@ -81,15 +84,11 @@ namespace WaiterMobile.Views
                 _guestCountEntry.Text = "";
             }
 
-            int maxGuests = App.Waiter.NewOrder.Table.MaxGuests;
-
-            if (guestCount > maxGuests)
+            if (guestCount >= 100)
             {
-                _guestCountEntry.Text = maxGuests.ToString();
-                guestCount = maxGuests;
+                _guestCountEntry.Text = "99";
+                guestCount = 99;
             }
-
-            App.Waiter.NewOrder.SetGuestCount(guestCount);
         }
     }
 }

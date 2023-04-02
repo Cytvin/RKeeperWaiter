@@ -17,15 +17,18 @@ namespace RKeeperWaiter.Models
         private Table _table;
 
         private List<Guest> _guests;
-        private List<Dish> _dishes;
+        private List<Dish> _commonDishes;
 
         public int Id { get { return _id; } }
         public int VisitId { get { return _visitId; } }
         public Guid Guid { get { return _guid; } }
         public string Name { get { return _name; } }
+        public Table Table { get { return _table; } }
 
         public IEnumerable<Guest> Guests { get { return _guests; } }
-        public IEnumerable<Dish> Dishes { get { return _dishes; } }
+        public IEnumerable<Dish> CommonDishes { get { return _commonDishes; } }
+
+        public Order() { }
 
         public Order (int id, int visitId, Guid guid, string name)
         {
@@ -35,7 +38,7 @@ namespace RKeeperWaiter.Models
             _name = name;
 
             _guests = new List<Guest>();
-            _dishes = new List<Dish>();
+            _commonDishes = new List<Dish>();
         }
 
         public void SetSum(int sum)
@@ -53,14 +56,14 @@ namespace RKeeperWaiter.Models
             _table = table;
         }
 
-        public void AddGuest(Guest guest)
+        public void InsertGuest(Guest guest)
         {
             _guests.Add(guest);
         }
 
-        public void AddDish(Dish dish)
+        public void InsertCommonDish(Dish dish)
         {
-            _dishes.Add(dish);
+            _commonDishes.Add(dish);
         }
     }
 }

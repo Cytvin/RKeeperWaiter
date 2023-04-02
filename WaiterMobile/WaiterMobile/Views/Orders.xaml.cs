@@ -34,15 +34,19 @@ namespace WaiterMobile.Views
                     _ordersGrid.RowDefinitions.Add(rowDefinition);
                 }
 
-                Button button = new Button();
-                button.Text = order.Name;
-                button.WidthRequest = 150;
-                button.HorizontalOptions = LayoutOptions.Center;
+                Button orderButton = new Button();
+                orderButton.Text = order.Name;
+                orderButton.WidthRequest = 150;
+                orderButton.HorizontalOptions = LayoutOptions.Center;
+                orderButton.Clicked += (s, e) =>
+                {
+                    OnOrderButtonClick(order);
+                };
 
-                Grid.SetColumn(button, columnNumber++);
-                Grid.SetRow(button, rowNumber);
+                Grid.SetColumn(orderButton, columnNumber++);
+                Grid.SetRow(orderButton, rowNumber);
 
-                _ordersGrid.Children.Add(button);
+                _ordersGrid.Children.Add(orderButton);
 
                 ordersCount++;
 
@@ -52,6 +56,11 @@ namespace WaiterMobile.Views
                     rowNumber++;
                 }
             }
+        }
+
+        private void OnOrderButtonClick(Order order)
+        {
+            Shell.Current.Navigation.PushAsync(new OrderView(order));
         }
 
         private void OnCreateOrderClick(object sender, System.EventArgs e)

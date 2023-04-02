@@ -20,13 +20,11 @@ namespace RKeeperWaiter
         private List<Hall> _halls;
         private List<OrderType> _orderTypes;
 
-        private NewOrder _newOrder;
         private User _user;
 
         public int StationId { get { return _stationId; } }
         public NetworkService NetworkService { get; private set; }
         public User CurrentUser { get { return _user; } }
-        public NewOrder NewOrder { get { return _newOrder; } }
         public IEnumerable<Hall> Halls { get { return _halls; } }
         public IEnumerable<OrderType> OrderTypes { get { return _orderTypes; } }
 
@@ -36,7 +34,6 @@ namespace RKeeperWaiter
             _dishes = new List<Dish>();
             _guestTypes = new List<GuestType>();
             _halls = new List<Hall>();
-            _newOrder = new NewOrder();
             _orderTypes = new List<OrderType>();
             NetworkService = new NetworkService();
         }
@@ -166,7 +163,7 @@ namespace RKeeperWaiter
                 {
                     Guest guest = new Guest(xGuest.Attribute("guestLabel").Value);
 
-                    order.AddGuest(guest);
+                    order.InsertGuest(guest);
                 }
             }
 
@@ -177,12 +174,23 @@ namespace RKeeperWaiter
                 foreach (XElement dish in xSession.Elements("Dish"))
                 {
                     int dishId = Convert.ToInt32(dish.Attribute("id").Value);
-                    order.AddDish(_dishes.Where(d => d.Id == dishId).First());
+
+                    XAttribute seat = dish.Attribute("seat");
+
+                    if (seat == null)
+                    {
+                        order.InsertCommonDish(_dishes.First(d => d.Id == dishId));
+                        continue;
+                    }
+
+                    Guest guest = order.Guests.First(g => g.Label == seat.Value);
+
+                    guest.InsertDish(_dishes.First(d => d.Id == dishId));
                 }
             }
         }
 
-        public void SendNewOrder()
+        public void CreateNewOrder(Order newOrder, int guestCount)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -195,7 +203,7 @@ namespace RKeeperWaiter
                 writer.WriteAttributeString("CMD", "CreateOrder");
 
                 writer.WriteStartElement("Table");
-                writer.WriteAttributeString("code", _newOrder.Table.Code.ToString());
+                writer.WriteAttributeString("code", newOrder.Table.Code.ToString());
                 writer.WriteEndElement();
 
                 writer.WriteStartElement("Waiter");
@@ -206,11 +214,11 @@ namespace RKeeperWaiter
                 writer.WriteAttributeString("id", _stationId.ToString());
                 writer.WriteEndElement();
 
-                if (_newOrder.GuestCount > 0)
+                if (guestCount > 0)
                 {
                     writer.WriteStartElement("Guests");
 
-                    for (int i = 0; i < _newOrder.GuestCount; i++)
+                    for (int i = 0; i < guestCount; i++)
                     {
 
                         writer.WriteStartElement("Guest");
@@ -229,9 +237,7 @@ namespace RKeeperWaiter
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(stringBuilder.ToString());
 
-            XDocument newOrder = NetworkService.SendRequest(xmlDocument);
-
-            _newOrder = new NewOrder();
+            NetworkService.SendRequest(xmlDocument);
         }
 
         //public void DeleteOrder(int visitId)

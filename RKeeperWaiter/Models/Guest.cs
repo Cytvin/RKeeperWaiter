@@ -9,12 +9,21 @@ namespace RKeeperWaiter.Models
     public class Guest
     {
         private string _label;
+        private List<Dish> _dishes;
 
         public string Label { get { return _label; } }
+
+        public IEnumerable<Dish> Dishes { get { return _dishes; } }
 
         public Guest(string name) 
         {
             _label = name;
+            _dishes = new List<Dish>();
+        }
+
+        public void InsertDish(Dish dish)
+        {
+            _dishes.Add(dish);
         }
     }
 }

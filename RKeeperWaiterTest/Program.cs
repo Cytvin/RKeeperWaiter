@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using RKeeperWaiter;
@@ -55,16 +56,25 @@ namespace RKeeperWaiterTest
                 Console.WriteLine();
                 Console.WriteLine($"{order.Id} | {order.Name}: {order.Guid}");
                 
+                if (order.CommonDishes.Count() > 0)
+                {
+                    Console.WriteLine("Общие блюда: ");
+                    foreach (Dish dish in order.CommonDishes)
+                    {
+                        Console.WriteLine($"{dish.Id} | {dish.Name} : {dish.Price}");
+                    }
+                }
+
                 Console.WriteLine("Гости: ");
                 foreach (Guest guest in order.Guests)
                 {
                     Console.WriteLine($"Guest: {guest.Label}");
-                }
 
-                Console.WriteLine("Блюда: ");
-                foreach (Dish dish in order.Dishes)
-                {
-                    Console.WriteLine($"{dish.Id} | {dish.Name} : {dish.Price}");
+                    Console.WriteLine("Блюда гостя: ");
+                    foreach (Dish dish in guest.Dishes)
+                    {
+                        Console.WriteLine($"{dish.Id} | {dish.Name} : {dish.Price}");
+                    }
                 }
             }
 

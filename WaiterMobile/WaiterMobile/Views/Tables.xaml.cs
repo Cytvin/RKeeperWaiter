@@ -16,6 +16,7 @@ namespace WaiterMobile.Views
         public Tables()
         {
             InitializeComponent();
+
             HallPickerInitialize();
         }
 
@@ -34,8 +35,12 @@ namespace WaiterMobile.Views
 
         private void OnTableSelected(Table table, Hall hall) 
         {
-            App.Waiter.NewOrder.SetTableAndTable(hall, table);
-            Shell.Current.Navigation.PushAsync(new GuestOrders());
+            Order newOrder = new Order();
+            newOrder.SetTable(table);
+
+            string hallTable = $"{hall.Name} | {table.Name}";
+
+            Shell.Current.Navigation.PushAsync(new GuestOrders(newOrder, hallTable));
         }
 
         private void CreateTables()
