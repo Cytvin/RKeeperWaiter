@@ -58,9 +58,11 @@ namespace RKeeperWaiter
 
         public MenuCategory GetMenuCategory(int id)
         {
-            MenuCategory menuCategory = new MenuCategory();
+            string categoryName = _categories.First(c => c.Id == id).Name;
 
-            IEnumerable<Category> categories = _categories.Where(category => category.ParentId == id);
+            MenuCategory menuCategory = new MenuCategory(categoryName);
+
+            IEnumerable<Category> categories = _categories.Where(category => category.ParentId == id && category.Id != 0);
 
             foreach (Category category in categories)
             {

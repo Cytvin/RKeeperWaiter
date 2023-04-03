@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,9 @@ namespace WaiterMobile.Views
             InitializeComponent();
 
             _order = order;
+
+            _order.OrderChanged += DisplayOrder;
+
             DisplayOrder();
         }
 
@@ -27,7 +31,9 @@ namespace WaiterMobile.Views
         {
             _orderName.Text = _order.Name;
 
-            _orderDishes.Children.Add(AddGridToStack(""));
+            _orderDishes.Children.Clear();
+
+            _orderDishes.Children.Add(AddGridToStack("", _order.InsertCommonDish));
 
             foreach (Dish dish in _order.CommonDishes)
             {
@@ -36,7 +42,8 @@ namespace WaiterMobile.Views
 
             foreach (Guest guest in _order.Guests)
             {
-                _orderDishes.Children.Add(AddGridToStack(guest.Label));
+                guest.DishInserted += DisplayOrder;
+                _orderDishes.Children.Add(AddGridToStack(guest.Label, guest.InsertDish));
 
                 foreach (Dish dish in guest.Dishes)
                 {
@@ -50,7 +57,12 @@ namespace WaiterMobile.Views
             Shell.Current.Navigation.PopAsync(true);
         }
 
-        private Grid AddGridToStack(string label)
+        private void OnAddDishButtonClicked(Action<Dish> action)
+        {
+            Shell.Current.Navigation.PushAsync(new Dishes(action));
+        }
+
+        private Grid AddGridToStack(string label, Action<Dish> action)
         {
             Grid guestGrid = new Grid();
 
@@ -78,6 +90,10 @@ namespace WaiterMobile.Views
             addDishButton.Text = "+";
             addDishButton.HorizontalOptions = LayoutOptions.End;
             addDishButton.VerticalOptions = LayoutOptions.Center;
+            addDishButton.Clicked += (s, e) =>
+            {
+                OnAddDishButtonClicked(action);
+            };
 
             Grid.SetColumn(guestLabel, 0);
             Grid.SetColumn(addDishButton, 1);
@@ -95,6 +111,16 @@ namespace WaiterMobile.Views
             dishLabel.Margin = new Thickness(30, 5, 30, 5);
 
             return dishLabel;
+        }
+
+        protected override void OnDisappearing()
+        {
+            _order.OrderChanged -= DisplayOrder;
+
+            foreach (Guest guest in _order.Guests)
+            {
+                guest.DishInserted -= DisplayOrder;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WaiterMobile.Views.OrderView"
+             x:Class="WaiterMobile.Views.Dishes"
              Shell.NavBarIsVisible="False">
     <ContentPage.Content>
         <StackLayout>
@@ -20,7 +20,7 @@
                         Clicked="OnBackButtonCLicked"
                         />
 
-                <Label x:Name="_orderName"
+                <Label x:Name="_categoryName"
                        Grid.Column="1"
                        FontSize="20"
                        TextColor="Black"
@@ -29,28 +29,14 @@
             </Grid>
 
             <ScrollView>
-                <StackLayout x:Name="_orderDishes">
-                </StackLayout>
-            </ScrollView>
-
-            <StackLayout VerticalOptions="EndAndExpand"
-                       HorizontalOptions="Center"
-                       Margin="10, 0, 10, 30">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="60"/>
-                    </Grid.RowDefinitions>
-
+                <Grid x:Name="_dishesGrid"
+                      Margin="20, 10, 20, 10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-
-                    <Button Text="Итог"/>
-                    <Button Text="+ гость"
-                         Grid.Column="1"/>
                 </Grid>
-            </StackLayout>
+            </ScrollView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

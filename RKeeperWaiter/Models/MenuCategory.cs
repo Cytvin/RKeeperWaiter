@@ -6,11 +6,15 @@ namespace RKeeperWaiter.Models
     {
         private List<Category> _internalCategory;
         private List<Dish> _dishes;
+        private string _name;
 
-        public MenuCategory()
+        public string Name { get { return _name; } }
+
+        public MenuCategory(string name)
         {
             _internalCategory = new List<Category>();
             _dishes = new List<Dish>();
+            _name = name;
         }
 
         public void AddCategory(Category category) 

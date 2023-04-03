@@ -11,6 +11,8 @@ namespace RKeeperWaiter.Models
         private string _label;
         private List<Dish> _dishes;
 
+        public event Action DishInserted;
+
         public string Label { get { return _label; } }
 
         public IEnumerable<Dish> Dishes { get { return _dishes; } }
@@ -24,6 +26,7 @@ namespace RKeeperWaiter.Models
         public void InsertDish(Dish dish)
         {
             _dishes.Add(dish);
+            DishInserted?.Invoke();
         }
     }
 }
