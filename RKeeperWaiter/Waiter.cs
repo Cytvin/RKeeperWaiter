@@ -194,52 +194,12 @@ namespace RKeeperWaiter
 
         public void CreateNewOrder(Order newOrder, int guestCount)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            CreateOrder createOrder = new CreateOrder(newOrder.Table.Id, _user.Id, _stationId, newOrder.Type.Id, guestCount);
+            RequestBuilder requestBuilder = new RequestBuilder();
+            createOrder.CreateRequest(requestBuilder);
 
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
-
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "CreateOrder");
-
-                writer.WriteStartElement("Table");
-                writer.WriteAttributeString("code", newOrder.Table.Code.ToString());
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("Waiter");
-                writer.WriteAttributeString("id", _user.Id.ToString());
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("Station");
-                writer.WriteAttributeString("id", _stationId.ToString());
-                writer.WriteEndElement();
-
-                if (guestCount > 0)
-                {
-                    writer.WriteStartElement("Guests");
-
-                    for (int i = 0; i < guestCount; i++)
-                    {
-
-                        writer.WriteStartElement("Guest");
-                        writer.WriteAttributeString("GuestLabel", (i + 1).ToString());
-                        writer.WriteEndElement();
-                    }
-
-                    writer.WriteEndElement();
-                }
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(stringBuilder.ToString());
-
-            NetworkService.SendRequest(xmlDocument);
+            XDocument createOrderResult = NetworkService.SendRequest(requestBuilder.GetXml());
+            createOrderResult.Save("D:\\sqllog\\test.xml");
         }
 
         //public void DeleteOrder(int visitId)

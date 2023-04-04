@@ -24,6 +24,7 @@ namespace RKeeperWaiter.Models
         public Guid Guid { get { return _guid; } }
         public string Name { get { return _name; } }
         public Table Table { get { return _table; } }
+        public OrderType Type { get { return _type; } }
 
         public IEnumerable<Guest> Guests { get { return _guests; } }
         public IEnumerable<Dish> CommonDishes { get { return _commonDishes; } }

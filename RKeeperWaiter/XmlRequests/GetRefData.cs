@@ -19,27 +19,28 @@ namespace RKeeperWaiter
 
         public void CreateRequest(RequestBuilder builder)
         {
-            builder.AddElementToRoot("RK7Command");
-            builder.AddAttributeToLast("CMD", "GetRefData");
+
+            builder.AddElement("RK7Command");
+            builder.AddAttribute("CMD", "GetRefData");
 
             if (_refName != null)
             {
-                builder.AddAttributeToLast("RefName", _refName);
+                builder.AddAttribute("RefName", _refName);
             }
             
             if (_refItemIdent != null)
             {
-                builder.AddAttributeToLast("RefItemIdent", _refItemIdent);
+                builder.AddAttribute("RefItemIdent", _refItemIdent);
             }
 
             if (_propMask != null)
             {
-                builder.AddAttributeToLast("PropMask", _propMask);
+                builder.AddAttribute("PropMask", _propMask);
             }
 
             if (_onlyActive != null)
             {
-                builder.AddAttributeToLast("OnlyActive", _onlyActive);
+                builder.AddAttribute("OnlyActive", _onlyActive);
             }
         }
     }

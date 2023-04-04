@@ -20,16 +20,17 @@ namespace RKeeperWaiter.XmlRequests
 
         public void CreateRequest(RequestBuilder builder)
         {
-            builder.AddElementToRoot("RK7Command");
-            builder.AddAttributeToLast("CMD", "GetOrderMenu");
-            builder.AddAttributeToLast("PropMask", "Dishes.(Ident,Price),Modifiers.(Ident,Price),OrderTypes.(Ident)");
-            builder.AddAttributeToLast("checkrests", "false");
+            builder.AddElement("RK7Command");
+            builder.AddAttribute("CMD", "GetOrderMenu");
+            builder.AddAttribute("PropMask", "Dishes.(Ident,Price),Modifiers.(Ident,Price),OrderTypes.(Ident)");
+            builder.AddAttribute("checkrests", "false");
 
-            builder.AddElementToLast("Station");
-            builder.AddAttributToInternal("id", _stationId.ToString());
+            builder.AddElement("Station");
+            builder.AddAttribute("id", _stationId.ToString());
+            builder.SelectPreviousElement();
 
-            builder.AddElementToLast("Waiter");
-            builder.AddAttributToInternal("id", _userId.ToString());
+            builder.AddElement("Waiter");
+            builder.AddAttribute("id", _userId.ToString());
         }
     }
 }

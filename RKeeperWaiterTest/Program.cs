@@ -34,28 +34,13 @@ namespace RKeeperWaiterTest
             }
         }
 
-        static void Main(string[] args)
+        public static void DisplayOrders(List<Order> orders)
         {
-            _waiter = new Waiter();
-
-            string userCode = "15";
-            string stationId = "";
-
-            _waiter.NetworkService.SetParameters("", "", "IT", "10");
-
-            _waiter.UserAuthorization(userCode);
-            _waiter.SetStationId(stationId);
-            _waiter.DownloadReferences();
-
-            Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
-
-            List<Order> orders = _waiter.GetOrderList();
-
-            foreach (Order order in orders) 
+            foreach (Order order in orders)
             {
                 Console.WriteLine();
                 Console.WriteLine($"{order.Id} | {order.Name}: {order.Guid}");
-                
+
                 if (order.CommonDishes.Count() > 0)
                 {
                     Console.WriteLine("Общие блюда: ");
@@ -77,8 +62,82 @@ namespace RKeeperWaiterTest
                     }
                 }
             }
+        }
 
-            //Menu();
+        public static XmlDocument CreateXml()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("RK7Query");
+
+                writer.WriteStartElement("RK7Command");
+                writer.WriteAttributeString("CMD", "CreateOrder");
+
+                writer.WriteStartElement("Table");
+                writer.WriteAttributeString("code", "12");
+
+                writer.WriteStartElement("Seat");
+                writer.WriteAttributeString("code", "20");
+
+                writer.WriteStartElement("Person");
+                writer.WriteAttributeString("code", "84");
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+            }
+
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(stringBuilder.ToString());
+            return xml;
+        }
+
+        public static XmlNode GetLastestChildNode(XmlElement xmlElement)
+        {
+            if (xmlElement.LastChild == null)
+            {
+                return xmlElement;
+            }
+
+            return GetLastestChildNode(xmlElement.LastChild as XmlElement);
+        }
+
+        static void Main(string[] args)
+        {
+            _waiter = new Waiter();
+
+            string userCode = "15";
+            string stationId = "";
+
+            _waiter.NetworkService.SetParameters("", "", "IT", "10");
+
+            _waiter.UserAuthorization(userCode);
+            _waiter.SetStationId(stationId);
+            _waiter.DownloadReferences();
+
+            Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
+
+            Order order = new Order();
+            Table table = _waiter.Halls.First().Tables.First();
+            OrderType orderType = _waiter.OrderTypes.First();
+
+            order.SetTable(table);
+            order.SetType(orderType);
+
+            _waiter.CreateNewOrder(order, 1);
+
+            List<Order> orders = _waiter.GetOrderList();
+            DisplayOrders(orders);
+
+            Menu();
             Console.ReadLine();
         }
     }

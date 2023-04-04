@@ -17,10 +17,11 @@ namespace RKeeperWaiter.XmlRequests
 
         public void CreateRequest(RequestBuilder builder)
         {
-            builder.AddElementToRoot("RK7Command");
-            builder.AddAttributeToLast("CMD", "GetOrder");
-            builder.AddElementToLast("Order");
-            builder.AddAttributToInternal("guid", _orderGuid);
+            builder.AddElement("RK7Command");
+            builder.AddAttribute("CMD", "GetOrder");
+
+            builder.AddElement("Order");
+            builder.AddAttribute("guid", _orderGuid);
         }
     }
 }
