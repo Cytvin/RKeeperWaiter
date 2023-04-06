@@ -54,6 +54,7 @@ namespace RKeeperWaiter
             _halls = GetHalls();
             _orderTypes = GetOrderTypes();
             SetPrice();
+            GetSystemInfo();
         }
 
         public Menu GetMenuCategory(int id)
@@ -82,7 +83,6 @@ namespace RKeeperWaiter
         public void UserAuthorization(string userCode)
         {
             RequestBuilder requestBuilder = new RequestBuilder();
-
             GetWaiterList getWaiterList = new GetWaiterList();
             getWaiterList.CreateRequest(requestBuilder);
 
@@ -102,17 +102,6 @@ namespace RKeeperWaiter
             int userId = Convert.ToInt32(userIdentificator);
 
             GetUserData(userId);
-        }
-
-        private void GetUserData(int userId)
-        {
-            XElement userDataXml = RequestReference("EMPLOYEES", userId.ToString(), null, null).First();
-
-            string userName = userDataXml.Attribute("Name").Value;
-            int userCode = Convert.ToInt32(userDataXml.Attribute("Code").Value);
-            Guid userGuid = Guid.Parse(userDataXml.Attribute("GUIDString").Value);
-
-            _user = new User(userId, userName, userCode, userGuid);
         }
 
         public List<Order> GetOrderList()
@@ -145,6 +134,35 @@ namespace RKeeperWaiter
             }
 
             return orders;
+        }
+
+        public void CreateNewOrder(Order newOrder, int guestCount)
+        {
+            CreateOrder createOrder = new CreateOrder(newOrder.Table.Id, _user.Id, _stationId, newOrder.Type.Id, guestCount);
+            RequestBuilder requestBuilder = new RequestBuilder();
+            createOrder.CreateRequest(requestBuilder);
+
+            XDocument createOrderResult = NetworkService.SendRequest(requestBuilder.GetXml());
+        }
+
+        private void GetSystemInfo()
+        {
+            GetSystemInfo getSystemInfo = new GetSystemInfo();
+            RequestBuilder requestBuilder = new RequestBuilder();
+            getSystemInfo.CreateRequest(requestBuilder);
+
+            NetworkService.SendRequest(requestBuilder.GetXml());
+        }
+
+        private void GetUserData(int userId)
+        {
+            XElement userDataXml = RequestReference("EMPLOYEES", userId.ToString(), null, null).First();
+
+            string userName = userDataXml.Attribute("Name").Value;
+            int userCode = Convert.ToInt32(userDataXml.Attribute("Code").Value);
+            Guid userGuid = Guid.Parse(userDataXml.Attribute("GUIDString").Value);
+
+            _user = new User(userId, userName, userCode, userGuid);
         }
 
         private void GetOrderInfo(Order order)
@@ -190,16 +208,6 @@ namespace RKeeperWaiter
                     guest.InsertDish(_dishes.First(d => d.Id == dishId));
                 }
             }
-        }
-
-        public void CreateNewOrder(Order newOrder, int guestCount)
-        {
-            CreateOrder createOrder = new CreateOrder(newOrder.Table.Id, _user.Id, _stationId, newOrder.Type.Id, guestCount);
-            RequestBuilder requestBuilder = new RequestBuilder();
-            createOrder.CreateRequest(requestBuilder);
-
-            XDocument createOrderResult = NetworkService.SendRequest(requestBuilder.GetXml());
-            createOrderResult.Save("D:\\sqllog\\test.xml");
         }
 
         //public void DeleteOrder(int visitId)

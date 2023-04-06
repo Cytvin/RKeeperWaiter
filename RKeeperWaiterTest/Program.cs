@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using RKeeperWaiter;
 using RKeeperWaiter.Models;
 
@@ -22,12 +27,12 @@ namespace RKeeperWaiterTest
 
                 Menu menuCategory = _waiter.GetMenuCategory(categoryId);
 
-                foreach (Category category in menuCategory.GetCategories())
+                foreach (Category category in menuCategory.Categories)
                 {
                     Console.WriteLine($"({category.ParentId}) {category.Id} - {category.Name}");
                 }
 
-                foreach (Dish dish in menuCategory.GetDishes())
+                foreach (Dish dish in menuCategory.Dishes)
                 {
                     Console.WriteLine($"({dish.ParentId}) {dish.Id} ({dish.Guid}) - {dish.Name} : {dish.Price}");
                 }
@@ -110,6 +115,50 @@ namespace RKeeperWaiterTest
             return GetLastestChildNode(xmlElement.LastChild as XmlElement);
         }
 
+        public static void TestMD5()
+        {
+            MD5 mD5 = MD5.Create();
+
+            string userName = "";
+            string password = "";
+            string token = "";
+
+            byte[] md5Token = mD5.ComputeHash(Encoding.ASCII.GetBytes(token));
+
+            string lowerCaseMD5Token = BitConverter.ToString(md5Token).Replace("-", "").ToLower();
+
+            byte[] md5UsernamePassword = mD5.ComputeHash(Encoding.ASCII.GetBytes(userName + password));
+
+            string lowerCaseMD5User = BitConverter.ToString(md5UsernamePassword).Replace("-", "").ToLower();
+
+            string codeString = $"{userName};{lowerCaseMD5User};{lowerCaseMD5Token}";
+
+            string code = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(codeString));
+
+            string anchor = "6%3Ab68e917f-6c64-4765-bf4f-64f3317aa443%23400580001/17";
+
+            Uri licenseUri = new Uri($"https://l.ucs.ru/ls5api/api/License/GetLicenseIdByAnchor?anchor={anchor}");
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(30);
+                httpClient.DefaultRequestHeaders.Add("usr", code);
+
+                HttpResponseMessage response = httpClient.GetAsync(licenseUri).Result;
+
+                HttpStatusCode httpStatusCode = response.StatusCode;
+
+                if (httpStatusCode == HttpStatusCode.OK)
+                {
+                    Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+                }
+                else if (httpStatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new Exception();
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
             _waiter = new Waiter();
@@ -125,19 +174,13 @@ namespace RKeeperWaiterTest
 
             Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
 
-            Order order = new Order();
-            Table table = _waiter.Halls.First().Tables.First();
-            OrderType orderType = _waiter.OrderTypes.First();
+            License license = new License("400580001");
+            Console.WriteLine(license.Token);
 
-            order.SetTable(table);
-            order.SetType(orderType);
+            //List<Order> orders = _waiter.GetOrderList();
+            //DisplayOrders(orders);
 
-            _waiter.CreateNewOrder(order, 1);
-
-            List<Order> orders = _waiter.GetOrderList();
-            DisplayOrders(orders);
-
-            Menu();
+            //Menu();
             Console.ReadLine();
         }
     }

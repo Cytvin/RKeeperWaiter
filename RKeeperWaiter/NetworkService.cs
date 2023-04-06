@@ -23,12 +23,12 @@ namespace RKeeperWaiter
         public string Login => _login;
         public string Password => _password;
 
-        private void SetUrl()
+        private void MakeUrl()
         {
             _uri = new Uri($"https://{_ip}:{_port}/rk7api/v0/xmlinterface.xml");
         }
 
-        private void SetAuthorization()
+        private void MakeAuthorizationString()
         {
             _authorizationString = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{_login}:{_password}"));
         }
@@ -40,8 +40,8 @@ namespace RKeeperWaiter
             _login = login;
             _password = password;
 
-            SetUrl();
-            SetAuthorization();
+            MakeUrl();
+            MakeAuthorizationString();
         }
 
         public XDocument SendRequest(XmlDocument xmlContent)
@@ -52,9 +52,9 @@ namespace RKeeperWaiter
                 return true;
             };
 
-            //DateTime requestSaveTime = DateTime.Now;
-            //xmlContent.Save($"D:\\sqllog\\Request_{requestSaveTime.Year}{requestSaveTime.Month}{requestSaveTime.Day}_" +
-            //    $"{requestSaveTime.Hour}{requestSaveTime.Minute}{requestSaveTime.Second}{requestSaveTime.Millisecond}.xml");
+            DateTime requestSaveTime = DateTime.Now;
+            xmlContent.Save($"D:\\sqllog\\Request_{requestSaveTime.Year}{requestSaveTime.Month}{requestSaveTime.Day}_" +
+                $"{requestSaveTime.Hour}{requestSaveTime.Minute}{requestSaveTime.Second}{requestSaveTime.Millisecond}.xml");
 
             using (HttpClient httpClient = new HttpClient(httpClientHandler))
             {
@@ -70,9 +70,9 @@ namespace RKeeperWaiter
                 {
                     XDocument responseContent = XDocument.Parse(response.Content.ReadAsStringAsync().Result);
 
-                    //DateTime responseSaveTime = DateTime.Now;
-                    //responseContent.Save($"D:\\sqllog\\Response_{responseSaveTime.Year}{responseSaveTime.Month}{responseSaveTime.Day}_" +
-                    //    $"{responseSaveTime.Hour}{responseSaveTime.Minute}{responseSaveTime.Second}{responseSaveTime.Millisecond}.xml");
+                    DateTime responseSaveTime = DateTime.Now;
+                    responseContent.Save($"D:\\sqllog\\Response_{responseSaveTime.Year}{responseSaveTime.Month}{responseSaveTime.Day}_" +
+                        $"{responseSaveTime.Hour}{responseSaveTime.Minute}{responseSaveTime.Second}{responseSaveTime.Millisecond}.xml");
 
                     return responseContent;
                 }
