@@ -10,12 +10,10 @@ namespace RKeeperWaiter.Models
     {
         private string _label;
         private List<Dish> _dishes;
-
         public event Action DishInserted;
 
-        public string Label { get { return _label; } }
-
-        public IEnumerable<Dish> Dishes { get { return _dishes; } }
+        public string Label => _label;
+        public IEnumerable<Dish> Dishes => _dishes;
 
         public Guest(string name) 
         {

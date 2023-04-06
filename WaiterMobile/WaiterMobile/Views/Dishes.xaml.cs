@@ -13,7 +13,7 @@ namespace WaiterMobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Dishes : ContentPage
     {
-        private Stack<MenuCategory> _previousCategories;
+        private Stack<RKeeperWaiter.Models.Menu> _previousCategories;
         private Action<Dish> _addDishToList;
 
         private int _gridRow = 0;
@@ -23,7 +23,7 @@ namespace WaiterMobile.Views
         {
             InitializeComponent();
 
-            _previousCategories = new Stack<MenuCategory>();
+            _previousCategories = new Stack<RKeeperWaiter.Models.Menu>();
             _addDishToList = _addDish;
 
             SetCategory(0);
@@ -31,12 +31,12 @@ namespace WaiterMobile.Views
 
         private void SetCategory(int categoryId)
         {
-            MenuCategory menuCategory = App.Waiter.GetMenuCategory(categoryId);
+            RKeeperWaiter.Models.Menu menuCategory = App.Waiter.GetMenuCategory(categoryId);
 
             DisplayMenuCategory(menuCategory);
         }
 
-        private void DisplayMenuCategory(MenuCategory category)
+        private void DisplayMenuCategory(RKeeperWaiter.Models.Menu category)
         {
             _categoryName.Text = category.Name;
 
@@ -59,7 +59,7 @@ namespace WaiterMobile.Views
                 };
             }
 
-            foreach (Category internalCategory in category.GetCategories())
+            foreach (Category internalCategory in category.Categories)
             {
                 Button button = AddButtonToGrid(internalCategory.Name);
                 button.Clicked += (s, e) =>
@@ -69,7 +69,7 @@ namespace WaiterMobile.Views
                 };
             }
 
-            foreach (Dish dish in category.GetDishes())
+            foreach (Dish dish in category.Dishes)
             {
                 string price = String.Format("{0:0.00}", dish.Price);
                 string namePrice = $"{dish.Name}  {price}";

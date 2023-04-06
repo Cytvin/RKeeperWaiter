@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 
 namespace RKeeperWaiter.Models
 {
@@ -19,15 +20,16 @@ namespace RKeeperWaiter.Models
         private List<Guest> _guests;
         private List<Dish> _commonDishes;
 
-        public int Id { get { return _id; } }
-        public int VisitId { get { return _visitId; } }
-        public Guid Guid { get { return _guid; } }
-        public string Name { get { return _name; } }
-        public Table Table { get { return _table; } }
-        public OrderType Type { get { return _type; } }
+        public int Id => _id;
+        public int VisitId => _visitId;
+        public Guid Guid => _guid;
+        public string Name => _name;
+        public Table Table { get => _table; set => _table = value; }
+        public OrderType Type { get => _type; set => _type = value; }
+        public decimal Sum { get => _sum; set => _sum = value / 100; }
 
-        public IEnumerable<Guest> Guests { get { return _guests; } }
-        public IEnumerable<Dish> CommonDishes { get { return _commonDishes; } }
+        public IEnumerable<Guest> Guests => _guests;
+        public IEnumerable<Dish> CommonDishes => _commonDishes;
 
         public event Action OrderChanged;
 
@@ -42,21 +44,6 @@ namespace RKeeperWaiter.Models
 
             _guests = new List<Guest>();
             _commonDishes = new List<Dish>();
-        }
-
-        public void SetSum(int sum)
-        {
-            _sum = sum / 100;
-        }
-
-        public void SetType (OrderType type) 
-        {
-            _type = type;
-        }
-
-        public void SetTable (Table table)
-        {
-            _table = table;
         }
 
         public void InsertGuest(Guest guest)

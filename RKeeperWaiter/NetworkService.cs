@@ -18,10 +18,10 @@ namespace RKeeperWaiter
         private Uri _uri;
         private string _authorizationString;
 
-        public string Ip { get { return _ip; } }
-        public string Port { get { return _port; } }
-        public string Login { get { return _login; } }
-        public string Password { get { return _password; } }
+        public string Ip => _ip;
+        public string Port => _port;
+        public string Login => _login;
+        public string Password => _password;
 
         private void SetUrl()
         {

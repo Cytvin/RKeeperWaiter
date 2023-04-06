@@ -14,10 +14,10 @@ namespace RKeeperWaiter.Models
 
         private List<Table> _tables;
 
-        public int Id { get { return _id; } }
-        public int Code { get { return _code; } }
-        public string Name { get { return _name; } }
-        public IEnumerable<Table> Tables { get { return _tables; } }
+        public int Id => _id; 
+        public int Code => _code;
+        public string Name => _name;
+        public IEnumerable<Table> Tables => _tables;
 
         public Hall(int id, int code, string name)
         {
@@ -27,7 +27,7 @@ namespace RKeeperWaiter.Models
             _tables = new List<Table>();
         }
 
-        public void AddTable(Table table)
+        public void InsertTable(Table table)
         {
             _tables.Add(table);
         }

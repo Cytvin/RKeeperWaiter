@@ -22,11 +22,11 @@ namespace RKeeperWaiter
 
         private User _user;
 
-        public int StationId { get { return _stationId; } }
+        public int StationId => _stationId;
         public NetworkService NetworkService { get; private set; }
-        public User CurrentUser { get { return _user; } }
-        public IEnumerable<Hall> Halls { get { return _halls; } }
-        public IEnumerable<OrderType> OrderTypes { get { return _orderTypes; } }
+        public User CurrentUser => _user;
+        public IEnumerable<Hall> Halls => _halls;
+        public IEnumerable<OrderType> OrderTypes => _orderTypes;
 
         public Waiter()
         {
@@ -56,24 +56,24 @@ namespace RKeeperWaiter
             SetPrice();
         }
 
-        public MenuCategory GetMenuCategory(int id)
+        public Menu GetMenuCategory(int id)
         {
             string categoryName = _categories.First(c => c.Id == id).Name;
 
-            MenuCategory menuCategory = new MenuCategory(categoryName);
+            Menu menuCategory = new Menu(categoryName);
 
             IEnumerable<Category> categories = _categories.Where(category => category.ParentId == id && category.Id != 0);
 
             foreach (Category category in categories)
             {
-                menuCategory.AddCategory(category);
+                menuCategory.InsertCategory(category);
             }
 
             IEnumerable<Dish> dishes = _dishes.Where(dish => dish.ParentId == id && dish.InMenu);
 
             foreach (Dish dish in dishes)
             {
-                menuCategory.AddDish(dish);
+                menuCategory.InsertDish(dish);
             }
 
             return menuCategory;
@@ -276,7 +276,6 @@ namespace RKeeperWaiter
 
                 if (prices.ContainsKey(dishId))
                 {
-                    dish.InMenu = true;
                     dish.SetPrice(prices[dishId]);
                 }
             }
@@ -373,7 +372,7 @@ namespace RKeeperWaiter
                 Table newTabel = new Table(id, code, name, maxGuests);
 
                 Hall hall = halls.Where(x => x.Id == hallId).Single();
-                hall.AddTable(newTabel);
+                hall.InsertTable(newTabel);
             }
 
             return halls;

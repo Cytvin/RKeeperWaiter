@@ -2,39 +2,31 @@
 
 namespace RKeeperWaiter.Models
 {
-    public class MenuCategory
+    public class Menu
     {
         private List<Category> _internalCategory;
         private List<Dish> _dishes;
         private string _name;
 
-        public string Name { get { return _name; } }
+        public string Name => _name;
+        public IEnumerable<Category> Categories => _internalCategory;
+        public IEnumerable<Dish> Dishes => _dishes;
 
-        public MenuCategory(string name)
+        public Menu(string name)
         {
             _internalCategory = new List<Category>();
             _dishes = new List<Dish>();
             _name = name;
         }
 
-        public void AddCategory(Category category) 
+        public void InsertCategory(Category category) 
         {
             _internalCategory.Add(category);
         }
 
-        public void AddDish(Dish dish)
+        public void InsertDish(Dish dish)
         {
             _dishes.Add(dish);
-        }
-
-        public IEnumerable<Category> GetCategories()
-        {
-            return _internalCategory;
-        }
-
-        public IEnumerable<Dish> GetDishes() 
-        {
-            return _dishes;
         }
     }
 }

@@ -12,9 +12,9 @@ namespace RKeeperWaiter.Models
         private int _code;
         private string _name;
 
-        public int Id { get { return _id; } }
-        public int Code { get { return _code; } }
-        public string Name { get { return _name; } }
+        public int Id => _id;
+        public int Code => _code;
+        public string Name => _name;
 
         public OrderType(int id, int code, string name)
         {

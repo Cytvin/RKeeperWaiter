@@ -13,10 +13,10 @@ namespace RKeeperWaiter.Models
         private string _name;
         private int _maxGuests;
 
-        public int Id { get { return _id; } }
-        public int Code { get { return _code; } }
-        public string Name { get { return _name; } }
-        public int MaxGuests { get {  return _maxGuests; } }
+        public int Id => _id;
+        public int Code => _code;
+        public string Name => _name;
+        public int MaxGuests => _maxGuests;
 
         public Table(int id, int code, string name, int maxGuests) 
         {

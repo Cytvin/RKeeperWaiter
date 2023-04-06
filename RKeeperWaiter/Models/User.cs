@@ -13,10 +13,10 @@ namespace RKeeperWaiter.Models
         private int _code;
         private Guid _guid;
 
-        public int Id { get { return _id; } }
-        public string Name { get { return _name; } }
-        public int Code { get { return _code; } }
-        public Guid Guid { get { return _guid; } }
+        public int Id => _id;
+        public string Name => _name;
+        public int Code => _code;
+        public Guid Guid => _guid;
 
         public User (int id, string name, int code, Guid guid)
         {
