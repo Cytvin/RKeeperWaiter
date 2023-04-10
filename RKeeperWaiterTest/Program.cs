@@ -161,26 +161,38 @@ namespace RKeeperWaiterTest
 
         static void Main(string[] args)
         {
-            _waiter = new Waiter();
+            //_waiter = new Waiter();
 
-            string userCode = "15";
-            string stationId = "";
+            //string userCode = "15";
+            //string stationId = "";
 
-            _waiter.NetworkService.SetParameters("", "", "IT", "10");
+            //_waiter.NetworkService.SetParameters("", "", "IT", "10");
 
-            _waiter.UserAuthorization(userCode);
-            _waiter.SetStationId(stationId);
-            _waiter.DownloadReferences();
+            //_waiter.UserAuthorization(userCode);
+            //_waiter.SetStationId(stationId);
+            //_waiter.DownloadReferences();
 
-            Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
+            //Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
 
-            License license = new License("400580001");
-            Console.WriteLine(license.Token);
+            //License license = new License("400580001");
+            //Console.WriteLine(license.Token);
 
             //List<Order> orders = _waiter.GetOrderList();
             //DisplayOrders(orders);
 
             //Menu();
+
+            int code = 3241412;
+            int delete = 10;
+
+            int codeLength = code.ToString().Length;
+
+            for (int i = 0; i < codeLength; i++)
+            {
+                code = code / delete;
+                Console.WriteLine($"Code: {code}");
+            }
+
             Console.ReadLine();
         }
     }

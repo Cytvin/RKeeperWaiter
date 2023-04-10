@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:WaiterMobile.Controls"
-             x:Class="WaiterMobile.Views.Settings"
+             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModel"
+             x:DataType="viewmodel:SettingsViewModel"
+             x:Class="WaiterMobile.Views.SettingsView"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
@@ -40,7 +42,7 @@
 
                 <ImageButton BackgroundColor="White"
                         Source="arrow_left_short.png"
-                        Clicked="OnBackButtonClick"/>
+                        Command="{Binding GoToBack}"/>
 
                 <Label Text="Настройки"
                        Grid.Column="1"
@@ -58,7 +60,7 @@
                    Style="{StaticResource LabelStyle}"/>
 
                 <Frame Style="{StaticResource FrameStyle}">
-                    <controls:StandartEntry x:Name="_stationId"
+                    <controls:StandartEntry Text="{Binding StationId}"
                        Keyboard="Numeric"
                        Visual="Material"
                        Style="{StaticResource EntryStyle}"/>
@@ -68,7 +70,7 @@
                    Style="{StaticResource LabelStyle}"/>
 
                 <Frame Style="{StaticResource FrameStyle}">
-                    <controls:StandartEntry x:Name="_ip"
+                    <controls:StandartEntry Text="{Binding IP}"
                        Visual="Material"
                        Style="{StaticResource EntryStyle}"/>
                 </Frame>
@@ -77,7 +79,7 @@
                    Style="{StaticResource LabelStyle}"/>
 
                 <Frame Style="{StaticResource FrameStyle}">
-                    <controls:StandartEntry x:Name="_port"
+                    <controls:StandartEntry Text="{Binding Port}"
                        Keyboard="Numeric"
                        Visual="Material"
                        Style="{StaticResource EntryStyle}"/>
@@ -87,7 +89,7 @@
                    Style="{StaticResource LabelStyle}"/>
 
                 <Frame Style="{StaticResource FrameStyle}">
-                    <controls:StandartEntry x:Name="_login"
+                    <controls:StandartEntry Text="{Binding Login}"
                        Visual="Material"
                        Style="{StaticResource EntryStyle}"/>
                 </Frame>
@@ -96,7 +98,7 @@
                    Style="{StaticResource LabelStyle}"/>
 
                 <Frame Style="{StaticResource FrameStyle}">
-                    <controls:StandartEntry x:Name="_password"
+                    <controls:StandartEntry Text="{Binding Password}"
                        Visual="Material"
                        Style="{StaticResource EntryStyle}"
                        IsPassword="true"/>
@@ -107,7 +109,7 @@
             <Button Text="Сохранить"
                     BackgroundColor="White"
                     HorizontalOptions="Center"
-                    Clicked="OnSaveButtonClick"/>
+                    Command="{Binding Save}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

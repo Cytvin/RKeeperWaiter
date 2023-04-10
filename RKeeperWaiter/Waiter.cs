@@ -90,14 +90,21 @@ namespace RKeeperWaiter
 
             string userIdentificator;
 
-            try
+            XElement xWaiters = usersList.Root.Element("CommandResult").Element("Waiters");
+
+            if (xWaiters == null)
             {
-                userIdentificator = usersList.Root.Element("CommandResult").Element("Waiters").Elements("waiter").Where(x => x.Attribute("Code").Value == userCode).Single().Attribute("ID").Value;
+                throw new ArgumentNullException(nameof(xWaiters), "В базе нет активных официантов");
             }
-            catch (InvalidOperationException ex)
+            
+            IEnumerable<XElement> xWaitersList = xWaiters.Elements("waiter").Where(x => x.Attribute("Code").Value == userCode);
+
+            if (xWaitersList.Count() == 0)
             {
-                throw ex;
+                throw new ArgumentNullException(null, $"Пользовтель с кодом \"{userCode}\" не найден");
             }
+
+            userIdentificator = xWaitersList.Single().Attribute("ID").Value;
 
             int userId = Convert.ToInt32(userIdentificator);
 

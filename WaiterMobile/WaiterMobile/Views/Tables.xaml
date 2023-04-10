@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModel"
+             x:DataType="viewmodel:TablesViewModel"
              x:Class="WaiterMobile.Views.Tables"
              Shell.NavBarIsVisible="false">
     <ContentPage.Content>
@@ -30,15 +32,18 @@
             <StackLayout>
                 <Picker Margin="10, 10 , 20, 10"
                     Title="Выберите зал"
-                    x:Name="_hallPicker"
+                    ItemsSource="{Binding Halls}"
+                    SelectedItem="{Binding SelectedHall}"
                     SelectedIndexChanged="OnSelectedIndexChanged">
+
+                    <Picker.Behaviors>
+                        
+                    </Picker.Behaviors>
                 </Picker>
 
                 <StackLayout x:Name="_tables">
-                    
-                </StackLayout>
 
-                <Label x:Name="_test"/>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
