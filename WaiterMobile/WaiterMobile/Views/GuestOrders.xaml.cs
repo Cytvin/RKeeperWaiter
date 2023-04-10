@@ -47,7 +47,7 @@ namespace WaiterMobile.Views
         private void OnOrderTypeChanged(object sender, EventArgs e)
         {
             OrderType orderType = App.Waiter.OrderTypes.ToArray()[_orderTypePicker.SelectedIndex];
-            _newOrder.SetType(orderType);
+            _newOrder.Type = orderType;
         }
 
         private void OnBackButtonClicked(object sender, EventArgs e)

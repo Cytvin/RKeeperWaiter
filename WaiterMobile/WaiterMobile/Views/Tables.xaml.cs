@@ -36,7 +36,7 @@ namespace WaiterMobile.Views
         private void OnTableSelected(Table table, Hall hall) 
         {
             Order newOrder = new Order();
-            newOrder.SetTable(table);
+            newOrder.Table = table;
 
             string hallTable = $"{hall.Name} | {table.Name}";
 

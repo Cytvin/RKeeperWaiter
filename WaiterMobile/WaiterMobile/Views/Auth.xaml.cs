@@ -26,14 +26,14 @@ namespace WaiterMobile.Views
 
         private void OnButtonDeleteClick(object sender, EventArgs e)
         {
-            int userCodeLenth = _userCode.Text.Length;
+            int userCodeLength = _userCode.Text.Length;
 
-            if (userCodeLenth == 0)
+            if (userCodeLength == 0)
             {
                 return;
             }
 
-            _userCode.Text = _userCode.Text.Remove(userCodeLenth - 1);
+            _userCode.Text = _userCode.Text.Remove(userCodeLength - 1);
         }
 
         private void OnButtonSettingsClick(object sender, EventArgs e)
