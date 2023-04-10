@@ -2,8 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModel"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:models="clr-namespace:RKeeperWaiter.Models;assembly=RKeeperWaiter"
              x:DataType="viewmodel:TablesViewModel"
              x:Class="WaiterMobile.Views.Tables"
+             x:Name="_tablesView"
              Shell.NavBarIsVisible="false">
     <ContentPage.Content>
         <StackLayout>
@@ -19,8 +22,7 @@
 
                 <ImageButton BackgroundColor="White"
                         Source="arrow_left_short.png"
-                        Clicked="OnBackButtonCLicked"
-                        />
+                        Command="{Binding GoToBack}"/>
 
                 <Label Text="Новый заказ"
                        Grid.Column="1"
@@ -34,15 +36,24 @@
                     Title="Выберите зал"
                     ItemsSource="{Binding Halls}"
                     SelectedItem="{Binding SelectedHall}"
-                    SelectedIndexChanged="OnSelectedIndexChanged">
+                    ItemDisplayBinding="{Binding Name}">
 
                     <Picker.Behaviors>
-                        
+                        <xct:EventToCommandBehavior
+                            EventName="SelectedIndexChanged"
+                            Command="{Binding SelectHall}"/>
                     </Picker.Behaviors>
                 </Picker>
 
-                <StackLayout x:Name="_tables">
-
+                <StackLayout BindableLayout.ItemsSource="{Binding Tables}"
+                             Margin="20, 0, 20, 0">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Table">
+                            <Button Text="{Binding Name}"
+                                    Command="{Binding Source={x:Reference Name=_tablesView}, Path=BindingContext.TableSelected}"
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
                 </StackLayout>
             </StackLayout>
         </StackLayout>
