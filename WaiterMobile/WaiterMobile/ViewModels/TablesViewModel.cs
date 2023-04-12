@@ -6,7 +6,7 @@ using System.Windows.Input;
 using WaiterMobile.Views;
 using Xamarin.Forms;
 
-namespace WaiterMobile.ViewModel
+namespace WaiterMobile.ViewModels
 {
     public class TablesViewModel : INotifyPropertyChanged
     {
@@ -15,9 +15,9 @@ namespace WaiterMobile.ViewModel
         public ICommand GoToBack { get; private set; }
         public ICommand SelectHall { get; private set; }
         public ICommand TableSelected { get; private set; }
-        public Hall SelectedHall { get; set; }
+        public Hall HallSelected { get; set; }
         public IEnumerable<Hall> Halls { get { return App.Waiter.Halls; } }
-        public ObservableCollection<Table> Tables { get; set; }
+        public ObservableCollection<Table> Tables { get; private set; }
 
         public TablesViewModel()
         {
@@ -35,8 +35,8 @@ namespace WaiterMobile.ViewModel
         private void OnHallSelected()
         {
             Tables.Clear();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedHall)));
-            foreach (Table table in SelectedHall.Tables) 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HallSelected)));
+            foreach (Table table in HallSelected.Tables) 
             {
                 Tables.Add(table);
             }
@@ -47,7 +47,7 @@ namespace WaiterMobile.ViewModel
             Order newOrder = new Order();
             newOrder.Table = table;
 
-            string hallTable = $"{SelectedHall.Name} | {table.Name}";
+            string hallTable = $"{HallSelected.Name} | {table.Name}";
 
             Shell.Current.Navigation.PushAsync(new GuestOrders(newOrder, hallTable));
         }

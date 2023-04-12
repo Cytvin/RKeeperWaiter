@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml;
+using System.Threading.Tasks;
 
 namespace RKeeperWaiter
 {
@@ -63,7 +64,19 @@ namespace RKeeperWaiter
 
                 StreamContent requestContent = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(xmlContent.OuterXml)));
 
-                HttpResponseMessage response = httpClient.PostAsync(_uri, requestContent).Result;
+                Task<HttpResponseMessage> serverResponse = httpClient.PostAsync(_uri, requestContent);
+
+                HttpResponseMessage response;
+
+                try
+                {
+                    response = serverResponse.Result;
+                }
+                catch (AggregateException ex)
+                {
+                    throw new TaskCanceledException("Не получен ответ от сервера");
+                }
+
                 HttpStatusCode httpStatusCode = response.StatusCode;
 
                 if (httpStatusCode == HttpStatusCode.OK)

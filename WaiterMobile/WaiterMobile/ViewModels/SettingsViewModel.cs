@@ -5,7 +5,7 @@ using System.Xml;
 using WaiterMobile.Models;
 using Xamarin.Forms;
 
-namespace WaiterMobile.ViewModel
+namespace WaiterMobile.ViewModels
 {
     public class SettingsViewModel : INotifyPropertyChanged
     {

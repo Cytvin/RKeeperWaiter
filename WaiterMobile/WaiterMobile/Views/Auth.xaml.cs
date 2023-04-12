@@ -1,5 +1,4 @@
-﻿using System;
-using WaiterMobile.ViewModel;
+﻿using WaiterMobile.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

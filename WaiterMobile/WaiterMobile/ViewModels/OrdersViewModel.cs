@@ -8,7 +8,7 @@ using System.Windows.Input;
 using WaiterMobile.Views;
 using Xamarin.Forms;
 
-namespace WaiterMobile.ViewModel
+namespace WaiterMobile.ViewModels
 {
     public class OrdersViewModel : INotifyPropertyChanged
     {

@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:DataType="viewmodel:GuestOrdersViewModel"
              x:Class="WaiterMobile.Views.GuestOrders"
              Shell.NavBarIsVisible="False">
+    
   <ContentPage.Content>
         <StackLayout>
             <Grid Margin="10,10,0,0">
@@ -17,11 +21,9 @@
 
                 <ImageButton BackgroundColor="White"
                         Source="arrow_left_short.png"
-                        Clicked="OnBackButtonClicked"
-                        />
+                        Command="{Binding GoToBack}"/>
 
-                <Label x:Name="_orderLabel"
-                       Text=""
+                <Label Text="{Binding PageLabel}"
                        Grid.Column="1"
                        FontSize="20"
                        TextColor="Black"
@@ -45,8 +47,7 @@
                            TextColor="Black"
                            Grid.Column="0"/>
 
-                    <Switch x:Name="_guestSwitch"
-                        Grid.Column="1"
+                    <Switch Grid.Column="1"
                         IsToggled="true"
                         Toggled="OnGuestSwitchToggled"/>
                 </Grid>
@@ -57,17 +58,25 @@
                        IsEnabled="False"
                        IsVisible="False"
                        Margin="30, 0, 30, 0"/>
-                
+
                 <Entry x:Name="_guestCountEntry"
                        IsEnabled="False"
                        IsVisible="False"
                        Margin="30, 0, 30, 0"
-                       TextChanged="OnGuestEntryTextChanged"/>
+                       Text="{Binding GuestCount}">
+
+                    <Entry.Behaviors>
+                        <xct:EventToCommandBehavior
+                            EventName="TextChanged"
+                            Command="{Binding GuestCountChanged}"/>
+                    </Entry.Behaviors>
+                </Entry>
 
                 <Picker Margin="30, 100, 30, 10"
                         Title="Тип заказа"
-                        x:Name="_orderTypePicker"
-                        SelectedIndexChanged="OnOrderTypeChanged">
+                        ItemsSource="{Binding Types}"
+                        SelectedItem="{Binding SelectedType}"
+                        ItemDisplayBinding="{Binding Name}">
                 </Picker>
             </StackLayout>
 
@@ -76,7 +85,7 @@
                     BackgroundColor="Black"
                     TextColor="White"
                     VerticalOptions="EndAndExpand"
-                    Clicked="OnCreateOrderClick"/>
+                    Command="{Binding CreateOrder}"/>
         </StackLayout>
   </ContentPage.Content>
 </ContentPage>

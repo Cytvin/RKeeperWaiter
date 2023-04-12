@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:WaiterMobile.Controls"
-             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModel"
+             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModels"
              x:DataType="viewmodel:SettingsViewModel"
              x:Class="WaiterMobile.Views.SettingsView"
              Shell.NavBarIsVisible="False">

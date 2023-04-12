@@ -1,8 +1,6 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using RKeeperWaiter.Models;
-using System.Collections.Generic;
-using WaiterMobile.ViewModel;
+using WaiterMobile.ViewModels;
 
 namespace WaiterMobile.Views
 {

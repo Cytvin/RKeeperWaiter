@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using WaiterMobile.Models;
 using WaiterMobile.Views;
 using Xamarin.Forms;
 
-namespace WaiterMobile.ViewModel
+namespace WaiterMobile.ViewModels
 {
     public class UserCodeViewModel : INotifyPropertyChanged
     {
@@ -72,6 +73,11 @@ namespace WaiterMobile.ViewModel
             catch (ArgumentNullException ex)
             {
                 Shell.Current.DisplayAlert("Вход не выполнен", ex.Message, "OK");
+                return;
+            }
+            catch (TaskCanceledException ex)
+            {
+                Shell.Current.DisplayAlert("Ошибка сервера", ex.Message, "OK");
                 return;
             }
 
