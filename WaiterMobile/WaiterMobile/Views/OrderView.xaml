@@ -1,8 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModels"
+             xmlns:models="clr-namespace:RKeeperWaiter.Models;assembly=RKeeperWaiter"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:DataType="viewmodel:OrderViewModel"
              x:Class="WaiterMobile.Views.OrderView"
              Shell.NavBarIsVisible="False">
+    
     <ContentPage.Content>
         <StackLayout>
             <Grid Margin="10,10,0,0">
@@ -17,10 +22,9 @@
 
                 <ImageButton BackgroundColor="White"
                         Source="arrow_left_short.png"
-                        Clicked="OnBackButtonCLicked"
-                        />
+                        Command="{Binding GoToBack}"/>
 
-                <Label x:Name="_orderName"
+                <Label Text="{Binding OrderName}"
                        Grid.Column="1"
                        FontSize="20"
                        TextColor="Black"
@@ -29,7 +33,37 @@
             </Grid>
 
             <ScrollView>
-                <StackLayout x:Name="_orderDishes">
+                <StackLayout>
+                    <Grid Margin="30, 10, 30, 10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Text="Общие"
+                               HorizontalOptions="Start"
+                               VerticalOptions="Center"/>
+
+                        <Button Text="+"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                Command="{Binding AddDish}"
+                                CommandParameter="{Binding AddDishToCommonDishes}"/>
+
+                        <StackLayout BindableLayout.ItemsSource="{Binding CommonDishes}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="models:Dish">
+                                    <Label Text="{Binding NamePrice}"/>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                    </Grid>
+                    
+                    
                 </StackLayout>
             </ScrollView>
 

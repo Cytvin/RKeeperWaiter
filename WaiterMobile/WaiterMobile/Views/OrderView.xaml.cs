@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+using WaiterMobile.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,42 +21,37 @@ namespace WaiterMobile.Views
         {
             InitializeComponent();
 
+            BindingContext = new OrderViewModel(order);
+
             _order = order;
 
-            _order.OrderChanged += DisplayOrder;
+            //_order.OrderChanged += DisplayOrder;
 
-            DisplayOrder();
+            //DisplayOrder();
         }
 
-        private void DisplayOrder()
-        {
-            _orderName.Text = _order.Name;
+        //private void DisplayOrder()
+        //{
+        //    _orderDishes.Children.Clear();
 
-            _orderDishes.Children.Clear();
+        //    _orderDishes.Children.Add(AddGridToStack("", _order.InsertCommonDish));
 
-            _orderDishes.Children.Add(AddGridToStack("", _order.InsertCommonDish));
+        //    foreach (Dish dish in _order.CommonDishes)
+        //    {
+        //        _orderDishes.Children.Add(CreateDishLabel(dish));
+        //    }
 
-            foreach (Dish dish in _order.CommonDishes)
-            {
-                _orderDishes.Children.Add(CreateDishLabel(dish));
-            }
+        //    foreach (Guest guest in _order.Guests)
+        //    {
+        //        guest.DishInserted += DisplayOrder;
+        //        _orderDishes.Children.Add(AddGridToStack(guest.Label, guest.InsertDish));
 
-            foreach (Guest guest in _order.Guests)
-            {
-                guest.DishInserted += DisplayOrder;
-                _orderDishes.Children.Add(AddGridToStack(guest.Label, guest.InsertDish));
-
-                foreach (Dish dish in guest.Dishes)
-                {
-                    _orderDishes.Children.Add(CreateDishLabel(dish));
-                }
-            }
-        }
-
-        private void OnBackButtonCLicked(object sender, EventArgs e)
-        {
-            Shell.Current.Navigation.PopAsync(true);
-        }
+        //        foreach (Dish dish in guest.Dishes)
+        //        {
+        //            _orderDishes.Children.Add(CreateDishLabel(dish));
+        //        }
+        //    }
+        //}
 
         private void OnAddDishButtonClicked(Action<Dish> action)
         {
@@ -111,16 +107,6 @@ namespace WaiterMobile.Views
             dishLabel.Margin = new Thickness(30, 5, 30, 5);
 
             return dishLabel;
-        }
-
-        protected override void OnDisappearing()
-        {
-            _order.OrderChanged -= DisplayOrder;
-
-            foreach (Guest guest in _order.Guests)
-            {
-                guest.DishInserted -= DisplayOrder;
-            }
         }
     }
 }

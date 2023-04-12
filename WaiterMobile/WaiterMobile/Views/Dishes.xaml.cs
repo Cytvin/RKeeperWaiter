@@ -102,7 +102,6 @@ namespace WaiterMobile.Views
                 _gridColumn = 0;
                 _gridRow++;
 
-
                 RowDefinition rowDefinition = new RowDefinition();
                 rowDefinition.Height = 100;
                 _dishesGrid.RowDefinitions.Add(rowDefinition);

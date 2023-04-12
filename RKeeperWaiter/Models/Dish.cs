@@ -17,6 +17,7 @@ namespace RKeeperWaiter.Models
         public Guid Guid => _guid; 
         public string Name => _name;
         public decimal Price => _price;
+        public string NamePrice => $"{_name} {_price}";
 
         public Dish(int id, Guid guid, string name, int parent) 
         {
