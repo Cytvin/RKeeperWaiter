@@ -25,7 +25,7 @@ namespace RKeeperWaiterTest
 
                 Console.WriteLine($"***** Объекты в категории {categoryId} *****");
 
-                Menu menuCategory = _waiter.GetMenuCategory(categoryId);
+                MenuCategory menuCategory = _waiter.GetMenuCategory(categoryId);
 
                 foreach (Category category in menuCategory.Categories)
                 {

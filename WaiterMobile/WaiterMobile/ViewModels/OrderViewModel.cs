@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 using System.Windows.Input;
 using RKeeperWaiter.Models;
 using WaiterMobile.Views;
@@ -27,6 +25,7 @@ namespace WaiterMobile.ViewModels
         {
             _order = order;
             GoToBack = new Command(OnGoToBack);
+            AddDish = new Command<Action<Dish>>(OnAddDish);
             CommonDishes = new ObservableCollection<Dish>(order.CommonDishes);
             Guests = new ObservableCollection<Guest>(order.Guests);
         }

@@ -2,7 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WaiterMobile.Views.Dishes"
+             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModels"
+             x:DataType="viewmodel:CategoryViewModel"
              Shell.NavBarIsVisible="False">
+    
     <ContentPage.Content>
         <StackLayout>
             <Grid Margin="10,10,0,0">
@@ -17,10 +20,9 @@
 
                 <ImageButton BackgroundColor="White"
                         Source="arrow_left_short.png"
-                        Clicked="OnBackButtonCLicked"
-                        />
+                        Command="{Binding GoToBack}"/>
 
-                <Label x:Name="_categoryName"
+                <Label Text="{Binding CategoryName}"
                        Grid.Column="1"
                        FontSize="20"
                        TextColor="Black"
@@ -31,6 +33,7 @@
             <ScrollView>
                 <Grid x:Name="_dishesGrid"
                       Margin="20, 10, 20, 10">
+                    
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>

@@ -57,11 +57,11 @@ namespace RKeeperWaiter
             GetSystemInfo();
         }
 
-        public Menu GetMenuCategory(int id)
+        public MenuCategory GetMenuCategory(int id)
         {
             string categoryName = _categories.First(c => c.Id == id).Name;
 
-            Menu menuCategory = new Menu(categoryName);
+            MenuCategory menuCategory = new MenuCategory(categoryName);
 
             IEnumerable<Category> categories = _categories.Where(category => category.ParentId == id && category.Id != 0);
 

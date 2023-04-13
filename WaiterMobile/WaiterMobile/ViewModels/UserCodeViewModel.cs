@@ -69,6 +69,7 @@ namespace WaiterMobile.ViewModels
             try
             {
                 App.Waiter.UserAuthorization(Code);
+                App.Waiter.DownloadReferences();
             }
             catch (ArgumentNullException ex)
             {
@@ -80,8 +81,6 @@ namespace WaiterMobile.ViewModels
                 Shell.Current.DisplayAlert("Ошибка сервера", ex.Message, "OK");
                 return;
             }
-
-            App.Waiter.DownloadReferences();
 
             Shell.Current.Navigation.PushAsync(new Orders());
         }

@@ -6,6 +6,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodel:OrderViewModel"
              x:Class="WaiterMobile.Views.OrderView"
+             x:Name="_orderView"
              Shell.NavBarIsVisible="False">
     
     <ContentPage.Content>
@@ -53,17 +54,54 @@
                                 VerticalOptions="Center"
                                 Command="{Binding AddDish}"
                                 CommandParameter="{Binding AddDishToCommonDishes}"/>
-
-                        <StackLayout BindableLayout.ItemsSource="{Binding CommonDishes}">
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate x:DataType="models:Dish">
-                                    <Label Text="{Binding NamePrice}"/>
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </StackLayout>
                     </Grid>
-                    
-                    
+
+                    <StackLayout BindableLayout.ItemsSource="{Binding CommonDishes}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:Dish">
+                                <Label Text="{Binding NamePrice}"
+                                       Margin="30, 5, 30, 5"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+
+                    <StackLayout BindableLayout.ItemsSource="{Binding Guests}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:Guest">
+                                <StackLayout>
+                                    <Grid Margin="30, 10, 30, 10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="50"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Label Text="{Binding Name}"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center"/>
+
+                                    <Button Text="+"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center"
+                                        Command="{Binding Source={x:Reference Name=_orderView}, Path=BindingContext.AddDish}"
+                                        CommandParameter="{Binding AddDishToGuest}"/>
+                                    </Grid>
+
+                                    <StackLayout x:DataType="models:Guest" BindableLayout.ItemsSource="{Binding Dishes}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="models:Dish">
+                                                <Label Text="{Binding NamePrice}"
+                                                    Margin="30, 5, 30, 5"/>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </StackLayout>
+                                </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
                 </StackLayout>
             </ScrollView>
 

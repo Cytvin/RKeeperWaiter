@@ -2,7 +2,7 @@
 
 namespace RKeeperWaiter.Models
 {
-    public class Menu
+    public class MenuCategory
     {
         private List<Category> _internalCategory;
         private List<Dish> _dishes;
@@ -12,7 +12,7 @@ namespace RKeeperWaiter.Models
         public IEnumerable<Category> Categories => _internalCategory;
         public IEnumerable<Dish> Dishes => _dishes;
 
-        public Menu(string name)
+        public MenuCategory(string name)
         {
             _internalCategory = new List<Category>();
             _dishes = new List<Dish>();

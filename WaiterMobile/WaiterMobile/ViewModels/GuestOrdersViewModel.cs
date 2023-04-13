@@ -40,20 +40,25 @@ namespace WaiterMobile.ViewModels
         {
             int guestCount;
 
-            if (int.TryParse(GuestCount, out guestCount) == false)
+            if (int.TryParse(GuestCount, out guestCount) == true && guestCount <= 100)
             {
-                GuestCount = "";
+                return;
             }
 
-            if (guestCount >= 100)
+            if (GuestCount.Length == 0)
             {
-                GuestCount = GuestCount.Remove(GuestCount.Length - 1);
+                return;
             }
+
+            GuestCount = GuestCount.Remove(GuestCount.Length - 1);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GuestCount)));
         }
 
         private void OnCreateOrder()
         {
             int guestCount = Convert.ToInt32(GuestCount);
+
+            Order.Type = SelectedType;
 
             App.Waiter.CreateNewOrder(Order, guestCount);
 
