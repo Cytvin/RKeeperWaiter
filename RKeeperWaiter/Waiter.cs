@@ -13,6 +13,8 @@ namespace RKeeperWaiter
     public class Waiter
     {
         private int _stationId;
+        private int _restaurantCode;
+        private User _user;
 
         private List<Category> _categories;
         private List<Dish> _dishes;
@@ -20,13 +22,14 @@ namespace RKeeperWaiter
         private List<Hall> _halls;
         private List<OrderType> _orderTypes;
 
-        private User _user;
-
         public int StationId => _stationId;
         public NetworkService NetworkService { get; private set; }
+        public License License { get; private set; }
         public User CurrentUser => _user;
         public IEnumerable<Hall> Halls => _halls;
         public IEnumerable<OrderType> OrderTypes => _orderTypes;
+
+        public IEnumerable<Dish> Dishes => _dishes.Where(d => d.InMenu == true);
 
         public Waiter()
         {
@@ -46,6 +49,11 @@ namespace RKeeperWaiter
             }
         }
 
+        public void CreateLicense(Guid applicationGuid)
+        {
+            License = new License(_restaurantCode, applicationGuid);
+        }
+
         public void DownloadReferences()
         {
             _categories = GetCategories();
@@ -53,8 +61,8 @@ namespace RKeeperWaiter
             _guestTypes = GetGuestTypes();
             _halls = GetHalls();
             _orderTypes = GetOrderTypes();
+            GetRestCode();
             SetPrice();
-            GetSystemInfo();
         }
 
         public MenuCategory GetMenuCategory(int id)
@@ -152,13 +160,15 @@ namespace RKeeperWaiter
             XDocument createOrderResult = NetworkService.SendRequest(requestBuilder.GetXml());
         }
 
-        private void GetSystemInfo()
+        private void GetRestCode()
         {
             GetSystemInfo getSystemInfo = new GetSystemInfo();
             RequestBuilder requestBuilder = new RequestBuilder();
             getSystemInfo.CreateRequest(requestBuilder);
 
-            NetworkService.SendRequest(requestBuilder.GetXml());
+            XDocument serverResponse = NetworkService.SendRequest(requestBuilder.GetXml());
+            XElement systemInfo = serverResponse.Root.Element("CommandResult").Element("SystemInfo");
+            _restaurantCode = Convert.ToInt32(systemInfo.Attribute("RestCode").Value);
         }
 
         private void GetUserData(int userId)

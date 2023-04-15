@@ -5,6 +5,7 @@ using WaiterMobile;
 using Xamarin.Forms;
 using RKeeperWaiter;
 using Xamarin.Essentials;
+using Xamarin.Forms.PlatformConfiguration;
 
 namespace WaiterMobile
 {
@@ -14,12 +15,13 @@ namespace WaiterMobile
         public static string SettingsFile { get; private set; }
         public static Waiter Waiter { get; private set; }
         public static DisplayInfo CurrentDisplay { get; private set; }
+        public static Guid ApplicationGuid { get; private set; }
 
         public App()
         {
             InitializeComponent();
 
-            FolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
+            FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             SettingsFile = Path.Combine(FolderPath, "settings.xml");
 
             Waiter = new Waiter();
@@ -44,6 +46,7 @@ namespace WaiterMobile
         {
             if (File.Exists(SettingsFile) == false)
             {
+                ApplicationGuid = Guid.NewGuid();
                 return;
             }
 
@@ -51,6 +54,7 @@ namespace WaiterMobile
 
             XElement root = settings.Root;
 
+            ApplicationGuid = Guid.Parse(root.Element("ApplicationGuid").Value);
             string stationId = root.Element("StationId").Value;
             string ip = root.Element("ServerIp").Value;
             string port = root.Element("ServerPort").Value;

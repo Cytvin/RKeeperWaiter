@@ -103,6 +103,7 @@
                        Style="{StaticResource EntryStyle}"
                        IsPassword="true"/>
                 </Frame>
+
             </StackLayout>
 
 
@@ -110,6 +111,11 @@
                     BackgroundColor="White"
                     HorizontalOptions="Center"
                     Command="{Binding Save}"/>
+
+            <Label Text="{Binding ApplicationGuid}"
+                   Margin="0, 175, 0, 0"
+                   HorizontalOptions="Center"
+                   VerticalOptions="End"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

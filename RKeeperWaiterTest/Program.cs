@@ -10,6 +10,7 @@ using System.Xml;
 using System.Xml.Linq;
 using RKeeperWaiter;
 using RKeeperWaiter.Models;
+using RKeeperWaiter.XmlRequests;
 
 namespace RKeeperWaiterTest
 {
@@ -159,18 +160,70 @@ namespace RKeeperWaiterTest
             }
         }
 
+        public static void SaveTestOrder(int stationId)
+        {
+            Table table = _waiter.Halls.First().Tables.Last();
+            OrderType orderType = _waiter.OrderTypes.First();
+
+            Order newOrder = new Order();
+            newOrder.Table = table;
+            newOrder.Type = orderType;
+
+            _waiter.CreateNewOrder(newOrder, 3);
+
+            newOrder = _waiter.GetOrderList().Last();
+
+            Console.WriteLine($"Order: {newOrder.Guid} | Guest Count: {newOrder.Guests.Count()}");
+
+            foreach (Dish dish in _waiter.Dishes)
+            {
+                Console.WriteLine($"({dish.Id}) {dish.Name} - {dish.Price}");
+            }
+
+            int dishId = -1;
+            while (dishId != 0)
+            {
+                dishId = Int32.Parse(Console.ReadLine());
+                if (dishId > 0)
+                {
+                    newOrder.InsertCommonDish(_waiter.Dishes.Single(d => d.Id == dishId));
+                }
+            }
+
+            Guest guest = newOrder.Guests.First();
+
+            dishId = -1;
+            while (dishId != 0)
+            {
+                dishId = Int32.Parse(Console.ReadLine());
+                if (dishId > 0)
+                {
+                    guest.InsertDish(_waiter.Dishes.Single(d => d.Id == dishId));
+                }
+            }
+
+            RequestBuilder requestBuilder = new RequestBuilder();
+            SaveOrder saveOrder = new SaveOrder(newOrder, _waiter.License, Convert.ToInt32(stationId), _waiter.CurrentUser.Id);
+            saveOrder.CreateRequest(requestBuilder);
+
+            _waiter.NetworkService.SendRequest(requestBuilder.GetXml());
+        }
+
         static void Main(string[] args)
         {
-            //_waiter = new Waiter();
+            _waiter = new Waiter();
 
-            //string userCode = "15";
-            //string stationId = "";
+            string userCode = "15";
+            string stationId = "";
 
-            //_waiter.NetworkService.SetParameters("", "", "IT", "10");
+            _waiter.NetworkService.SetParameters("", "", "IT", "10");
 
-            //_waiter.UserAuthorization(userCode);
-            //_waiter.SetStationId(stationId);
-            //_waiter.DownloadReferences();
+            _waiter.UserAuthorization(userCode);
+            _waiter.SetStationId(stationId);
+            _waiter.DownloadReferences();
+            _waiter.CreateLicense(Guid.NewGuid());
+
+            SaveTestOrder(Convert.ToInt32(stationId));
 
             //Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
 
@@ -182,16 +235,9 @@ namespace RKeeperWaiterTest
 
             //Menu();
 
-            int code = 3241412;
-            int delete = 10;
-
-            int codeLength = code.ToString().Length;
-
-            for (int i = 0; i < codeLength; i++)
-            {
-                code = code / delete;
-                Console.WriteLine($"Code: {code}");
-            }
+            //XmlDocument xmlDocument = new XmlDocument();
+            //xmlDocument.LoadXml(license.GetXMLLicense().OuterXml);
+            //xmlDocument.Save("D:\\sqllog\\test.xml");
 
             Console.ReadLine();
         }

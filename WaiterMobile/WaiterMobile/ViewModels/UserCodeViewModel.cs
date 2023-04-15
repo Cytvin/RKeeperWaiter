@@ -18,6 +18,16 @@ namespace WaiterMobile.ViewModels
         public ICommand OpenSetting { private set; get; }
         public ICommand Authorization { private set; get; }
 
+        public string Code
+        {
+            get { return _currentUser.Value; }
+            set
+            {
+                _currentUser.Value = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Code)));
+            }
+        }
+
         public UserCodeViewModel()
         {
             _currentUser = new UserCode();
@@ -25,16 +35,6 @@ namespace WaiterMobile.ViewModels
             RemoveNumber = new Command(RemoveLastNumberFromeCode);
             OpenSetting = new Command(GoToSetting);
             Authorization = new Command(UserAuthorization);
-        }
-
-        public string Code
-        {
-            get { return _currentUser.Value; }
-            set 
-            {
-                _currentUser.Value = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Code)));
-            }
         }
 
         private void AddNumberToCode(string number)
@@ -70,6 +70,7 @@ namespace WaiterMobile.ViewModels
             {
                 App.Waiter.UserAuthorization(Code);
                 App.Waiter.DownloadReferences();
+                App.Waiter.CreateLicense(App.ApplicationGuid);
             }
             catch (ArgumentNullException ex)
             {

@@ -16,14 +16,6 @@ namespace WaiterMobile.ViewModels
         public ICommand GoToBack { get; private set; }
         public ICommand Save { get; private set; }
 
-        public SettingsViewModel()
-        {
-            _settings = new Settings();
-            GoToBack = new Command(Return);
-            Save = new Command(SaveSettings);
-            DisplaySettings();
-        }
-
         public string StationId
         {
             get { return _settings.StationId; }
@@ -74,6 +66,16 @@ namespace WaiterMobile.ViewModels
             }
         }
 
+        public string ApplicationGuid => App.ApplicationGuid.ToString();
+
+        public SettingsViewModel()
+        {
+            _settings = new Settings();
+            GoToBack = new Command(Return);
+            Save = new Command(SaveSettings);
+            DisplaySettings();
+        }
+
         private void DisplaySettings()
         {
             StationId = App.Waiter.StationId.ToString();
@@ -99,7 +101,11 @@ namespace WaiterMobile.ViewModels
             {
                 writer.WriteStartDocument();
 
-                writer.WriteStartElement("Setting");
+                writer.WriteStartElement("Settings");
+
+                writer.WriteStartElement("ApplicationGuid");
+                writer.WriteValue(App.ApplicationGuid.ToString());
+                writer.WriteEndElement();
 
                 writer.WriteStartElement("StationId");
                 writer.WriteValue(StationId);

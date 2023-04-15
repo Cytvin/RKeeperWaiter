@@ -25,6 +25,13 @@ namespace RKeeperWaiter
             _elements.Push(xmlElement);
         }
 
+        public void AddElement(XmlElement element)
+        {
+            XmlElement xmlElement = _xmlDocument.ImportNode(element, true) as XmlElement;
+            _elements.Peek().AppendChild(xmlElement);
+            _elements.Push(xmlElement);
+        }
+
         public void AddAttribute(string name, string value)
         {
             XmlAttribute newAttribute = _xmlDocument.CreateAttribute(name);
