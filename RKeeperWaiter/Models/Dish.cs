@@ -18,7 +18,6 @@ namespace RKeeperWaiter.Models
         public Guid Guid => _guid;
         public string Name => _name;
         public decimal Price => _price;
-        public string NamePrice => $"{_name} {_price}";
         public Course Course { get => _course; set => _course = value; }
         public string Seat { get; set; }
 
@@ -30,6 +29,7 @@ namespace RKeeperWaiter.Models
             _name = name;
             _inMenu = false;
             _parentId = parent;
+            _course = Course.Empty;
         }
 
         public void SetPrice(decimal price)
