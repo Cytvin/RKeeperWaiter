@@ -13,6 +13,7 @@ namespace RKeeperWaiter.XmlRequests
         private License _license;
         private int _stationId;
         private int _authorId;
+        private Dictionary<int, List<Dish>> _courses;
 
         public SaveOrder(Order orderToSave, License license, int stationId, int author)
         {
@@ -20,6 +21,7 @@ namespace RKeeperWaiter.XmlRequests
             _license = license;
             _stationId = stationId;
             _authorId = author;
+            _courses = CreateCoursesList();
         }
 
         public void CreateRequest(RequestBuilder builder)
@@ -47,39 +49,69 @@ namespace RKeeperWaiter.XmlRequests
             builder.AddAttribute("id", _authorId.ToString());
             builder.SelectPreviousElement();
 
-            builder.AddElement("Session");
-
-            builder.AddElement("Author");
-            builder.AddAttribute("id", _authorId.ToString());
-            builder.SelectPreviousElement();
-
-            builder.AddElement("Creator");
-            builder.AddAttribute("id", _authorId.ToString());
-            builder.SelectPreviousElement();
-
-            foreach(Dish dish in _order.CommonDishes)
+            foreach (KeyValuePair<int, List<Dish>> courseDishes in _courses)
             {
-                AddDish(builder, dish.Id, 1000, "0");
-            }
+                builder.AddElement("Session");
 
-            foreach(Guest guest in _order.Guests)
-            {
-                foreach(Dish dish in guest.Dishes)
+                builder.AddElement("Author");
+                builder.AddAttribute("id", _authorId.ToString());
+                builder.SelectPreviousElement();
+
+                builder.AddElement("Creator");
+                builder.AddAttribute("id", _authorId.ToString());
+                builder.SelectPreviousElement();
+
+                if (courseDishes.Key != 0)
                 {
-                    AddDish(builder, dish.Id, 1000, guest.Label);
+                    builder.AddElement("Course");
+                    builder.AddAttribute("id", courseDishes.Key.ToString());
+                    builder.SelectPreviousElement();
                 }
-            }
 
+                foreach (Dish dish in courseDishes.Value)
+                {
+                    AddDish(builder, dish);
+                }
+
+                builder.SelectPreviousElement();
+            }
+        }
+
+        private void AddDish(RequestBuilder builder, Dish dish)
+        {
+            builder.AddElement("Dish");
+            builder.AddAttribute("id", dish.Id.ToString());
+            builder.AddAttribute("quantity", "1000");
+            builder.AddAttribute("seat", dish.Seat);
             builder.SelectPreviousElement();
         }
 
-        private void AddDish(RequestBuilder builder, int id, int quantity, string seat)
+        private Dictionary<int, List<Dish>> CreateCoursesList()
         {
-            builder.AddElement("Dish");
-            builder.AddAttribute("id", id.ToString());
-            builder.AddAttribute("quantity", quantity.ToString());
-            builder.AddAttribute("seat", seat);
-            builder.SelectPreviousElement();
+            Dictionary<int, List<Dish>> coursesDishesDictionary = new Dictionary<int, List<Dish>>();
+
+            AddDishesToCourses(coursesDishesDictionary, _order.CommonDishes, "0");
+
+            foreach(Guest guest in _order.Guests)
+            {
+                AddDishesToCourses(coursesDishesDictionary, guest.Dishes, guest.Label);
+            }
+
+            return coursesDishesDictionary;
+        }
+
+        private void AddDishesToCourses(Dictionary<int, List<Dish>> outputDictionary, IEnumerable<Dish> dishes, string seat)
+        {
+            foreach (Dish dish in dishes)
+            {
+                dish.Seat = seat;
+                if (outputDictionary.ContainsKey(dish.Course.Id) == false)
+                {
+                    outputDictionary.Add(dish.Course.Id, new List<Dish>());
+                }
+
+                outputDictionary[dish.Course.Id].Add(dish);
+            }
         }
     }
 }

@@ -81,7 +81,8 @@ namespace WaiterMobile.ViewModels
                 Button button = AddButtonToGrid(namePrice);
                 button.Command = new Command(() =>
                 {
-                    _addDishToList(dish);
+                    Dish currentDish = dish.Clone() as Dish;
+                    _addDishToList(currentDish);
                 });
             }
         }

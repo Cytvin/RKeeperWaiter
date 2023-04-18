@@ -70,52 +70,6 @@ namespace RKeeperWaiterTest
             }
         }
 
-        public static XmlDocument CreateXml()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            using (XmlWriter writer = XmlWriter.Create(stringBuilder))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("RK7Query");
-
-                writer.WriteStartElement("RK7Command");
-                writer.WriteAttributeString("CMD", "CreateOrder");
-
-                writer.WriteStartElement("Table");
-                writer.WriteAttributeString("code", "12");
-
-                writer.WriteStartElement("Seat");
-                writer.WriteAttributeString("code", "20");
-
-                writer.WriteStartElement("Person");
-                writer.WriteAttributeString("code", "84");
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(stringBuilder.ToString());
-            return xml;
-        }
-
-        public static XmlNode GetLastestChildNode(XmlElement xmlElement)
-        {
-            if (xmlElement.LastChild == null)
-            {
-                return xmlElement;
-            }
-
-            return GetLastestChildNode(xmlElement.LastChild as XmlElement);
-        }
-
         public static void TestMD5()
         {
             MD5 mD5 = MD5.Create();
@@ -175,38 +129,22 @@ namespace RKeeperWaiterTest
 
             Console.WriteLine($"Order: {newOrder.Guid} | Guest Count: {newOrder.Guests.Count()}");
 
-            foreach (Dish dish in _waiter.Dishes)
-            {
-                Console.WriteLine($"({dish.Id}) {dish.Name} - {dish.Price}");
-            }
+            Dish dish1 = _waiter.Dishes.Single(d => d.Id == 1000030);
+            dish1.Course = Course.Empty;
 
-            int dishId = -1;
-            while (dishId != 0)
-            {
-                dishId = Int32.Parse(Console.ReadLine());
-                if (dishId > 0)
-                {
-                    newOrder.InsertCommonDish(_waiter.Dishes.Single(d => d.Id == dishId));
-                }
-            }
+            Dish dish2 = _waiter.Dishes.Single(d => d.Id == 1000029);
+            dish2.Course = Course.Empty;
+
+            Dish dish3 = _waiter.Dishes.Single(d => d.Id == 1000035);
+            dish3.Course = _waiter.Courses.First();
 
             Guest guest = newOrder.Guests.First();
 
-            dishId = -1;
-            while (dishId != 0)
-            {
-                dishId = Int32.Parse(Console.ReadLine());
-                if (dishId > 0)
-                {
-                    guest.InsertDish(_waiter.Dishes.Single(d => d.Id == dishId));
-                }
-            }
+            newOrder.InsertCommonDish(dish1);
+            newOrder.InsertCommonDish(dish3);
+            guest.InsertDish(dish2);
 
-            RequestBuilder requestBuilder = new RequestBuilder();
-            SaveOrder saveOrder = new SaveOrder(newOrder, _waiter.License, Convert.ToInt32(stationId), _waiter.CurrentUser.Id);
-            saveOrder.CreateRequest(requestBuilder);
-
-            _waiter.NetworkService.SendRequest(requestBuilder.GetXml());
+            _waiter.SaveOrder(newOrder);
         }
 
         static void Main(string[] args)
@@ -222,8 +160,8 @@ namespace RKeeperWaiterTest
             _waiter.SetStationId(stationId);
             _waiter.DownloadReferences();
             _waiter.CreateLicense(Guid.NewGuid());
-
-            SaveTestOrder(Convert.ToInt32(stationId));
+            _waiter.GetOrderList();
+            //SaveTestOrder(Convert.ToInt32(stationId));
 
             //Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
 

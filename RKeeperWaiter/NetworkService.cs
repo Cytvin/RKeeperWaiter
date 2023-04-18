@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace RKeeperWaiter
 {
+    public enum DocumentType
+    {
+        Request,
+        Response
+    }
+
     public class NetworkService
     {
         private string _ip;
@@ -53,9 +59,10 @@ namespace RKeeperWaiter
                 return true;
             };
 
-            DateTime requestSaveTime = DateTime.Now;
-            xmlContent.Save($"D:\\sqllog\\Request_{requestSaveTime.Year}{requestSaveTime.Month}{requestSaveTime.Day}_" +
-                $"{requestSaveTime.Hour}{requestSaveTime.Minute}{requestSaveTime.Second}{requestSaveTime.Millisecond}.xml");
+            XmlNode xmlElement = xmlContent.GetElementsByTagName("RK7Command").Item(0);
+            string requestType = xmlElement.Attributes["CMD"].Value;
+
+            //Log<XmlDocument>(xmlContent, requestType, DocumentType.Request);
 
             using (HttpClient httpClient = new HttpClient(httpClientHandler))
             {
@@ -83,9 +90,7 @@ namespace RKeeperWaiter
                 {
                     XDocument responseContent = XDocument.Parse(response.Content.ReadAsStringAsync().Result);
 
-                    DateTime responseSaveTime = DateTime.Now;
-                    responseContent.Save($"D:\\sqllog\\Response_{responseSaveTime.Year}{responseSaveTime.Month}{responseSaveTime.Day}_" +
-                        $"{responseSaveTime.Hour}{responseSaveTime.Minute}{responseSaveTime.Second}{responseSaveTime.Millisecond}.xml");
+                    //Log<XDocument>(responseContent, requestType, DocumentType.Response);
 
                     return responseContent;
                 }
@@ -96,6 +101,36 @@ namespace RKeeperWaiter
 
                 throw new Exception();
             }
+        }
+
+        private void Log<T>(T xmlContent, string cmdName, DocumentType type)
+        {
+            XmlDocument saveDocument = new XmlDocument();
+
+            if (xmlContent is XDocument)
+            {
+                saveDocument = XDocumentToXml(xmlContent as XDocument);
+            }
+            else
+            {
+                saveDocument = xmlContent as XmlDocument;
+            }
+
+            DateTime requestSaveTime = DateTime.Now;
+            saveDocument.Save($"D:\\sqllog\\{type}_{cmdName}_{requestSaveTime.Year}{requestSaveTime.Month}{requestSaveTime.Day}_" +
+                $"{requestSaveTime.Hour}{requestSaveTime.Minute}{requestSaveTime.Second}{requestSaveTime.Millisecond}.xml");
+        }
+
+        private XmlDocument XDocumentToXml(XDocument xDocument)
+        {
+            XmlDocument resultXml = new XmlDocument();
+            
+            using (var xmlReader = xDocument.CreateReader())
+            {
+                resultXml.Load(xDocument.CreateReader());
+            }
+
+            return resultXml;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace RKeeperWaiter
         private List<GuestType> _guestTypes;
         private List<Hall> _halls;
         private List<OrderType> _orderTypes;
+        private List<Course> _courses;
 
         public int StationId => _stationId;
         public NetworkService NetworkService { get; private set; }
@@ -28,8 +29,8 @@ namespace RKeeperWaiter
         public User CurrentUser => _user;
         public IEnumerable<Hall> Halls => _halls;
         public IEnumerable<OrderType> OrderTypes => _orderTypes;
-
         public IEnumerable<Dish> Dishes => _dishes.Where(d => d.InMenu == true);
+        public IEnumerable<Course> Courses => _courses;
 
         public Waiter()
         {
@@ -61,13 +62,14 @@ namespace RKeeperWaiter
             _guestTypes = GetGuestTypes();
             _halls = GetHalls();
             _orderTypes = GetOrderTypes();
+            _courses = GetCourses();
             GetRestCode();
             SetPrice();
         }
 
         public MenuCategory GetMenuCategory(int id)
         {
-            string categoryName = _categories.First(c => c.Id == id).Name;
+            string categoryName = _categories.Single(c => c.Id == id).Name;
 
             MenuCategory menuCategory = new MenuCategory(categoryName);
 
@@ -160,6 +162,43 @@ namespace RKeeperWaiter
             XDocument createOrderResult = NetworkService.SendRequest(requestBuilder.GetXml());
         }
 
+        public void SaveOrder(Order order)
+        {
+            RequestBuilder requestBuilder = new RequestBuilder();
+            SaveOrder saveOrder = new SaveOrder(order, License, _stationId, CurrentUser.Id);
+            saveOrder.CreateRequest(requestBuilder);
+
+            XDocument serverResponse = NetworkService.SendRequest(requestBuilder.GetXml());
+
+            XElement rk7QueryResult = serverResponse.Root;
+
+            string status = rk7QueryResult.Attribute("Status").Value;
+
+            if (status != "Ok")
+            {
+                string errorText = rk7QueryResult.Attribute("ErrorText").Value;
+                throw new Exception(errorText);
+            }
+        }
+
+        private List<Course> GetCourses()
+        {
+            List<Course> courses = new List<Course>();
+
+            IEnumerable<XElement> xCourses = RequestReference("KURSES", null, null, "1");
+
+            foreach (XElement course in xCourses) 
+            {
+                int id = Convert.ToInt32(course.Attribute("Ident").Value);
+                string name = course.Attribute("Name").Value;
+
+                Course newCourse = new Course(id, name);
+                courses.Add(newCourse);
+            }
+
+            return courses;
+        }
+
         private void GetRestCode()
         {
             GetSystemInfo getSystemInfo = new GetSystemInfo();
@@ -204,25 +243,42 @@ namespace RKeeperWaiter
                 }
             }
 
-            XElement xSession = xOrder.Element("Session");
+            IEnumerable<XElement> xSessions = xOrder.Elements("Session");
 
-            if (xSession != null)
+            if (xSessions != null)
             {
-                foreach (XElement dish in xSession.Elements("Dish"))
+                foreach (XElement xSession in xSessions)
                 {
-                    int dishId = Convert.ToInt32(dish.Attribute("id").Value);
+                    Course course = Course.Empty;
 
-                    XAttribute seat = dish.Attribute("seat");
+                    XElement xCourse = xSession.Element("Course");
 
-                    if (seat == null)
+                    if (xCourse != null)
                     {
-                        order.InsertCommonDish(_dishes.First(d => d.Id == dishId));
-                        continue;
+                        int id = Convert.ToInt32(xCourse.Attribute("id").Value);
+                        string name = xCourse.Attribute("name").Value;
+                        course = new Course(id, name);
                     }
 
-                    Guest guest = order.Guests.First(g => g.Label == seat.Value);
+                    foreach (XElement dish in xSession.Elements("Dish"))
+                    {
+                        int dishId = Convert.ToInt32(dish.Attribute("id").Value);
 
-                    guest.InsertDish(_dishes.First(d => d.Id == dishId));
+                        Dish newDish = _dishes.Single(d => d.Id == dishId).Clone() as Dish;
+                        newDish.Course = course;
+
+                        XAttribute seat = dish.Attribute("seat");
+
+                        if (seat == null)
+                        {
+                            order.InsertCommonDish(newDish);
+                            continue;
+                        }
+
+                        Guest guest = order.Guests.First(g => g.Label == seat.Value);
+
+                        guest.InsertDish(newDish);
+                    }
                 }
             }
         }

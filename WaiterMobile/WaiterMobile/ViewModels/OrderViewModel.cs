@@ -16,6 +16,7 @@ namespace WaiterMobile.ViewModels
 
         public ICommand GoToBack { get; private set; }
         public ICommand AddDish { get; private set; }
+        public ICommand SaveOrder { get; private set; }
         public ObservableCollection<Dish> CommonDishes { get; set; }
         public ObservableCollection<Guest> Guests { get; set; }
         public Action<Dish> AddDishToCommonDishes => CommonDishes.Add;
@@ -26,6 +27,7 @@ namespace WaiterMobile.ViewModels
             _order = order;
             GoToBack = new Command(OnGoToBack);
             AddDish = new Command<Action<Dish>>(OnAddDish);
+            SaveOrder = new Command(OnSaveOrder);
             CommonDishes = new ObservableCollection<Dish>(order.CommonDishes);
             Guests = new ObservableCollection<Guest>(order.Guests);
         }
@@ -38,6 +40,21 @@ namespace WaiterMobile.ViewModels
         private void OnAddDish(Action<Dish> action)
         {
             Shell.Current.Navigation.PushAsync(new Dishes(action), true);
+        }
+
+        private void OnSaveOrder()
+        {
+            try
+            {
+                App.Waiter.SaveOrder(_order);
+            }
+            catch (Exception ex) 
+            {
+                Shell.Current.DisplayAlert("Ошибка", ex.Message, "ОК");
+                return;
+            }
+
+            Shell.Current.DisplayAlert("Готово", "Заказ успешно отправлен", "ОК");
         }
     }
 }
