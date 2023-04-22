@@ -16,7 +16,7 @@ namespace RKeeperWaiter.Models
         public int Id => _id;
         public int Code => _code;
         public string Name => _name;
-        public IEnumerable<ModifiersGroup> Modifiers => _modifiersGroups;
+        public IEnumerable<ModifiersGroup> ModifiersGroups => _modifiersGroups;
 
         public ModifiersSheme(int id, int code, string name)
         {

@@ -367,15 +367,18 @@ namespace RKeeperWaiter
                 }
             }
 
-            foreach (ModifiersGroup modifiersGroup in _modifiersGroup)
+            foreach (ModifiersSheme modifiersSheme in _modifiersShemes)
             {
-                foreach (Modifier modifier in modifiersGroup.Modifiers)
+                foreach (ModifiersGroup modifiersGroup in modifiersSheme.ModifiersGroups)
                 {
-                    int modifierId = modifier.Id;
-
-                    if (prices.ContainsKey(modifierId))
+                    foreach (Modifier modifier in modifiersGroup.Modifiers)
                     {
-                        modifier.SetPrice(prices[modifierId]);
+                        int modifierId = modifier.Id;
+
+                        if (prices.ContainsKey(modifierId))
+                        {
+                            modifier.SetPrice(prices[modifierId]);
+                        }
                     }
                 }
             }
