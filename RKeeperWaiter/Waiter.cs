@@ -22,6 +22,7 @@ namespace RKeeperWaiter
         private List<Hall> _halls;
         private List<OrderType> _orderTypes;
         private List<Course> _courses;
+        private List<ModifiersSheme> _modifiersShemes;
 
         public int StationId => _stationId;
         public NetworkService NetworkService { get; private set; }
@@ -31,6 +32,7 @@ namespace RKeeperWaiter
         public IEnumerable<OrderType> OrderTypes => _orderTypes;
         public IEnumerable<Dish> Dishes => _dishes.Where(d => d.InMenu == true);
         public IEnumerable<Course> Courses => _courses;
+        public IEnumerable <ModifiersSheme> Modifiers => _modifiersShemes;
 
         public Waiter()
         {
@@ -39,6 +41,7 @@ namespace RKeeperWaiter
             _guestTypes = new List<GuestType>();
             _halls = new List<Hall>();
             _orderTypes = new List<OrderType>();
+            _modifiersShemes = new List<ModifiersSheme>();
             NetworkService = new NetworkService();
         }
 
@@ -63,6 +66,7 @@ namespace RKeeperWaiter
             _halls = GetHalls();
             _orderTypes = GetOrderTypes();
             _courses = GetCourses();
+            _modifiersShemes = GetModifiers();
             GetRestCode();
             SetPrice();
         }
@@ -243,6 +247,8 @@ namespace RKeeperWaiter
                 }
             }
 
+            order.Comment = xOrder.Attribute("persistentComment").Value;
+
             IEnumerable<XElement> xSessions = xOrder.Elements("Session");
 
             if (xSessions != null)
@@ -360,6 +366,19 @@ namespace RKeeperWaiter
                     dish.SetPrice(prices[dishId]);
                 }
             }
+
+            foreach (ModifiersGroup modifiersGroup in _modifiersGroup)
+            {
+                foreach (Modifier modifier in modifiersGroup.Modifiers)
+                {
+                    int modifierId = modifier.Id;
+
+                    if (prices.ContainsKey(modifierId))
+                    {
+                        modifier.SetPrice(prices[modifierId]);
+                    }
+                }
+            }
         }
 
         private List<GuestType> GetGuestTypes()
@@ -406,18 +425,28 @@ namespace RKeeperWaiter
             GetOrderMenu getOrderMenu = new GetOrderMenu(_stationId, _user.Id);
             getOrderMenu.CreateRequest(requestBuilder);
 
-            XDocument orderMenu = NetworkService.SendRequest(requestBuilder.GetXml());
+            XDocument xOrderMenu = NetworkService.SendRequest(requestBuilder.GetXml());
 
             Dictionary<int, decimal> prices = new Dictionary<int, decimal>();
 
-            IEnumerable<XElement> pricesXml = orderMenu.Root.Element("CommandResult").Element("Dishes").Elements("Item");
+            IEnumerable<XElement> xDishesPrices = xOrderMenu.Root.Element("CommandResult").Element("Dishes").Elements("Item");
 
-            foreach (XElement priceXelement in pricesXml)
+            foreach (XElement xDishPrice in xDishesPrices)
             {
-                int dishId = Convert.ToInt32(priceXelement.Attribute("Ident").Value);
-                decimal price = Convert.ToDecimal(priceXelement.Attribute("Price").Value);
+                int dishId = Convert.ToInt32(xDishPrice.Attribute("Ident").Value);
+                decimal price = Convert.ToDecimal(xDishPrice.Attribute("Price").Value);
 
                 prices.Add(dishId, price);
+            }
+
+            IEnumerable<XElement> xModifiersPrices = xOrderMenu.Root.Element("CommandResult").Element("Modifiers").Elements("Item");
+
+            foreach (XElement xModifierPrice in xModifiersPrices)
+            {
+                int modifierId = Convert.ToInt32(xModifierPrice.Attribute("Ident").Value);
+                decimal price = Convert.ToDecimal(xModifierPrice.Attribute("Price").Value);
+
+                prices.Add(modifierId, price);
             }
 
             return prices;
@@ -449,7 +478,6 @@ namespace RKeeperWaiter
                 int hallId = Convert.ToInt32(table.Attribute("Hall").Value);
                 int maxGuests = Convert.ToInt32(table.Attribute("MaxGuests").Value);
 
-
                 Table newTabel = new Table(id, code, name, maxGuests);
 
                 Hall hall = halls.Where(x => x.Id == hallId).Single();
@@ -457,6 +485,49 @@ namespace RKeeperWaiter
             }
 
             return halls;
+        }
+
+        private List<ModifiersSheme> GetModifiers()
+        {
+            List<ModifiersGroup> modifiersGroups = new List<ModifiersGroup>();
+
+            IEnumerable<XElement> xModifiersGroups = RequestReference("MODIGROUPS", null, "Items.(Ident, Code, ActiveHierarchy, Status, Name)", "1");
+
+            foreach (XElement xModifiersGroup in xModifiersGroups)
+            {
+                int id = Convert.ToInt32(xModifiersGroup.Attribute("Ident").Value);
+                int code = Convert.ToInt32(xModifiersGroup.Attribute("Code").Value);
+                string name = xModifiersGroup.Attribute("Name").Value;
+
+                ModifiersGroup modifiersGroup = new ModifiersGroup(id, code, name);
+                modifiersGroups.Add(modifiersGroup);
+            }
+
+            IEnumerable<XElement> xModifiers = RequestReference("MODIFIERS", null, "Items.(Ident, Code, ActiveHierarchy, Status, Name)", "1");
+
+            foreach (XElement xModifier in xModifiers)
+            {
+                int id = Convert.ToInt32(xModifier.Attribute("Ident").Value);
+                int code = Convert.ToInt32(xModifier.Attribute("Code").Value);
+                string name = xModifier.Attribute("Name").Value;
+                int groupId = Convert.ToInt32(xModifier.Attribute("MainParentIdent").Value);
+
+                Modifier modifier = new Modifier(id, code, name);
+
+                ModifiersGroup modifiersGroup = modifiersGroups.Single(g => g.Id == groupId);
+                modifiersGroup.InsertModifier(modifier);
+            }
+
+            List<ModifiersSheme> modifiersShemes = new List<ModifiersSheme>();
+
+            IEnumerable<XElement> xModifiersShemes = RequestReference("ModiSchemes", null, "Items.(Ident, Code, ActiveHierarchy, Status, Name)", "1");
+
+            foreach (XElement xModifiersSheme in xModifiersShemes)
+            {
+
+            }
+
+            return modifiersShemes;
         }
 
         private IEnumerable<XElement> RequestReference(string refName, string refItemIdent, string propMask, string onlyActive)

@@ -35,14 +35,15 @@
 
             <ScrollView>
                 <StackLayout>
-                    <Grid Margin="30, 10, 30, 10">
+                    <Grid Margin="30, 0, 30, 0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0"/>
                         </Grid.ColumnDefinitions>
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
                         <Label Text="Общие"
@@ -55,15 +56,16 @@
                                 Command="{Binding AddDish}"
                                 CommandParameter="{Binding AddDishToCommonDishes}"/>
                     </Grid>
-
+                    
                     <CollectionView ItemsSource="{Binding CommonDishes}"
-                                    SelectionMode="Single">
+                                    SelectionMode="Single"
+                                    HeightRequest="10">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Dish">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="20"/>
-                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>

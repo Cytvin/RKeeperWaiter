@@ -49,6 +49,9 @@
     <Compile Include="Models\GuestType.cs" />
     <Compile Include="Models\Hall.cs" />
     <Compile Include="Models\MenuCategory.cs" />
+    <Compile Include="Models\Modifier.cs" />
+    <Compile Include="Models\ModifiersGroup.cs" />
+    <Compile Include="Models\ModifiersSheme.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderType.cs" />
     <Compile Include="Models\Table.cs" />
