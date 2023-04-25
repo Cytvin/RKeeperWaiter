@@ -5,13 +5,15 @@ namespace RKeeperWaiter
     public class GetRefData : IRequest
     {
         private readonly string _refName = null;
+        private readonly string _withChildItems = null;
         private readonly string _refItemIdent = null;
         private readonly string _propMask = null;
         private readonly string _onlyActive = null;
 
-        public GetRefData(string refName, string refItemIdent, string propMask, string onlyActive) 
+        public GetRefData(string refName, string withChildItems, string refItemIdent, string propMask, string onlyActive) 
         {
             _refName = refName;
+            _withChildItems = withChildItems;
             _refItemIdent = refItemIdent;
             _propMask = propMask;
             _onlyActive = onlyActive;
@@ -28,6 +30,11 @@ namespace RKeeperWaiter
                 builder.AddAttribute("RefName", _refName);
             }
             
+            if (_withChildItems != null)
+            {
+                builder.AddAttribute("WithChildItems", _withChildItems);
+            }
+
             if (_refItemIdent != null)
             {
                 builder.AddAttribute("RefItemIdent", _refItemIdent);

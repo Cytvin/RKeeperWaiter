@@ -147,6 +147,31 @@ namespace RKeeperWaiterTest
             _waiter.SaveOrder(newOrder);
         }
 
+        public static void DisplayModifiersShemes(IEnumerable<ModifiersSheme> modifiersShemes)
+        {
+            foreach (ModifiersSheme modifiersSheme in modifiersShemes)
+            {
+                Console.WriteLine($"Sheme - {modifiersSheme.Id}: {modifiersSheme.Name}:");
+                
+                foreach (ModifiersGroup modifiersGroup in modifiersSheme.ModifiersGroups)
+                {
+                    Console.WriteLine($"Group - {modifiersGroup.Id}: {modifiersGroup.Name}");
+
+                    foreach (ModifiersGroup internalGroup in modifiersGroup.ModifiersGroups)
+                    {
+                        Console.WriteLine($"InternalGroup - {internalGroup.Id}: {internalGroup.Name}");
+                    }
+
+                    foreach (Modifier modifier in modifiersGroup.Modifiers)
+                    {
+                        Console.WriteLine($"Modifier - {modifier.Id}: {modifier.Name} Price: {modifier.Price}");
+                    }
+                }
+
+                Console.WriteLine();
+            }
+        }
+
         static void Main(string[] args)
         {
             _waiter = new Waiter();
@@ -160,7 +185,10 @@ namespace RKeeperWaiterTest
             _waiter.SetStationId(stationId);
             _waiter.DownloadReferences();
             _waiter.CreateLicense(Guid.NewGuid());
-            _waiter.GetOrderList();
+
+            //DisplayModifiersShemes(_waiter.Modifiers);
+
+            //_waiter.GetOrderList();
             //SaveTestOrder(Convert.ToInt32(stationId));
 
             //Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");

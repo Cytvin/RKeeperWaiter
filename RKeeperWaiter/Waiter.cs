@@ -32,7 +32,7 @@ namespace RKeeperWaiter
         public IEnumerable<OrderType> OrderTypes => _orderTypes;
         public IEnumerable<Dish> Dishes => _dishes.Where(d => d.InMenu == true);
         public IEnumerable<Course> Courses => _courses;
-        public IEnumerable <ModifiersSheme> Modifiers => _modifiersShemes;
+        public IEnumerable<ModifiersSheme> Modifiers => _modifiersShemes;
 
         public Waiter()
         {
@@ -189,7 +189,7 @@ namespace RKeeperWaiter
         {
             List<Course> courses = new List<Course>();
 
-            IEnumerable<XElement> xCourses = RequestReference("KURSES", null, null, "1");
+            IEnumerable<XElement> xCourses = RequestReference("KURSES", null, null, null, "1");
 
             foreach (XElement course in xCourses) 
             {
@@ -216,7 +216,7 @@ namespace RKeeperWaiter
 
         private void GetUserData(int userId)
         {
-            XElement userDataXml = RequestReference("EMPLOYEES", userId.ToString(), null, null).First();
+            XElement userDataXml = RequestReference("EMPLOYEES", null, userId.ToString(), null, null).First();
 
             string userName = userDataXml.Attribute("Name").Value;
             int userCode = Convert.ToInt32(userDataXml.Attribute("Code").Value);
@@ -314,7 +314,7 @@ namespace RKeeperWaiter
         {
             List<Category> categories = new List<Category>();
 
-            IEnumerable<XElement> menuCategoriesXElement = RequestReference("CategList", null, null, null);
+            IEnumerable<XElement> menuCategoriesXElement = RequestReference("CategList", null, null, null, null);
 
             foreach (XElement categoryXElement in menuCategoriesXElement)
             {
@@ -334,7 +334,7 @@ namespace RKeeperWaiter
         {
             List<Dish> dishes = new List<Dish>();
 
-            IEnumerable<XElement> dishesXElements = RequestReference("MenuItems", null, null, null);
+            IEnumerable<XElement> dishesXElements = RequestReference("MenuItems", null, null, null, null);
 
             foreach (XElement dishesXElement in dishesXElements)
             {
@@ -388,7 +388,7 @@ namespace RKeeperWaiter
         {
             List<GuestType> guestTypes = new List<GuestType>();
 
-            IEnumerable<XElement> xGuestTypes = RequestReference("GUESTTYPES", null, "Items.(Ident, Name, Code)", null);
+            IEnumerable<XElement> xGuestTypes = RequestReference("GUESTTYPES", null, null, "Items.(Ident, Name, Code)", null);
 
             foreach (XElement guestType in xGuestTypes)
             {
@@ -407,7 +407,7 @@ namespace RKeeperWaiter
         {
             List<OrderType> orderTypes = new List<OrderType>();
 
-            IEnumerable<XElement> xOrderTypes = RequestReference("CHANGEABLEORDERTYPES", null, null, "1");
+            IEnumerable<XElement> xOrderTypes = RequestReference("CHANGEABLEORDERTYPES", null, null, null, "1");
 
             foreach (XElement orderType in xOrderTypes)
             {
@@ -459,7 +459,7 @@ namespace RKeeperWaiter
         {
             List<Hall> halls = new List<Hall>();
 
-            IEnumerable<XElement> hallList = RequestReference("HallPlans", null, "Items.(Ident, Code, ActiveHierarchy,Status,Name,Items.(*))", "1");
+            IEnumerable<XElement> hallList = RequestReference("HallPlans", null, null, "Items.(Ident, Code, ActiveHierarchy,Status,Name,Items.(*))", "1");
 
             foreach (XElement hall in hallList)
             {
@@ -471,7 +471,7 @@ namespace RKeeperWaiter
                 halls.Add(newHall);
             }
 
-            IEnumerable<XElement> tables = RequestReference("Tables", null, "Items.(Ident, Code, Name, Hall, MaxGuests)", "1");
+            IEnumerable<XElement> tables = RequestReference("Tables", null, null, "Items.(Ident, Code, Name, Hall, MaxGuests)", "1");
 
             foreach (XElement table in tables)
             {
@@ -494,19 +494,26 @@ namespace RKeeperWaiter
         {
             List<ModifiersGroup> modifiersGroups = new List<ModifiersGroup>();
 
-            IEnumerable<XElement> xModifiersGroups = RequestReference("MODIGROUPS", null, "Items.(Ident, Code, ActiveHierarchy, Status, Name)", "1");
+            IEnumerable<XElement> xModifiersGroups = RequestReference("MODIGROUPS", null, null, "Items.(Ident, Code, Name, MainParentIdent)", "1");
 
             foreach (XElement xModifiersGroup in xModifiersGroups)
             {
                 int id = Convert.ToInt32(xModifiersGroup.Attribute("Ident").Value);
                 int code = Convert.ToInt32(xModifiersGroup.Attribute("Code").Value);
                 string name = xModifiersGroup.Attribute("Name").Value;
+                int parentGroupId = Convert.ToInt32(xModifiersGroup.Attribute("MainParentIdent").Value);
 
                 ModifiersGroup modifiersGroup = new ModifiersGroup(id, code, name);
                 modifiersGroups.Add(modifiersGroup);
+
+                if (parentGroupId != 0)
+                {
+                    ModifiersGroup parrent = modifiersGroups.Single(g => g.Id == parentGroupId);
+                    parrent?.InsertGroup(modifiersGroup);
+                }
             }
 
-            IEnumerable<XElement> xModifiers = RequestReference("MODIFIERS", null, "Items.(Ident, Code, ActiveHierarchy, Status, Name)", "1");
+            IEnumerable<XElement> xModifiers = RequestReference("MODIFIERS", null, null, "Items.(Ident, Code, Name, MainParentIdent)", "1");
 
             foreach (XElement xModifier in xModifiers)
             {
@@ -523,20 +530,47 @@ namespace RKeeperWaiter
 
             List<ModifiersSheme> modifiersShemes = new List<ModifiersSheme>();
 
-            IEnumerable<XElement> xModifiersShemes = RequestReference("ModiSchemes", null, "Items.(Ident, Code, ActiveHierarchy, Status, Name)", "1");
+            IEnumerable<XElement> xModifiersShemes = RequestReference("ModiSchemes", "2", null, "Items.(Ident, Code, Name), Items.RIChildItems.(ModiGroup)", "1");
 
             foreach (XElement xModifiersSheme in xModifiersShemes)
             {
+                int id = Convert.ToInt32(xModifiersSheme.Attribute("Ident").Value);
+                int code = Convert.ToInt32(xModifiersSheme.Attribute("Code").Value);
+                string name = xModifiersSheme.Attribute("Name").Value;
 
+                ModifiersSheme modifiersSheme = new ModifiersSheme(id, code, name);
+
+                XElement RIChildItems = xModifiersSheme.Element("RIChildItems");
+
+                IEnumerable<XElement> xChilds = null;
+
+                if (RIChildItems != null)
+                {
+                    xChilds = RIChildItems.Elements("TModiSchemeDetail");
+
+                    foreach (XElement xChild in xChilds)
+                    {
+                        int modifiersGroupId = Convert.ToInt32(xChild.Attribute("ModiGroup").Value);
+
+                        ModifiersGroup modifiersGroup = modifiersGroups.SingleOrDefault(g => g.Id == modifiersGroupId);
+
+                        if (modifiersGroup != null)
+                        {
+                            modifiersSheme.InsertModifiersGroup(modifiersGroup);
+                        }
+                    }
+                }
+
+                modifiersShemes.Add(modifiersSheme);
             }
 
             return modifiersShemes;
         }
 
-        private IEnumerable<XElement> RequestReference(string refName, string refItemIdent, string propMask, string onlyActive)
+        private IEnumerable<XElement> RequestReference(string refName, string withChildItems, string refItemIdent, string propMask, string onlyActive)
         {
             RequestBuilder requestBuilder = new RequestBuilder();
-            GetRefData getRefData = new GetRefData(refName, refItemIdent, propMask, onlyActive);
+            GetRefData getRefData = new GetRefData(refName, withChildItems, refItemIdent, propMask, onlyActive);
             getRefData.CreateRequest(requestBuilder);
 
             XDocument reference = NetworkService.SendRequest(requestBuilder.GetXml());
