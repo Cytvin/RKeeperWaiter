@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModels"
+             xmlns:models="clr-namespace:RKeeperWaiter.Models;assembly=RKeeperWaiter"
+             x:Class="WaiterMobile.Views.DishView"
+             Shell.NavBarIsVisible="False"
+             x:DataType="viewmodel:DishViewModel">
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid Margin="10,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+
+                <ImageButton BackgroundColor="White"
+                        Source="arrow_left_short.png"
+                        Command="{Binding GoToBack}"/>
+
+                <Label Text="{Binding Name}"
+                       Grid.Column="1"
+                       FontSize="15"
+                       TextColor="Black"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </Grid>
+
+            <Picker Margin="30, 100, 30, 0"
+                        Title="Порядок подачи"
+                        ItemsSource="{Binding Courses}"
+                        SelectedItem="{Binding SelectedCourse}"
+                        ItemDisplayBinding="{Binding Name}">
+            </Picker>
+
+            <StackLayout>
+                <StackLayout BindableLayout.ItemsSource="{Binding Modifiers.ModifiersGroups}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:ModifiersGroup">
+                            <StackLayout>
+                                <Label Text="{Binding Name}"/>
+
+                                <StackLayout BindableLayout.ItemsSource="{Binding Modifiers}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="models:Modifier">
+                                            <Label Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

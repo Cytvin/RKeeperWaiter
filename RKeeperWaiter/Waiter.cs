@@ -61,12 +61,12 @@ namespace RKeeperWaiter
         public void DownloadReferences()
         {
             _categories = GetCategories();
-            _dishes = GetDishes();
             _guestTypes = GetGuestTypes();
             _halls = GetHalls();
             _orderTypes = GetOrderTypes();
             _courses = GetCourses();
             _modifiersShemes = GetModifiers();
+            _dishes = GetDishes();
             GetRestCode();
             SetPrice();
         }
@@ -334,18 +334,24 @@ namespace RKeeperWaiter
         {
             List<Dish> dishes = new List<Dish>();
 
-            IEnumerable<XElement> dishesXElements = RequestReference("MenuItems", null, null, null, null);
+            IEnumerable<XElement> xDishes = RequestReference("MenuItems", null, null, null, null);
 
-            foreach (XElement dishesXElement in dishesXElements)
+            foreach (XElement xDish in xDishes)
             {
-                int dishId = Convert.ToInt32(dishesXElement.Attribute("ItemIdent").Value);
-                string dishName = dishesXElement.Attribute("Name").Value;
-                int parentId = Convert.ToInt32(dishesXElement.Attribute("MainParentIdent").Value);
-                string guidString = dishesXElement.Attribute("GUIDString").Value;
+                int dishId = Convert.ToInt32(xDish.Attribute("ItemIdent").Value);
+                string dishName = xDish.Attribute("Name").Value;
+                int parentId = Convert.ToInt32(xDish.Attribute("MainParentIdent").Value);
+                string guidString = xDish.Attribute("GUIDString").Value;
+                int modifiersShemeId = Convert.ToInt32(xDish.Attribute("ModiScheme").Value);
 
                 Guid dishGuid = guidString == "" ? Guid.NewGuid() : Guid.Parse(guidString);
 
                 Dish dish = new Dish(dishId, dishGuid, dishName, parentId);
+
+                if (modifiersShemeId != 0)
+                {
+                    dish.Modifiers = _modifiersShemes.Single(m => m.Id == modifiersShemeId);
+                }
 
                 dishes.Add(dish);
             }

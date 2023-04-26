@@ -11,6 +11,7 @@ namespace RKeeperWaiter.Models
         private decimal _price;
         private int _parentId;
         private Course _course;
+        private ModifiersSheme _modifiersSheme;
 
         public bool InMenu => _inMenu;
         public int Id => _id;
@@ -20,7 +21,7 @@ namespace RKeeperWaiter.Models
         public decimal Price => _price;
         public Course Course { get => _course; set => _course = value; }
         public string Seat { get; set; }
-
+        public ModifiersSheme Modifiers { get => _modifiersSheme; set => _modifiersSheme = value; }
 
         public Dish(int id, Guid guid, string name, int parent) 
         {

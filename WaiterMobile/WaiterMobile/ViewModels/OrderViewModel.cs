@@ -16,6 +16,7 @@ namespace WaiterMobile.ViewModels
 
         public ICommand GoToBack { get; private set; }
         public ICommand AddDish { get; private set; }
+        public ICommand EditDish { get; private set; }
         public ICommand SaveOrder { get; private set; }
         public ObservableCollection<Dish> CommonDishes { get; set; }
         public ObservableCollection<Guest> Guests { get; set; }
@@ -27,6 +28,7 @@ namespace WaiterMobile.ViewModels
             _order = order;
             GoToBack = new Command(OnGoToBack);
             AddDish = new Command<Action<Dish>>(OnAddDish);
+            EditDish = new Command<Dish>(OnEditDish);
             SaveOrder = new Command(OnSaveOrder);
             CommonDishes = new ObservableCollection<Dish>(order.CommonDishes);
             Guests = new ObservableCollection<Guest>(order.Guests);
@@ -40,6 +42,11 @@ namespace WaiterMobile.ViewModels
         private void OnAddDish(Action<Dish> action)
         {
             Shell.Current.Navigation.PushAsync(new Dishes(action), true);
+        }
+
+        private void OnEditDish(Dish dish)
+        {
+            Shell.Current.Navigation.PushAsync(new DishView(dish), true);
         }
 
         private void OnSaveOrder()

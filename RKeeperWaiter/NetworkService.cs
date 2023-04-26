@@ -62,7 +62,7 @@ namespace RKeeperWaiter
             XmlNode xmlElement = xmlContent.GetElementsByTagName("RK7Command").Item(0);
             string requestType = xmlElement.Attributes["CMD"].Value;
 
-            Log<XmlDocument>(xmlContent, requestType, DocumentType.Request);
+            //Log<XmlDocument>(xmlContent, requestType, DocumentType.Request);
 
             using (HttpClient httpClient = new HttpClient(httpClientHandler))
             {
@@ -90,7 +90,7 @@ namespace RKeeperWaiter
                 {
                     XDocument responseContent = XDocument.Parse(response.Content.ReadAsStringAsync().Result);
 
-                    Log<XDocument>(responseContent, requestType, DocumentType.Response);
+                    //Log<XDocument>(responseContent, requestType, DocumentType.Response);
 
                     return responseContent;
                 }

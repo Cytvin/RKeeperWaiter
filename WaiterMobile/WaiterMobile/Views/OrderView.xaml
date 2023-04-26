@@ -57,10 +57,8 @@
                                 CommandParameter="{Binding AddDishToCommonDishes}"/>
                     </Grid>
                     
-                    <CollectionView ItemsSource="{Binding CommonDishes}"
-                                    SelectionMode="Single"
-                                    HeightRequest="10">
-                        <CollectionView.ItemTemplate>
+                    <StackLayout BindableLayout.ItemsSource="{Binding CommonDishes}">
+                        <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="models:Dish">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -84,10 +82,15 @@
                                            Grid.Row="0"
                                            Grid.RowSpan="1"
                                            Grid.Column="1"/>
+
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference Name=_orderView}, Path=BindingContext.EditDish}"
+                                                              CommandParameter="{Binding}"/>
+                                    </Grid.GestureRecognizers>
                                 </Grid>
                             </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
 
                     <StackLayout BindableLayout.ItemsSource="{Binding Guests}">
                         <BindableLayout.ItemTemplate>
@@ -95,15 +98,16 @@
                                 <StackLayout>
                                     <Grid Margin="30, 10, 30, 10">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="0"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="50"/>
+                                        <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                    <Label Text="{Binding Name}"
+                                        <Label Text="{Binding Name}"
                                         HorizontalOptions="Start"
                                         VerticalOptions="Center"/>
 
@@ -114,9 +118,9 @@
                                         CommandParameter="{Binding AddDishToGuest}"/>
                                     </Grid>
 
-                                    <CollectionView x:DataType="models:Guest" ItemsSource="{Binding Dishes}"
-                                                    SelectionMode="Single">
-                                        <CollectionView.ItemTemplate>
+                                    <StackLayout x:DataType="models:Guest" 
+                                                 BindableLayout.ItemsSource="{Binding Dishes}">
+                                        <BindableLayout.ItemTemplate>
                                             <DataTemplate x:DataType="models:Dish">
                                                 <Grid>
                                                     <Grid.RowDefinitions>
@@ -140,10 +144,15 @@
                                                            Grid.Row="0"
                                                            Grid.RowSpan="1"
                                                            Grid.Column="1"/>
+                                                    
+                                                    <Grid.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference Name=_orderView}, Path=BindingContext.EditDish}"
+                                                                              CommandParameter="{Binding}"/>
+                                                    </Grid.GestureRecognizers>
                                                 </Grid>
                                             </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
+                                        </BindableLayout.ItemTemplate>
+                                    </StackLayout>
                                 </StackLayout>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
