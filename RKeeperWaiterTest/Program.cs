@@ -178,8 +178,11 @@ namespace RKeeperWaiterTest
 
             string userCode = "15";
             string stationId = "";
+            string authString = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(""));
 
-            _waiter.NetworkService.SetParameters("", "", "IT", "10");
+            Console.WriteLine(authString);
+
+            _waiter.NetworkService.SetParameters("", "", authString);
 
             _waiter.UserAuthorization(userCode);
             _waiter.SetStationId(stationId);

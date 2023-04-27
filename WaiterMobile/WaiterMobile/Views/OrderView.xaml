@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModels"
              xmlns:models="clr-namespace:RKeeperWaiter.Models;assembly=RKeeperWaiter"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodel:OrderViewModel"
              x:Class="WaiterMobile.Views.OrderView"
              x:Name="_orderView"

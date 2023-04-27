@@ -19,36 +19,25 @@ namespace RKeeperWaiter
     {
         private string _ip;
         private string _port;
-        private string _login;
-        private string _password;
 
         private Uri _uri;
         private string _authorizationString;
 
         public string Ip => _ip;
         public string Port => _port;
-        public string Login => _login;
-        public string Password => _password;
 
         private void MakeUrl()
         {
             _uri = new Uri($"https://{_ip}:{_port}/rk7api/v0/xmlinterface.xml");
         }
 
-        private void MakeAuthorizationString()
-        {
-            _authorizationString = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{_login}:{_password}"));
-        }
-
-        public void SetParameters(string ip, string port, string login, string password)
+        public void SetParameters(string ip, string port, string authString)
         {
             _ip = ip;
             _port = port;
-            _login = login;
-            _password = password;
+            _authorizationString = authString;
 
             MakeUrl();
-            MakeAuthorizationString();
         }
 
         public XDocument SendRequest(XmlDocument xmlContent)
@@ -81,7 +70,7 @@ namespace RKeeperWaiter
                 }
                 catch (AggregateException ex)
                 {
-                    throw new TaskCanceledException("Не получен ответ от сервера");
+                    throw new TaskCanceledException(ex.InnerException.Message);
                 }
 
                 HttpStatusCode httpStatusCode = response.StatusCode;

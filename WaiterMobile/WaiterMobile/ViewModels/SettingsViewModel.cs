@@ -1,7 +1,11 @@
-﻿using System.ComponentModel;
+﻿using RKeeperWaiter;
+using System;
+using System.ComponentModel;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
 using System.Xml;
+using System.Xml.Linq;
 using WaiterMobile.Models;
 using Xamarin.Forms;
 
@@ -78,11 +82,20 @@ namespace WaiterMobile.ViewModels
 
         private void DisplaySettings()
         {
-            StationId = App.Waiter.StationId.ToString();
-            IP = App.Waiter.NetworkService.Ip;
-            Port = App.Waiter.NetworkService.Port;
-            Login = App.Waiter.NetworkService.Login;
-            Password = App.Waiter.NetworkService.Password;
+            if (File.Exists(App.SettingsFile) == false)
+            {
+                return;
+            }
+
+            XDocument settings = XDocument.Load(App.SettingsFile);
+
+            XElement root = settings.Root;
+
+            StationId = root.Element("StationId").Value;
+            IP = root.Element("ServerIp").Value;
+            Port = root.Element("ServerPort").Value;
+            Login = root.Element("UserLogin").Value;
+            Password = root.Element("UserPassword").Value;
         }
 
         private void Return()
@@ -92,8 +105,10 @@ namespace WaiterMobile.ViewModels
 
         private void SaveSettings()
         {
+            string authString = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{Login}:{Password}"));
+
             App.Waiter.SetStationId(StationId);
-            App.Waiter.NetworkService.SetParameters(IP, Port, Login, Password);
+            App.Waiter.NetworkService.SetParameters(IP, Port, authString);
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -125,6 +140,10 @@ namespace WaiterMobile.ViewModels
 
                 writer.WriteStartElement("UserPassword");
                 writer.WriteValue(Password);
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("AuthString");
+                writer.WriteValue(authString);
                 writer.WriteEndElement();
 
                 writer.WriteEndElement();

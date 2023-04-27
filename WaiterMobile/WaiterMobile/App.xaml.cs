@@ -58,10 +58,9 @@ namespace WaiterMobile
             string stationId = root.Element("StationId").Value;
             string ip = root.Element("ServerIp").Value;
             string port = root.Element("ServerPort").Value;
-            string login = root.Element("UserLogin").Value;
-            string password = root.Element("UserPassword").Value;
+            string authString = root.Element("AuthString").Value;
 
-            Waiter.NetworkService.SetParameters(ip, port, login, password);
+            Waiter.NetworkService.SetParameters(ip, port, authString);
             Waiter.SetStationId(stationId);
         }
     }

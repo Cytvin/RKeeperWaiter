@@ -350,7 +350,7 @@ namespace RKeeperWaiter
 
                 if (modifiersShemeId != 0)
                 {
-                    dish.Modifiers = _modifiersShemes.Single(m => m.Id == modifiersShemeId);
+                    dish.ModifiersSheme = _modifiersShemes.Single(m => m.Id == modifiersShemeId);
                 }
 
                 dishes.Add(dish);

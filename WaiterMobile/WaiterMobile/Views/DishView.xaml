@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModels"
              xmlns:models="clr-namespace:RKeeperWaiter.Models;assembly=RKeeperWaiter"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="WaiterMobile.Views.DishView"
              Shell.NavBarIsVisible="False"
-             x:DataType="viewmodel:DishViewModel">
+             x:DataType="viewmodel:DishViewModel"
+             x:Name="_dishView">
     
     <ContentPage.Content>
         <StackLayout>
@@ -38,7 +40,7 @@
                         ItemDisplayBinding="{Binding Name}">
             </Picker>
 
-            <StackLayout>
+            <StackLayout Margin="30, 20, 30, 0">
                 <StackLayout BindableLayout.ItemsSource="{Binding Modifiers.ModifiersGroups}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="models:ModifiersGroup">
@@ -48,7 +50,30 @@
                                 <StackLayout BindableLayout.ItemsSource="{Binding Modifiers}">
                                     <BindableLayout.ItemTemplate>
                                         <DataTemplate x:DataType="models:Modifier">
-                                            <Label Text="{Binding Name}"/>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="20"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <CheckBox Grid.Column="0">
+                                                    <CheckBox.Behaviors>
+                                                        <xct:EventToCommandBehavior EventName="CheckedChanged"
+                                                                                    Command="{Binding Source={x:Reference Name=_dishView}, Path=BindingContext.SelectUnselectModifier}"
+                                                                                    CommandParameter="{Binding}"/>
+                                                    </CheckBox.Behaviors>
+                                                </CheckBox>
+
+                                                <Label Text="{Binding Name}"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Start"
+                                                       TextColor="Black"
+                                                       Grid.Column="1"/>
+                                            </Grid>
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>
                                 </StackLayout>
