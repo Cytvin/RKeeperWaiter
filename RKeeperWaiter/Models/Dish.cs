@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace RKeeperWaiter.Models
 {
@@ -13,7 +12,8 @@ namespace RKeeperWaiter.Models
         private int _parentId;
         private Course _course;
         private ModifiersSheme _modifiersSheme;
-        private List<Modifier> _modifiers;
+        private int _uni;
+        private Guid _lineGuid;
 
         public bool InMenu => _inMenu;
         public int Id => _id;
@@ -24,7 +24,8 @@ namespace RKeeperWaiter.Models
         public Course Course { get => _course; set => _course = value; }
         public string Seat { get; set; }
         public ModifiersSheme ModifiersSheme { get => _modifiersSheme; set => _modifiersSheme = value; }
-        public IEnumerable<Modifier> Modifiers => _modifiers;
+        public int Uni { get => _uni; set => _uni = value; }
+        public Guid LineGuid { get => _lineGuid; set => _lineGuid = value; }
 
         public Dish(int id, Guid guid, string name, int parent) 
         {
@@ -34,7 +35,6 @@ namespace RKeeperWaiter.Models
             _inMenu = false;
             _parentId = parent;
             _course = Course.Empty;
-            _modifiers = new List<Modifier>();
         }
 
         public void SetPrice(decimal price)
@@ -46,21 +46,6 @@ namespace RKeeperWaiter.Models
 
             _inMenu = true;
             _price = Math.Round(price / 100, 2);
-        }
-
-        public void InsertModifier(Modifier modifier)
-        {
-            if (_modifiers.Contains(modifier))
-            {
-                return;
-            }
-
-            _modifiers.Add(modifier);
-        }
-
-        public void RemoveModifier(Modifier modifier)
-        {
-            _modifiers.Remove(modifier);
         }
 
         public object Clone() => MemberwiseClone();

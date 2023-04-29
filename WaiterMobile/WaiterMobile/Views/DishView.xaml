@@ -57,10 +57,12 @@
 
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="20"/>
-                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="100"/>
+                                                    <ColumnDefinition Width="50"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <CheckBox Grid.Column="0">
+                                                <CheckBox Grid.Column="0"
+                                                          IsChecked="{Binding Selected}">
                                                     <CheckBox.Behaviors>
                                                         <xct:EventToCommandBehavior EventName="CheckedChanged"
                                                                                     Command="{Binding Source={x:Reference Name=_dishView}, Path=BindingContext.SelectUnselectModifier}"
@@ -73,6 +75,12 @@
                                                        VerticalOptions="Start"
                                                        TextColor="Black"
                                                        Grid.Column="1"/>
+
+                                                <Label Text="{Binding Count}"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"
+                                                       TextColor="Black"
+                                                       Grid.Column="2"/>
                                             </Grid>
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>

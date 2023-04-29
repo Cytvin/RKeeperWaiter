@@ -1,9 +1,6 @@
 ﻿using RKeeperWaiter.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -19,14 +16,12 @@ namespace WaiterMobile.ViewModels
         public ICommand SelectUnselectModifier { get; private set; }
         public string Name => _dish.Name;
         public IEnumerable<Course> Courses => App.Waiter.Courses;
-        public ModifiersSheme Modifiers { get; private set; }
+        public ModifiersSheme Modifiers => _dish.ModifiersSheme;
         public Course SelectedCourse { get; set; }
 
         public DishViewModel(Dish dish) 
         {
             _dish = dish;
-            Modifiers = _dish.ModifiersSheme;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Modifiers)));
             GoToBack = new Command(OnGoToBack);
             SelectUnselectModifier = new Command<Modifier>(OnSelectUnselectModifier);
         }
@@ -38,13 +33,10 @@ namespace WaiterMobile.ViewModels
 
         private void OnSelectUnselectModifier(Modifier modifier)
         {
-            if (_dish.Modifiers.Contains(modifier))
+            if (modifier.Selected == false)
             {
-                _dish.RemoveModifier(modifier);
-                return;
+                modifier.Select();
             }
-
-            _dish.InsertModifier(modifier);
         }
     }
 }

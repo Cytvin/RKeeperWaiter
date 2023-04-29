@@ -69,6 +69,7 @@
     <Compile Include="XmlRequests\IRequest.cs" />
     <Compile Include="XmlRequests\SaveOrder.cs" />
     <Compile Include="XmlRequests\RequestBuilder.cs" />
+    <Compile Include="XmlRequests\TransferDishes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -21,8 +21,8 @@
                 </Grid.ColumnDefinitions>
 
                 <ImageButton BackgroundColor="White"
-                        Source="arrow_left_short.png"
-                        Command="{Binding GoToBack}"/>
+                             Source="arrow_left_short.png"
+                             Command="{Binding GoToBack}"/>
 
                 <Label Text="{Binding OrderName}"
                        Grid.Column="1"
@@ -30,6 +30,10 @@
                        TextColor="Black"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"/>
+
+                <ImageButton BackgroundColor="White"
+                             Source="card_text.png"
+                             Command="{Binding AddCommentary}"/>
             </Grid>
 
             <ScrollView>

@@ -174,39 +174,20 @@ namespace RKeeperWaiterTest
 
         static void Main(string[] args)
         {
-            _waiter = new Waiter();
+            //_waiter = new Waiter();
 
-            string userCode = "15";
-            string stationId = "";
-            string authString = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(""));
+            //string userCode = "15";
+            //string stationId = "";
+            //string authString = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(""));
 
-            Console.WriteLine(authString);
+            //Console.WriteLine(authString);
 
-            _waiter.NetworkService.SetParameters("", "", authString);
+            //_waiter.NetworkService.SetParameters("", "", authString);
 
-            _waiter.UserAuthorization(userCode);
-            _waiter.SetStationId(stationId);
-            _waiter.DownloadReferences();
-            _waiter.CreateLicense(Guid.NewGuid());
-
-            //DisplayModifiersShemes(_waiter.Modifiers);
-
-            //_waiter.GetOrderList();
-            //SaveTestOrder(Convert.ToInt32(stationId));
-
-            //Console.WriteLine($"{_waiter.CurrentUser.Id}:{_waiter.CurrentUser.Name}");
-
-            //License license = new License("400580001");
-            //Console.WriteLine(license.Token);
-
-            //List<Order> orders = _waiter.GetOrderList();
-            //DisplayOrders(orders);
-
-            //Menu();
-
-            //XmlDocument xmlDocument = new XmlDocument();
-            //xmlDocument.LoadXml(license.GetXMLLicense().OuterXml);
-            //xmlDocument.Save("D:\\sqllog\\test.xml");
+            //_waiter.UserAuthorization(userCode);
+            //_waiter.SetStationId(stationId);
+            //_waiter.DownloadReferences();
+            //_waiter.CreateLicense(Guid.NewGuid());
 
             Console.ReadLine();
         }

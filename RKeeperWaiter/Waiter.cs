@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 using RKeeperWaiter.Models;
 using RKeeperWaiter.XmlRequests;
@@ -185,6 +182,20 @@ namespace RKeeperWaiter
             }
         }
 
+        public void TransferDish(Order source, Order destionation, Dish dish)
+        {
+            RequestBuilder requestBuilder = new RequestBuilder();
+            TransferDishes transferDishes = new TransferDishes(CurrentUser.Id, source.Id, destionation.Id, dish.LineGuid);
+            transferDishes.CreateRequest(requestBuilder);
+
+            NetworkService.SendRequest(requestBuilder.GetXml());
+        }
+
+        public void DeleteDish()
+        {
+
+        }
+
         private List<Course> GetCourses()
         {
             List<Course> courses = new List<Course>();
@@ -266,14 +277,18 @@ namespace RKeeperWaiter
                         course = new Course(id, name);
                     }
 
-                    foreach (XElement dish in xSession.Elements("Dish"))
+                    foreach (XElement xDish in xSession.Elements("Dish"))
                     {
-                        int dishId = Convert.ToInt32(dish.Attribute("id").Value);
+                        int dishId = Convert.ToInt32(xDish.Attribute("id").Value);
+                        int uni = Convert.ToInt32(xDish.Attribute("uni").Value);
+                        Guid lineGuid = Guid.Parse(xDish.Attribute("line_guid").Value);
 
-                        Dish newDish = _dishes.Single(d => d.Id == dishId).Clone() as Dish;
+                        Dish newDish = (Dish)_dishes.Single(d => d.Id == dishId).Clone();
                         newDish.Course = course;
+                        newDish.Uni = uni;
+                        newDish.LineGuid = lineGuid;
 
-                        XAttribute seat = dish.Attribute("seat");
+                        XAttribute seat = xDish.Attribute("seat");
 
                         if (seat == null)
                         {
@@ -350,7 +365,7 @@ namespace RKeeperWaiter
 
                 if (modifiersShemeId != 0)
                 {
-                    dish.ModifiersSheme = _modifiersShemes.Single(m => m.Id == modifiersShemeId);
+                    dish.ModifiersSheme = (ModifiersSheme)_modifiersShemes.Single(m => m.Id == modifiersShemeId).Clone();
                 }
 
                 dishes.Add(dish);
@@ -536,7 +551,7 @@ namespace RKeeperWaiter
 
             List<ModifiersSheme> modifiersShemes = new List<ModifiersSheme>();
 
-            IEnumerable<XElement> xModifiersShemes = RequestReference("ModiSchemes", "2", null, "Items.(Ident, Code, Name), Items.RIChildItems.(ModiGroup)", "1");
+            IEnumerable<XElement> xModifiersShemes = RequestReference("ModiSchemes", "2", null, "Items.(Ident, Code, Name), Items.RIChildItems.(ModiGroup, UpLimit, DownLimit)", "1");
 
             foreach (XElement xModifiersSheme in xModifiersShemes)
             {
@@ -557,8 +572,12 @@ namespace RKeeperWaiter
                     foreach (XElement xChild in xChilds)
                     {
                         int modifiersGroupId = Convert.ToInt32(xChild.Attribute("ModiGroup").Value);
+                        int upLimit = Convert.ToInt32(xChild.Attribute("UpLimit").Value);
+                        int downLimit = Convert.ToInt32(xChild.Attribute("DownLimit").Value);
 
                         ModifiersGroup modifiersGroup = modifiersGroups.SingleOrDefault(g => g.Id == modifiersGroupId);
+                        modifiersGroup.UpLimit = upLimit;
+                        modifiersGroup.DownLimit = downLimit;
 
                         if (modifiersGroup != null)
                         {

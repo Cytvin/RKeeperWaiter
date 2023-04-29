@@ -59,5 +59,15 @@ namespace RKeeperWaiter.Models
             _commonDishes.Add(dish);
             OrderChanged?.Invoke();
         }
+
+        public void SetCommonDishes(List<Dish> dishes)
+        {
+            _commonDishes = dishes;
+        }
+
+        public void SetGuests(List<Guest> guests)
+        {
+            _guests = guests;
+        }
     }
 }
