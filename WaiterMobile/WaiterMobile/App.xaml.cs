@@ -13,7 +13,7 @@ namespace WaiterMobile
     {
         public static string FolderPath { get; private set; }
         public static string SettingsFile { get; private set; }
-        public static Waiter Waiter { get; private set; }
+        public static IWaiter Waiter { get; private set; }
         public static DisplayInfo CurrentDisplay { get; private set; }
         public static Guid ApplicationGuid { get; private set; }
 
@@ -24,7 +24,7 @@ namespace WaiterMobile
             FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             SettingsFile = Path.Combine(FolderPath, "settings.xml");
 
-            Waiter = new Waiter();
+            Waiter = new WaiterTest();
             MainPage = new AppShell();
             CurrentDisplay = DeviceDisplay.MainDisplayInfo;
         }

@@ -1,6 +1,6 @@
 ﻿namespace RKeeperWaiter.Models
 {
-    internal class GuestType
+    public class GuestType
     {
         private int _id;
         private int _code;

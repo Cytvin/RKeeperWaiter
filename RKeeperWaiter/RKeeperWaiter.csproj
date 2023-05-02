@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IWaiter.cs" />
     <Compile Include="License.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Dish.cs" />
@@ -57,6 +58,8 @@
     <Compile Include="Models\Table.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="NetworkService.cs" />
+    <Compile Include="TestData.cs" />
+    <Compile Include="WaiterTest.cs" />
     <Compile Include="XmlRequests\CreateOrder.cs" />
     <Compile Include="XmlRequests\GetOrder.cs" />
     <Compile Include="XmlRequests\GetOrderList.cs" />

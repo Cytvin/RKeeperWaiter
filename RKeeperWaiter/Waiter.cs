@@ -7,7 +7,7 @@ using RKeeperWaiter.XmlRequests;
 
 namespace RKeeperWaiter
 {
-    public class Waiter
+    public class Waiter : IWaiter
     {
         private int _stationId;
         private int _restaurantCode;
@@ -107,7 +107,7 @@ namespace RKeeperWaiter
             {
                 throw new ArgumentNullException(nameof(xWaiters), "В базе нет активных официантов");
             }
-            
+
             IEnumerable<XElement> xWaitersList = xWaiters.Elements("waiter").Where(x => x.Attribute("Code").Value == userCode);
 
             if (xWaitersList.Count() == 0)
@@ -202,7 +202,7 @@ namespace RKeeperWaiter
 
             IEnumerable<XElement> xCourses = RequestReference("KURSES", null, null, null, "1");
 
-            foreach (XElement course in xCourses) 
+            foreach (XElement course in xCourses)
             {
                 int id = Convert.ToInt32(course.Attribute("Ident").Value);
                 string name = course.Attribute("Name").Value;
@@ -241,7 +241,7 @@ namespace RKeeperWaiter
             RequestBuilder requestBuilder = new RequestBuilder();
             GetOrder getOrder = new GetOrder(order.Guid);
             getOrder.CreateRequest(requestBuilder);
-            
+
             XDocument orderInfo = NetworkService.SendRequest(requestBuilder.GetXml());
 
             XElement xOrder = orderInfo.Root.Element("CommandResult").Element("Order");
@@ -492,7 +492,7 @@ namespace RKeeperWaiter
                 halls.Add(newHall);
             }
 
-            IEnumerable<XElement> tables = RequestReference("Tables", null, null, "Items.(Ident, Code, Name, Hall, MaxGuests)", "1");
+            IEnumerable<XElement> tables = RequestReference("Tables", null, null, "Items.(Ident, Code, Name, Hall)", "1");
 
             foreach (XElement table in tables)
             {
@@ -500,9 +500,8 @@ namespace RKeeperWaiter
                 int code = Convert.ToInt32(table.Attribute("Code").Value);
                 string name = table.Attribute("Name").Value;
                 int hallId = Convert.ToInt32(table.Attribute("Hall").Value);
-                int maxGuests = Convert.ToInt32(table.Attribute("MaxGuests").Value);
 
-                Table newTabel = new Table(id, code, name, maxGuests);
+                Table newTabel = new Table(id, code, name, hallId);
 
                 Hall hall = halls.Where(x => x.Id == hallId).Single();
                 hall.InsertTable(newTabel);

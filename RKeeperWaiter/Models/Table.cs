@@ -11,19 +11,19 @@ namespace RKeeperWaiter.Models
         private int _id;
         private int _code;
         private string _name;
-        private int _maxGuests;
+        private int _hallId;
 
         public int Id => _id;
         public int Code => _code;
         public string Name => _name;
-        public int MaxGuests => _maxGuests;
+        public int HallId => _hallId;
 
-        public Table(int id, int code, string name, int maxGuests) 
+        public Table(int id, int code, string name, int hallId) 
         {
             _id = id;
             _code = code;
             _name = name;
-            _maxGuests = maxGuests;
+            _hallId = hallId;
         }
     }
 }

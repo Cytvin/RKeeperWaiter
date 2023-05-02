@@ -6,11 +6,11 @@ namespace RKeeperWaiter.Models
     {
         private int _id;
         private int _code;
-        private string _name;
-        private decimal _price;
-        private bool _inMenu = false;
         private int _maxOneDish;
         private int _count;
+        private decimal _price;
+        private string _name;
+        private bool _inMenu = false;
         private bool _selected;
 
         public int Id => _id;

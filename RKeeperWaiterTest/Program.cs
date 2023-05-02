@@ -16,7 +16,7 @@ namespace RKeeperWaiterTest
 {
     internal class Program
     {
-        private static Waiter _waiter;
+        private static IWaiter _waiter;
         public static void Menu()
         {
             while (true)
@@ -188,6 +188,11 @@ namespace RKeeperWaiterTest
             //_waiter.SetStationId(stationId);
             //_waiter.DownloadReferences();
             //_waiter.CreateLicense(Guid.NewGuid());
+
+            _waiter = new WaiterTest();
+            _waiter.DownloadReferences();
+
+            DisplayModifiersShemes(_waiter.Modifiers);
 
             Console.ReadLine();
         }
