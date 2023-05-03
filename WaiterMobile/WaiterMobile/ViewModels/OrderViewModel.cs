@@ -3,9 +3,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using System.Collections.Specialized;
 using RKeeperWaiter.Models;
 using WaiterMobile.Views;
 using Xamarin.Forms;
+using System.Threading.Tasks;
 
 namespace WaiterMobile.ViewModels
 {
@@ -20,21 +22,31 @@ namespace WaiterMobile.ViewModels
         public ICommand EditDish { get; private set; }
         public ICommand SaveOrder { get; private set; }
         public ICommand AddCommentary { get; private set; }
-        public ObservableCollection<Dish> CommonDishes { get; set; }
-        public ObservableCollection<Guest> Guests { get; set; }
-        public Action<Dish> AddDishToCommonDishes => CommonDishes.Add;
+        public ICommand AddGuest { get; private set; }
+        public Action<DishViewModel> AddDishToCommonDishes => CommonDishes.Add;
+        public ObservableCollection<DishViewModel> CommonDishes { get; set; }
+        public ObservableCollection<GuestViewModel> Guests { get; set; }
         public string OrderName => _order.Name;
 
         public OrderViewModel(Order order)
         {
             _order = order;
+
+            MakeDishViewModels();
+            MakeGuestViewOrder();
+
             GoToBack = new Command(OnGoToBack);
-            AddDish = new Command<Action<Dish>>(OnAddDish);
-            EditDish = new Command<Dish>(OnEditDish);
+            AddDish = new Command<Action<DishViewModel>>(OnAddDish);
+            EditDish = new Command<DishViewModel>(OnEditDish);
             SaveOrder = new Command(OnSaveOrder);
             AddCommentary = new Command(OnAddCommentary);
-            CommonDishes = new ObservableCollection<Dish>(order.CommonDishes);
-            Guests = new ObservableCollection<Guest>(order.Guests);
+            AddGuest = new Command(OnGuestAdd);
+
+            CommonDishes = MakeDishViewModels();
+            Guests = MakeGuestViewOrder();
+
+            CommonDishes.CollectionChanged += OnCommonDishesAdded;
+            Guests.CollectionChanged += OnGuestAdded;
         }
 
         private void OnGoToBack()
@@ -42,21 +54,41 @@ namespace WaiterMobile.ViewModels
             Shell.Current.Navigation.PopAsync(true);
         }
 
-        private void OnAddDish(Action<Dish> action)
+        private void OnAddDish(Action<DishViewModel> action)
         {
             Shell.Current.Navigation.PushAsync(new Dishes(action), true);
         }
 
-        private void OnEditDish(Dish dish)
+        private void OnEditDish(DishViewModel dish)
         {
             Shell.Current.Navigation.PushAsync(new DishView(dish), true);
         }
 
+        private void OnCommonDishesAdded(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach(DishViewModel dish in e.NewItems)
+            {
+                _order.InsertCommonDish(dish.InternalDish);
+            }
+        }
+
+        private void OnGuestAdded(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach (GuestViewModel guest in e.NewItems)
+            {
+                _order.InsertGuest(guest.InternalGuest);
+            }
+        }
+
+        private void OnGuestAdd()
+        {
+            string guestName = (Guests.Count + 1).ToString();
+            Guest newGuest = new Guest(guestName);
+            Guests.Add(new GuestViewModel(newGuest));
+        }
+
         private void OnSaveOrder()
         {
-            _order.SetCommonDishes(CommonDishes.ToList());
-            _order.SetGuests(Guests.ToList());
-
             try
             {
                 App.Waiter.SaveOrder(_order);
@@ -70,9 +102,40 @@ namespace WaiterMobile.ViewModels
             Shell.Current.DisplayAlert("Готово", "Заказ успешно отправлен", "ОК");
         }
 
-        private void OnAddCommentary()
+        private async void OnAddCommentary()
         {
-            _order.Comment = Shell.Current.DisplayPromptAsync("Введите комментарий к заказу", message: "", initialValue: _order.Comment).Result;
+            string comment = await Shell.Current.DisplayPromptAsync("Введите комментарий к заказу", message: "", initialValue: _order.Comment);
+            
+            if (comment == null)
+            {
+                return;
+            }
+
+            _order.Comment = comment;
+        }
+
+        private ObservableCollection<DishViewModel> MakeDishViewModels()
+        {
+            ObservableCollection<DishViewModel> dishes = new ObservableCollection<DishViewModel>();
+
+            foreach (Dish dish in _order.CommonDishes)
+            {
+                dishes.Add(new DishViewModel(dish));
+            }
+
+            return dishes;
+        }
+
+        private ObservableCollection<GuestViewModel> MakeGuestViewOrder()
+        {
+            ObservableCollection<GuestViewModel> guests = new ObservableCollection<GuestViewModel>();
+
+            foreach (Guest guest in _order.Guests)
+            {
+                guests.Add(new GuestViewModel(guest));
+            }
+
+            return guests;
         }
     }
 }

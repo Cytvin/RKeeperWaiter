@@ -33,8 +33,6 @@ namespace RKeeperWaiter.Models
         public IEnumerable<Guest> Guests => _guests;
         public IEnumerable<Dish> CommonDishes => _commonDishes;
 
-        public event Action OrderChanged;
-
         public Order() { }
 
         public Order (int id, int visitId, Guid guid, string name)
@@ -51,23 +49,11 @@ namespace RKeeperWaiter.Models
         public void InsertGuest(Guest guest)
         {
             _guests.Add(guest);
-            OrderChanged?.Invoke();
         }
 
         public void InsertCommonDish(Dish dish)
         {
             _commonDishes.Add(dish);
-            OrderChanged?.Invoke();
-        }
-
-        public void SetCommonDishes(List<Dish> dishes)
-        {
-            _commonDishes = dishes;
-        }
-
-        public void SetGuests(List<Guest> guests)
-        {
-            _guests = guests;
         }
     }
 }

@@ -510,11 +510,11 @@ namespace RKeeperWaiter
             return halls;
         }
 
-        private List<ModifiersSheme> GetModifiers()
+        public List<ModifiersSheme> GetModifiers()
         {
             List<ModifiersGroup> modifiersGroups = new List<ModifiersGroup>();
 
-            IEnumerable<XElement> xModifiersGroups = RequestReference("MODIGROUPS", null, null, "Items.(Ident, Code, Name, MainParentIdent)", "1");
+            IEnumerable<XElement> xModifiersGroups = RequestReference("MODIGROUPS", null, null, "Items.(Ident, Code, Name, MainParentIdent, CommonModifier)", "1");
 
             foreach (XElement xModifiersGroup in xModifiersGroups)
             {
@@ -533,7 +533,7 @@ namespace RKeeperWaiter
                 }
             }
 
-            IEnumerable<XElement> xModifiers = RequestReference("MODIFIERS", null, null, "Items.(Ident, Code, Name, MainParentIdent)", "1");
+            IEnumerable<XElement> xModifiers = RequestReference("MODIFIERS", null, null, "Items.(Ident, Code, Name, MainParentIdent, MaxOneDish)", "1");
 
             foreach (XElement xModifier in xModifiers)
             {

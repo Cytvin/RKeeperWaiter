@@ -11,7 +11,7 @@ namespace RKeeperWaiter.Models
         private decimal _price;
         private string _name;
         private bool _inMenu = false;
-        private bool _selected;
+        private bool _selected = false;
 
         public int Id => _id;
         public int Code => _code;
@@ -80,7 +80,7 @@ namespace RKeeperWaiter.Models
             IncreaseCount();
         }
 
-        public void Deselect()
+        public void UnSelect()
         {
             if (_selected == false)
             {

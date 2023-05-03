@@ -7,8 +7,7 @@ namespace RKeeperWaiter.Models
     public class Guest
     {
         private string _label;
-        private ObservableCollection<Dish> _dishes;
-        public Action<Dish> AddDishToGuest => InsertDish;
+        private List<Dish> _dishes;
 
         public string Label => _label;
         public IEnumerable<Dish> Dishes => _dishes;
@@ -17,7 +16,7 @@ namespace RKeeperWaiter.Models
         public Guest(string name) 
         {
             _label = name;
-            _dishes = new ObservableCollection<Dish>();
+            _dishes = new List<Dish>();
         }
 
         public void InsertDish(Dish dish)

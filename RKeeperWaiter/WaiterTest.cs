@@ -23,6 +23,7 @@ namespace RKeeperWaiter
         private List<OrderType> _orderTypes;
         private List<Course> _courses;
         private List<ModifiersSheme> _modifiersShemes;
+        private List<Order> _orders;
 
         public int StationId => _stationId;
         public User CurrentUser => _user;
@@ -41,6 +42,7 @@ namespace RKeeperWaiter
             _halls = new List<Hall>();
             _orderTypes = new List<OrderType>();
             _modifiersShemes = new List<ModifiersSheme>();
+            _orders = new List<Order>();
             NetworkService = new NetworkService();
         }
 
@@ -61,7 +63,19 @@ namespace RKeeperWaiter
 
         public void CreateNewOrder(Order newOrder, int guestCount)
         {
-            throw new NotImplementedException();
+            int orderId = _orders.Count + 1;
+            string orderName = $"{newOrder.Table.Name}.{orderId}";
+
+            Order order = new Order(orderId, orderId, Guid.NewGuid(), orderName);
+            order.Table = newOrder.Table;
+            order.Type = newOrder.Type;
+
+            for (int i = 0; i < guestCount; i++)
+            {
+                order.InsertGuest(new Guest((i + 1).ToString()));
+            }
+
+            _orders.Add(order);
         }
 
         public void DeleteDish()
@@ -94,7 +108,7 @@ namespace RKeeperWaiter
 
         public List<Order> GetOrderList()
         {
-            return new List<Order>();
+            return _orders;
         }
 
         public void SaveOrder(Order order)
@@ -274,8 +288,10 @@ namespace RKeeperWaiter
                 int code = Convert.ToInt32(xModifiersGroup.Attribute("Code").Value);
                 string name = xModifiersGroup.Attribute("Name").Value;
                 int parentGroupId = Convert.ToInt32(xModifiersGroup.Attribute("MainParentIdent").Value);
+                bool commonModifier = Convert.ToBoolean(xModifiersGroup.Attribute("CommonModifier").Value);
 
                 ModifiersGroup modifiersGroup = new ModifiersGroup(id, code, name);
+                modifiersGroup.CommonModifier = commonModifier;
                 modifiersGroups.Add(modifiersGroup);
 
                 if (parentGroupId != 0)
@@ -295,8 +311,10 @@ namespace RKeeperWaiter
                 int code = Convert.ToInt32(xModifier.Attribute("Code").Value);
                 string name = xModifier.Attribute("Name").Value;
                 int groupId = Convert.ToInt32(xModifier.Attribute("MainParentIdent").Value);
+                int maxOneDish = Convert.ToInt32(xModifier.Attribute("MaxOneDish").Value);
 
                 Modifier modifier = new Modifier(id, code, name);
+                modifier.MaxOneDish = maxOneDish;
 
                 ModifiersGroup modifiersGroup = modifiersGroups.Single(g => g.Id == groupId);
                 modifiersGroup.InsertModifier(modifier);
@@ -307,6 +325,15 @@ namespace RKeeperWaiter
             IEnumerable<XElement> xModifiersShemes = xModifiersShemesDocument.Root.Element("CommandResult").Element("RK7Reference").Element("Items").Elements("Item");
 
             List<ModifiersSheme> modifiersShemes = new List<ModifiersSheme>();
+
+            ModifiersSheme commonSheme = new ModifiersSheme(0, 0, "Общие");
+            ModifiersGroup commonGroup = modifiersGroups.SingleOrDefault(g => g.CommonModifier);
+            if (commonGroup != null)
+            {
+                commonSheme.InsertModifiersGroup(commonGroup);
+            }
+
+            modifiersShemes.Add(commonSheme);
 
             foreach (XElement xModifiersSheme in xModifiersShemes)
             {
@@ -341,6 +368,11 @@ namespace RKeeperWaiter
                     }
                 }
 
+                if (commonGroup != null)
+                {
+                    modifiersSheme.InsertModifiersGroup(commonGroup);
+                }
+
                 modifiersShemes.Add(modifiersSheme);
             }
 
@@ -370,6 +402,10 @@ namespace RKeeperWaiter
                 if (modifiersShemeId != 0)
                 {
                     dish.ModifiersSheme = (ModifiersSheme)_modifiersShemes.Single(m => m.Id == modifiersShemeId).Clone();
+                }
+                else
+                {
+                    dish.ModifiersSheme = (ModifiersSheme)_modifiersShemes.Single(s => s.Id == 0).Clone();
                 }
 
                 dishes.Add(dish);

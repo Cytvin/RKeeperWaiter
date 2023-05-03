@@ -18,6 +18,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30"/>
                     <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
 
                 <ImageButton BackgroundColor="White"
@@ -33,6 +34,7 @@
 
                 <ImageButton BackgroundColor="White"
                              Source="card_text.png"
+                             Grid.Column="2"
                              Command="{Binding AddCommentary}"/>
             </Grid>
 
@@ -60,9 +62,10 @@
                                 CommandParameter="{Binding AddDishToCommonDishes}"/>
                     </Grid>
                     
-                    <StackLayout BindableLayout.ItemsSource="{Binding CommonDishes}">
+                    <StackLayout BindableLayout.ItemsSource="{Binding CommonDishes}"
+                                 Margin="30, 0, 30, 0">
                         <BindableLayout.ItemTemplate>
-                            <DataTemplate x:DataType="models:Dish">
+                            <DataTemplate x:DataType="viewmodel:DishViewModel">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
@@ -74,10 +77,12 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label Text="{Binding Name}"
+                                           TextColor="Black"
+                                           FontAttributes="Bold"
                                            Grid.Row="0"
                                            Grid.Column="0"/>
 
-                                    <Label Text="{Binding Course.Name}"
+                                    <Label Text="{Binding SelectedCourse.Name}"
                                            Grid.Row="1"
                                            Grid.Column="0"/>
 
@@ -97,7 +102,7 @@
 
                     <StackLayout BindableLayout.ItemsSource="{Binding Guests}">
                         <BindableLayout.ItemTemplate>
-                            <DataTemplate x:DataType="models:Guest">
+                            <DataTemplate x:DataType="viewmodel:GuestViewModel">
                                 <StackLayout>
                                     <Grid Margin="30, 10, 30, 10">
                                     <Grid.ColumnDefinitions>
@@ -118,13 +123,14 @@
                                         HorizontalOptions="End"
                                         VerticalOptions="Center"
                                         Command="{Binding Source={x:Reference Name=_orderView}, Path=BindingContext.AddDish}"
-                                        CommandParameter="{Binding AddDishToGuest}"/>
+                                        CommandParameter="{Binding InsertDish}"/>
                                     </Grid>
 
-                                    <StackLayout x:DataType="models:Guest" 
-                                                 BindableLayout.ItemsSource="{Binding Dishes}">
+                                    <StackLayout x:DataType="viewmodel:GuestViewModel" 
+                                                 BindableLayout.ItemsSource="{Binding Dishes}"
+                                                 Margin="30, 0, 30, 0">
                                         <BindableLayout.ItemTemplate>
-                                            <DataTemplate x:DataType="models:Dish">
+                                            <DataTemplate x:DataType="viewmodel:DishViewModel">
                                                 <Grid>
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="20"/>
@@ -136,10 +142,12 @@
                                                     </Grid.ColumnDefinitions>
 
                                                     <Label Text="{Binding Name}"
+                                                           TextColor="Black"
+                                                           FontAttributes="Bold"
                                                            Grid.Row="0"
                                                            Grid.Column="0"/>
 
-                                                    <Label Text="{Binding Course.Name}"
+                                                    <Label Text="{Binding SelectedCourse.Name}"
                                                            Grid.Row="1"
                                                            Grid.Column="0"/>
 
@@ -179,6 +187,7 @@
                     <Button Text="Отправить"
                             Command="{Binding SaveOrder}"/>
                     <Button Text="+ гость"
+                            Command="{Binding AddGuest}"
                          Grid.Column="1"/>
                 </Grid>
             </StackLayout>

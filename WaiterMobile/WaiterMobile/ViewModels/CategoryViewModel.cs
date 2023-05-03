@@ -13,7 +13,7 @@ namespace WaiterMobile.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Stack<MenuCategory> _previousCategories;
-        private Action<Dish> _addDishToList;
+        private Action<DishViewModel> _addDishToList;
         private Grid _categoryItems;
         private int _gridRow = 0;
         private int _gridColumn = 0;
@@ -22,7 +22,7 @@ namespace WaiterMobile.ViewModels
         public ICommand DisplayCategory { get; private set; }
         public string CategoryName { get; private set; }
 
-        public CategoryViewModel(Grid categoryItems, Action<Dish> addDish)
+        public CategoryViewModel(Grid categoryItems, Action<DishViewModel> addDish)
         {
             _addDishToList = addDish;
             _categoryItems = categoryItems;
@@ -79,10 +79,12 @@ namespace WaiterMobile.ViewModels
                 string namePrice = $"{dish.Name}  {price}";
 
                 Button button = AddButtonToGrid(namePrice);
+
                 button.Command = new Command(() =>
                 {
                     Dish currentDish = dish.Clone() as Dish;
-                    _addDishToList(currentDish);
+                    DishViewModel dishViewModel = new DishViewModel(currentDish);
+                    _addDishToList(dishViewModel);
                 });
             }
         }

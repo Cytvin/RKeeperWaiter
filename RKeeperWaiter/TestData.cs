@@ -17,136 +17,14 @@ namespace RKeeperWaiter
 
         public static TextReader GetModifiersGroupsTR()
         {
-            TextReader modifiersGroupsXmlTR = new StringReader("<RK7QueryResult ServerVersion=\"7.7.0.244\" XmlVersion=\"248\" NetName=\"MID\" Status=\"Ok\" Processed=\"1\" ArrivalDateTime=\"2023-04-26T01:05:47\">\r\n" +
-                "<CommandResult CMD=\"GetRefData\" Status=\"Ok\" ErrorText=\"\" DateTime=\"2023-04-26T01:05:47\" WorkTime=\"0\">\r\n" +
-                "<RK7Reference DataVersion=\"298\" ClassName=\"TModiGroups\" TotalItemCount=\"31\">\r\n" +
-                "<Items>\r\n" +
-                "<Item Ident=\"2000\" Code=\"2000\" Name=\"РОССИЯ: ЕГАИС\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"2001\" Code=\"2001\" Name=\"ЕГАИС EAN13\" MainParentIdent=\"2000\"/>\r\n" +
-                "<Item Ident=\"2002\" Code=\"2002\" Name=\"PDF417\" MainParentIdent=\"2000\"/>\r\n" +
-                "<Item Ident=\"2011\" Code=\"2011\" Name=\"ЕГАИС Маркированная продукция\" MainParentIdent=\"2000\"/>\r\n" +
-                "<Item Ident=\"2111\" Code=\"2111\" Name=\"Маркированная продукция, без обработки\" MainParentIdent=\"2000\"/>\r\n" +
-                "<Item Ident=\"1000067\" Code=\"46\" Name=\"Общие\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000082\" Code=\"52\" Name=\"Степень прожарки для стейка\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000089\" Code=\"56\" Name=\"Соусы для стейков\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000114\" Code=\"64\" Name=\"Бургер\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000116\" Code=\"74\" Name=\"Картошка\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000118\" Code=\"76\" Name=\"Напиток\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000146\" Code=\"86\" Name=\"Суп для обеда\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000147\" Code=\"87\" Name=\"Второе для обеда\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000148\" Code=\"95\" Name=\"Напиток для обеда\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000212\" Code=\"59\" Name=\"Чек-лист\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000213\" Code=\"113\" Name=\"5 баллов\" MainParentIdent=\"1000212\"/>\r\n" +
-                "<Item Ident=\"1000214\" Code=\"123\" Name=\"Да/Нет\" MainParentIdent=\"1000212\"/>\r\n" +
-                "<Item Ident=\"1000215\" Code=\"124\" Name=\"Нет/Да\" MainParentIdent=\"1000212\"/>\r\n" +
-                "<Item Ident=\"1000246\" Code=\"145\" Name=\"Чек-лист открытия\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000247\" Code=\"146\" Name=\"Чек-лист чистоты\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000402\" Code=\"158\" Name=\"Мороженное\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000688\" Code=\"167\" Name=\"Для стейка\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000913\" Code=\"171\" Name=\"Зал/ на вынос\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000917\" Code=\"174\" Name=\"Посуда\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000961\" Code=\"189\" Name=\"Бизнес ланч\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1000962\" Code=\"190\" Name=\"Первые блюда\" MainParentIdent=\"1000961\"/>\r\n" +
-                "<Item Ident=\"1000967\" Code=\"191\" Name=\"Вторые блюда\" MainParentIdent=\"1000961\"/>\r\n" +
-                "<Item Ident=\"1000971\" Code=\"198\" Name=\"Гарниры\" MainParentIdent=\"1000961\"/>\r\n" +
-                "<Item Ident=\"1001076\" Code=\"212\" Name=\"Тест мод\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1001380\" Code=\"237\" Name=\"прожарка для стейков\" MainParentIdent=\"0\"/>\r\n" +
-                "<Item Ident=\"1001728\" Code=\"246\" Name=\"Стейк\" MainParentIdent=\"0\"/>\r\n" +
-                "</Items>\r\n" +
-                "</RK7Reference>\r\n" +
-                "</CommandResult>\r\n" +
-                "</RK7QueryResult>");
+            TextReader modifiersGroupsXmlTR = new StringReader("<RK7QueryResult ServerVersion=\"7.7.0.244\" XmlVersion=\"248\" NetName=\"MID\" Status=\"Ok\" Processed=\"1\" ArrivalDateTime=\"2023-05-03T17:55:39\">\r\n<CommandResult CMD=\"GetRefData\" Status=\"Ok\" ErrorText=\"\" DateTime=\"2023-05-03T17:55:39\" WorkTime=\"0\">\r\n<RK7Reference DataVersion=\"298\" ClassName=\"TModiGroups\" TotalItemCount=\"31\">\r\n<Items>\r\n<Item Ident=\"2000\" Code=\"2000\" Name=\"РОССИЯ: ЕГАИС\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"2001\" Code=\"2001\" Name=\"ЕГАИС EAN13\" MainParentIdent=\"2000\" CommonModifier=\"false\"/>\r\n<Item Ident=\"2002\" Code=\"2002\" Name=\"PDF417\" MainParentIdent=\"2000\" CommonModifier=\"false\"/>\r\n<Item Ident=\"2011\" Code=\"2011\" Name=\"ЕГАИС Маркированная продукция\" MainParentIdent=\"2000\" CommonModifier=\"false\"/>\r\n<Item Ident=\"2111\" Code=\"2111\" Name=\"Маркированная продукция, без обработки\" MainParentIdent=\"2000\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000067\" Code=\"46\" Name=\"Общие\" MainParentIdent=\"0\" CommonModifier=\"true\"/>\r\n<Item Ident=\"1000082\" Code=\"52\" Name=\"Степень прожарки для стейка\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000089\" Code=\"56\" Name=\"Соусы для стейков\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000114\" Code=\"64\" Name=\"Бургер\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000116\" Code=\"74\" Name=\"Картошка\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000118\" Code=\"76\" Name=\"Напиток\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000146\" Code=\"86\" Name=\"Суп для обеда\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000147\" Code=\"87\" Name=\"Второе для обеда\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000148\" Code=\"95\" Name=\"Напиток для обеда\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000212\" Code=\"59\" Name=\"Чек-лист\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000213\" Code=\"113\" Name=\"5 баллов\" MainParentIdent=\"1000212\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000214\" Code=\"123\" Name=\"Да/Нет\" MainParentIdent=\"1000212\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000215\" Code=\"124\" Name=\"Нет/Да\" MainParentIdent=\"1000212\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000246\" Code=\"145\" Name=\"Чек-лист открытия\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000247\" Code=\"146\" Name=\"Чек-лист чистоты\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000402\" Code=\"158\" Name=\"Мороженное\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000688\" Code=\"167\" Name=\"Для стейка\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000913\" Code=\"171\" Name=\"Зал/ на вынос\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000917\" Code=\"174\" Name=\"Посуда\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000961\" Code=\"189\" Name=\"Бизнес ланч\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000962\" Code=\"190\" Name=\"Первые блюда\" MainParentIdent=\"1000961\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000967\" Code=\"191\" Name=\"Вторые блюда\" MainParentIdent=\"1000961\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1000971\" Code=\"198\" Name=\"Гарниры\" MainParentIdent=\"1000961\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1001076\" Code=\"212\" Name=\"Тест мод\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1001380\" Code=\"237\" Name=\"прожарка для стейков\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n<Item Ident=\"1001728\" Code=\"246\" Name=\"Стейк\" MainParentIdent=\"0\" CommonModifier=\"false\"/>\r\n</Items>\r\n</RK7Reference>\r\n</CommandResult>\r\n</RK7QueryResult>");
 
             return modifiersGroupsXmlTR;
         }
 
         public static TextReader GetModifiersTR()
         {
-            TextReader modifiersXmlTR = new StringReader("<RK7QueryResult ServerVersion=\"7.7.0.244\" XmlVersion=\"248\" NetName=\"MID\" Status=\"Ok\" Processed=\"1\" ArrivalDateTime=\"2023-04-26T01:05:47\">\r\n" +
-                "<CommandResult CMD=\"GetRefData\" Status=\"Ok\" ErrorText=\"\" DateTime=\"2023-04-26T01:05:47\" WorkTime=\"0\">\r\n" +
-                "<RK7Reference DataVersion=\"247\" ClassName=\"tModifiers\" TotalItemCount=\"78\">\r\n" +
-                "<Items>\r\n" +
-                "<Item Ident=\"1001729\" Code=\"247\" Name=\"Стейк\" MainParentIdent=\"1001728\" />\r\n" +
-                "<Item Ident=\"1001733\" Code=\"249\" Name=\"Молоко\" MainParentIdent=\"1001728\" />\r\n" +
-                "<Item Ident=\"1000966\" Code=\"194\" Name=\"Бульон с яйцом\" MainParentIdent=\"1000962\" />\r\n" +
-                "<Item Ident=\"1000965\" Code=\"193\" Name=\"Суп &quot;Сельский с курицей&quot;\" MainParentIdent=\"1000962\" />\r\n" +
-                "<Item Ident=\"1000964\" Code=\"192\" Name=\"Суп сырный с курицей\" MainParentIdent=\"1000962\" />\r\n" +
-                "<Item Ident=\"1000970\" Code=\"197\" Name=\"Бефстроганов\" MainParentIdent=\"1000967\" />\r\n" +
-                "<Item Ident=\"1000969\" Code=\"196\" Name=\"Биточки &quot;Камчатские&quot;\" MainParentIdent=\"1000967\" />\r\n" +
-                "<Item Ident=\"1000968\" Code=\"195\" Name=\"Рагу &quot;Словенское&quot;\" MainParentIdent=\"1000967\" />\r\n" +
-                "<Item Ident=\"1000974\" Code=\"201\" Name=\"Гречка с овощами\" MainParentIdent=\"1000971\" />\r\n" +
-                "<Item Ident=\"1000973\" Code=\"200\" Name=\"Грибная Перла\" MainParentIdent=\"1000971\" />\r\n" +
-                "<Item Ident=\"1000972\" Code=\"199\" Name=\"Рис припущенный с овощами\" MainParentIdent=\"1000971\" />\r\n" +
-                "<Item Ident=\"1000220\" Code=\"129\" Name=\"1\" MainParentIdent=\"1000213\" />\r\n" +
-                "<Item Ident=\"1000221\" Code=\"130\" Name=\"2\" MainParentIdent=\"1000213\" />\r\n" +
-                "<Item Ident=\"1000222\" Code=\"131\" Name=\"3\" MainParentIdent=\"1000213\" />\r\n" +
-                "<Item Ident=\"1000223\" Code=\"132\" Name=\"4\" MainParentIdent=\"1000213\" />\r\n" +
-                "<Item Ident=\"1000224\" Code=\"133\" Name=\"5\" MainParentIdent=\"1000213\" />\r\n" +
-                "<Item Ident=\"1000218\" Code=\"127\" Name=\"Да\" MainParentIdent=\"1000214\" />\r\n" +
-                "<Item Ident=\"1000219\" Code=\"128\" Name=\"Нет\" MainParentIdent=\"1000214\" />\r\n" +
-                "<Item Ident=\"1000217\" Code=\"126\" Name=\"Да\" MainParentIdent=\"1000215\" />\r\n" +
-                "<Item Ident=\"1000216\" Code=\"125\" Name=\"Нет\" MainParentIdent=\"1000215\" />\r\n" +
-                "<Item Ident=\"1000253\" Code=\"152\" Name=\"Выход персонала на смену\" MainParentIdent=\"1000246\" />\r\n" +
-                "<Item Ident=\"1000254\" Code=\"153\" Name=\"Наличие продуктов\" MainParentIdent=\"1000246\" />\r\n" +
-                "<Item Ident=\"1000255\" Code=\"154\" Name=\"Наличие стоп листа\" MainParentIdent=\"1000246\" />\r\n" +
-                "<Item Ident=\"1000256\" Code=\"155\" Name=\"Наполнение витрины\" MainParentIdent=\"1000246\" />\r\n" +
-                "<Item Ident=\"1000252\" Code=\"151\" Name=\"Размен в кассе\" MainParentIdent=\"1000246\" />\r\n" +
-                "<Item Ident=\"1000251\" Code=\"150\" Name=\"Стандарты внешнего вида персонала\" MainParentIdent=\"1000246\" />\r\n" +
-                "<Item Ident=\"1000250\" Code=\"149\" Name=\"Чистота в зале\" MainParentIdent=\"1000247\" />\r\n" +
-                "<Item Ident=\"1000249\" Code=\"148\" Name=\"Чистота в туалете\" MainParentIdent=\"1000247\" />\r\n" +
-                "<Item Ident=\"1000248\" Code=\"147\" Name=\"Чистота на раздаче\" MainParentIdent=\"1000247\" />\r\n" +
-                "<Item Ident=\"2112\" Code=\"2112\" Name=\"Маркированная продукция, без обработки\" MainParentIdent=\"2111\" />\r\n" +
-                "<Item Ident=\"1001077\" Code=\"213\" Name=\"Орех\" MainParentIdent=\"1001076\" />\r\n" +
-                "<Item Ident=\"1000069\" Code=\"48\" Name=\"Без соли\" MainParentIdent=\"1000067\" />\r\n" +
-                "<Item Ident=\"1001363\" Code=\"225\" Name=\"Готовить похже\" MainParentIdent=\"1000067\" />\r\n" +
-                "<Item Ident=\"1000068\" Code=\"47\" Name=\"Дождаться официанта\" MainParentIdent=\"1000067\" />\r\n" +
-                "<Item Ident=\"1000070\" Code=\"49\" Name=\"Текстовый\" MainParentIdent=\"1000067\" />\r\n" +
-                "<Item Ident=\"1000085\" Code=\"55\" Name=\"Medium\" MainParentIdent=\"1000082\" />\r\n" +
-                "<Item Ident=\"1000084\" Code=\"54\" Name=\"Rare\" MainParentIdent=\"1000082\" />\r\n" +
-                "<Item Ident=\"1000083\" Code=\"53\" Name=\"Well Done\" MainParentIdent=\"1000082\" />\r\n" +
-                "<Item Ident=\"1000090\" Code=\"57\" Name=\"Сырный соус\" MainParentIdent=\"1000089\" />\r\n" +
-                "<Item Ident=\"1000091\" Code=\"58\" Name=\"Чесночный соус\" MainParentIdent=\"1000089\" />\r\n" +
-                "<Item Ident=\"1001382\" Code=\"239\" Name=\"легкая\" MainParentIdent=\"1001380\" />\r\n" +
-                "<Item Ident=\"1001383\" Code=\"240\" Name=\"сильная\" MainParentIdent=\"1001380\" />\r\n" +
-                "<Item Ident=\"1001381\" Code=\"238\" Name=\"средняя\" MainParentIdent=\"1001380\" />\r\n" +
-                "<Item Ident=\"1000115\" Code=\"73\" Name=\"Гамбургер\" MainParentIdent=\"1000114\" />\r\n" +
-                "<Item Ident=\"1000117\" Code=\"75\" Name=\"Средняя\" MainParentIdent=\"1000116\" />\r\n" +
-                "<Item Ident=\"1000121\" Code=\"79\" Name=\"Кола бол.\" MainParentIdent=\"1000118\" />\r\n" +
-                "<Item Ident=\"1000119\" Code=\"77\" Name=\"Кола мал.\" MainParentIdent=\"1000118\" />\r\n" +
-                "<Item Ident=\"1000120\" Code=\"78\" Name=\"Кола ср.\" MainParentIdent=\"1000118\" />\r\n" +
-                "<Item Ident=\"2003\" Code=\"2003\" Name=\"ЕГАИС EAN13\" MainParentIdent=\"2001\" />\r\n" +
-                "<Item Ident=\"1000914\" Code=\"172\" Name=\"Зал\" MainParentIdent=\"1000913\" />\r\n" +
-                "<Item Ident=\"1000915\" Code=\"173\" Name=\"На вынос\" MainParentIdent=\"1000913\" />\r\n" +
-                "<Item Ident=\"2004\" Code=\"2004\" Name=\"PDF417\" MainParentIdent=\"2002\" />\r\n" +
-                "<Item Ident=\"1000153\" Code=\"100\" Name=\"Борщ\" MainParentIdent=\"1000146\" />\r\n" +
-                "<Item Ident=\"1000177\" Code=\"114\" Name=\"Грибной суп\" MainParentIdent=\"1000146\" />\r\n" +
-                "<Item Ident=\"1000151\" Code=\"98\" Name=\"Солянка\" MainParentIdent=\"1000146\" />\r\n" +
-                "<Item Ident=\"1000178\" Code=\"115\" Name=\"Сырный суп\" MainParentIdent=\"1000146\" />\r\n" +
-                "<Item Ident=\"1000179\" Code=\"116\" Name=\"Уха\" MainParentIdent=\"1000146\" />\r\n" +
-                "<Item Ident=\"1000180\" Code=\"117\" Name=\"Харчо\" MainParentIdent=\"1000146\" />\r\n" +
-                "<Item Ident=\"1000152\" Code=\"99\" Name=\"Щи\" MainParentIdent=\"1000146\" />\r\n" +
-                "<Item Ident=\"1000412\" Code=\"164\" Name=\"Без мороженного\" MainParentIdent=\"1000402\" />\r\n" +
-                "<Item Ident=\"1000403\" Code=\"159\" Name=\"С орехом\" MainParentIdent=\"1000402\" />\r\n" +
-                "<Item Ident=\"1000404\" Code=\"160\" Name=\"С сиропом\" MainParentIdent=\"1000402\" />\r\n" +
-                "<Item Ident=\"1000406\" Code=\"161\" Name=\"С шоколадом\" MainParentIdent=\"1000402\" />\r\n" +
-                "<Item Ident=\"1000154\" Code=\"101\" Name=\"Гречка с мясом\" MainParentIdent=\"1000147\" />\r\n" +
-                "<Item Ident=\"1000155\" Code=\"102\" Name=\"Макароны с мясом\" MainParentIdent=\"1000147\" />\r\n" +
-                "<Item Ident=\"1000181\" Code=\"118\" Name=\"Печень в сливках\" MainParentIdent=\"1000147\" />\r\n" +
-                "<Item Ident=\"1000182\" Code=\"119\" Name=\"Поджарка\" MainParentIdent=\"1000147\" />\r\n" +
-                "<Item Ident=\"1000185\" Code=\"122\" Name=\"Рыба\" MainParentIdent=\"1000147\" />\r\n" +
-                "<Item Ident=\"1000183\" Code=\"120\" Name=\"Тефтели\" MainParentIdent=\"1000147\" />\r\n" +
-                "<Item Ident=\"1000184\" Code=\"121\" Name=\"Эскалоп\" MainParentIdent=\"1000147\" />\r\n" +
-                "<Item Ident=\"1000149\" Code=\"96\" Name=\"Чай зелёный\" MainParentIdent=\"1000148\" />\r\n" +
-                "<Item Ident=\"1000150\" Code=\"97\" Name=\"Чай чёрный\" MainParentIdent=\"1000148\" />\r\n" +
-                "<Item Ident=\"1000918\" Code=\"175\" Name=\"Стакан 0.3л\" MainParentIdent=\"1000917\" />\r\n" +
-                "<Item Ident=\"1000919\" Code=\"176\" Name=\"Тарелка мал.\" MainParentIdent=\"1000917\" />\r\n" +
-                "<Item Ident=\"2012\" Code=\"2012\" Name=\"Маркированная продукция\" MainParentIdent=\"2011\" />\r\n" +
-                "<Item Ident=\"1000691\" Code=\"170\" Name=\"С кровью\" MainParentIdent=\"1000688\" />\r\n" +
-                "<Item Ident=\"1000690\" Code=\"169\" Name=\"Сильная\" MainParentIdent=\"1000688\" />\r\n" +
-                "<Item Ident=\"1000689\" Code=\"168\" Name=\"Средняя\" MainParentIdent=\"1000688\" />\r\n" +
-                "</Items>\r\n" +
-                "</RK7Reference>\r\n" +
-                "</CommandResult>\r\n</RK7QueryResult>");
+            TextReader modifiersXmlTR = new StringReader("<RK7QueryResult ServerVersion=\"7.7.0.244\" XmlVersion=\"248\" NetName=\"MID\" Status=\"Ok\" Processed=\"1\" ArrivalDateTime=\"2023-05-03T12:54:05\">\r\n  <CommandResult CMD=\"GetRefData\" Status=\"Ok\" ErrorText=\"\" DateTime=\"2023-05-03T12:54:05\" WorkTime=\"0\">\r\n    <RK7Reference DataVersion=\"247\" ClassName=\"tModifiers\" TotalItemCount=\"78\">\r\n      <Items>\r\n        <Item Ident=\"1001729\" Code=\"247\" Name=\"Стейк\" MainParentIdent=\"1001728\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1001733\" Code=\"249\" Name=\"Молоко\" MainParentIdent=\"1001728\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000966\" Code=\"194\" Name=\"Бульон с яйцом\" MainParentIdent=\"1000962\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000965\" Code=\"193\" Name=\"Суп &quot;Сельский с курицей&quot;\" MainParentIdent=\"1000962\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000964\" Code=\"192\" Name=\"Суп сырный с курицей\" MainParentIdent=\"1000962\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000970\" Code=\"197\" Name=\"Бефстроганов\" MainParentIdent=\"1000967\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000969\" Code=\"196\" Name=\"Биточки &quot;Камчатские&quot;\" MainParentIdent=\"1000967\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000968\" Code=\"195\" Name=\"Рагу &quot;Словенское&quot;\" MainParentIdent=\"1000967\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000974\" Code=\"201\" Name=\"Гречка с овощами\" MainParentIdent=\"1000971\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000973\" Code=\"200\" Name=\"Грибная Перла\" MainParentIdent=\"1000971\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000972\" Code=\"199\" Name=\"Рис припущенный с овощами\" MainParentIdent=\"1000971\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000220\" Code=\"129\" Name=\"1\" MainParentIdent=\"1000213\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000221\" Code=\"130\" Name=\"2\" MainParentIdent=\"1000213\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000222\" Code=\"131\" Name=\"3\" MainParentIdent=\"1000213\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000223\" Code=\"132\" Name=\"4\" MainParentIdent=\"1000213\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000224\" Code=\"133\" Name=\"5\" MainParentIdent=\"1000213\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000218\" Code=\"127\" Name=\"Да\" MainParentIdent=\"1000214\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000219\" Code=\"128\" Name=\"Нет\" MainParentIdent=\"1000214\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000217\" Code=\"126\" Name=\"Да\" MainParentIdent=\"1000215\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000216\" Code=\"125\" Name=\"Нет\" MainParentIdent=\"1000215\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000253\" Code=\"152\" Name=\"Выход персонала на смену\" MainParentIdent=\"1000246\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000254\" Code=\"153\" Name=\"Наличие продуктов\" MainParentIdent=\"1000246\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000255\" Code=\"154\" Name=\"Наличие стоп листа\" MainParentIdent=\"1000246\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000256\" Code=\"155\" Name=\"Наполнение витрины\" MainParentIdent=\"1000246\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000252\" Code=\"151\" Name=\"Размен в кассе\" MainParentIdent=\"1000246\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000251\" Code=\"150\" Name=\"Стандарты внешнего вида персонала\" MainParentIdent=\"1000246\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000250\" Code=\"149\" Name=\"Чистота в зале\" MainParentIdent=\"1000247\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000249\" Code=\"148\" Name=\"Чистота в туалете\" MainParentIdent=\"1000247\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000248\" Code=\"147\" Name=\"Чистота на раздаче\" MainParentIdent=\"1000247\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"2112\" Code=\"2112\" Name=\"Маркированная продукция, без обработки\" MainParentIdent=\"2111\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1001077\" Code=\"213\" Name=\"Орех\" MainParentIdent=\"1001076\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000069\" Code=\"48\" Name=\"Без соли\" MainParentIdent=\"1000067\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1001363\" Code=\"225\" Name=\"Готовить похже\" MainParentIdent=\"1000067\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000068\" Code=\"47\" Name=\"Дождаться официанта\" MainParentIdent=\"1000067\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000070\" Code=\"49\" Name=\"Текстовый\" MainParentIdent=\"1000067\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000085\" Code=\"55\" Name=\"Medium\" MainParentIdent=\"1000082\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000084\" Code=\"54\" Name=\"Rare\" MainParentIdent=\"1000082\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000083\" Code=\"53\" Name=\"Well Done\" MainParentIdent=\"1000082\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000090\" Code=\"57\" Name=\"Сырный соус\" MainParentIdent=\"1000089\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000091\" Code=\"58\" Name=\"Чесночный соус\" MainParentIdent=\"1000089\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1001382\" Code=\"239\" Name=\"легкая\" MainParentIdent=\"1001380\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1001383\" Code=\"240\" Name=\"сильная\" MainParentIdent=\"1001380\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1001381\" Code=\"238\" Name=\"средняя\" MainParentIdent=\"1001380\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000115\" Code=\"73\" Name=\"Гамбургер\" MainParentIdent=\"1000114\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000117\" Code=\"75\" Name=\"Средняя\" MainParentIdent=\"1000116\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000121\" Code=\"79\" Name=\"Кола бол.\" MainParentIdent=\"1000118\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000119\" Code=\"77\" Name=\"Кола мал.\" MainParentIdent=\"1000118\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000120\" Code=\"78\" Name=\"Кола ср.\" MainParentIdent=\"1000118\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"2003\" Code=\"2003\" Name=\"ЕГАИС EAN13\" MainParentIdent=\"2001\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000914\" Code=\"172\" Name=\"Зал\" MainParentIdent=\"1000913\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000915\" Code=\"173\" Name=\"На вынос\" MainParentIdent=\"1000913\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"2004\" Code=\"2004\" Name=\"PDF417\" MainParentIdent=\"2002\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000153\" Code=\"100\" Name=\"Борщ\" MainParentIdent=\"1000146\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000177\" Code=\"114\" Name=\"Грибной суп\" MainParentIdent=\"1000146\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000151\" Code=\"98\" Name=\"Солянка\" MainParentIdent=\"1000146\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000178\" Code=\"115\" Name=\"Сырный суп\" MainParentIdent=\"1000146\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000179\" Code=\"116\" Name=\"Уха\" MainParentIdent=\"1000146\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000180\" Code=\"117\" Name=\"Харчо\" MainParentIdent=\"1000146\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000152\" Code=\"99\" Name=\"Щи\" MainParentIdent=\"1000146\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000412\" Code=\"164\" Name=\"Без мороженного\" MainParentIdent=\"1000402\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000403\" Code=\"159\" Name=\"С орехом\" MainParentIdent=\"1000402\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000404\" Code=\"160\" Name=\"С сиропом\" MainParentIdent=\"1000402\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000406\" Code=\"161\" Name=\"С шоколадом\" MainParentIdent=\"1000402\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000154\" Code=\"101\" Name=\"Гречка с мясом\" MainParentIdent=\"1000147\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000155\" Code=\"102\" Name=\"Макароны с мясом\" MainParentIdent=\"1000147\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000181\" Code=\"118\" Name=\"Печень в сливках\" MainParentIdent=\"1000147\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000182\" Code=\"119\" Name=\"Поджарка\" MainParentIdent=\"1000147\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000185\" Code=\"122\" Name=\"Рыба\" MainParentIdent=\"1000147\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000183\" Code=\"120\" Name=\"Тефтели\" MainParentIdent=\"1000147\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000184\" Code=\"121\" Name=\"Эскалоп\" MainParentIdent=\"1000147\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000149\" Code=\"96\" Name=\"Чай зелёный\" MainParentIdent=\"1000148\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000150\" Code=\"97\" Name=\"Чай чёрный\" MainParentIdent=\"1000148\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000918\" Code=\"175\" Name=\"Стакан 0.3л\" MainParentIdent=\"1000917\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000919\" Code=\"176\" Name=\"Тарелка мал.\" MainParentIdent=\"1000917\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"2012\" Code=\"2012\" Name=\"Маркированная продукция\" MainParentIdent=\"2011\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000691\" Code=\"170\" Name=\"С кровью\" MainParentIdent=\"1000688\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000690\" Code=\"169\" Name=\"Сильная\" MainParentIdent=\"1000688\" MaxOneDish=\"1\" />\r\n        <Item Ident=\"1000689\" Code=\"168\" Name=\"Средняя\" MainParentIdent=\"1000688\" MaxOneDish=\"1\" />\r\n      </Items>\r\n    </RK7Reference>\r\n  </CommandResult>\r\n</RK7QueryResult>");
 
             return modifiersXmlTR;
         }

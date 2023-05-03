@@ -9,11 +9,11 @@ namespace WaiterMobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DishView : ContentPage
     {
-        public DishView(Dish dish)
+        public DishView(DishViewModel dish)
         {
             InitializeComponent();
 
-            BindingContext = new DishViewModel(dish);
+            BindingContext = dish;
         }
     }
 }

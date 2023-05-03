@@ -21,6 +21,8 @@ namespace RKeeperWaiter.Models
         public IEnumerable<ModifiersGroup> ModifiersGroups => _internalGroups;
         public int UpLimit { get => _upLimit; set => _upLimit = value < 0 ? 0 : value; }
         public int DownLimit { get => _downLimit; set => _downLimit = value < 0 ? 0 : value; }
+        public int SelectedModifiersCount => _modifiers.Count(m => m.Selected);
+        public bool CommonModifier { get; set; }
 
         public ModifiersGroup(int id, int code, string name)
         {
@@ -43,17 +45,23 @@ namespace RKeeperWaiter.Models
             _downLimit = downLimit;
         }
 
-        private bool IsInLimit()
+        public bool IsInDownLimit()
         {
             bool result = false;
-            int modifiersCount = 0;
 
-            foreach (Modifier modifier in _modifiers) 
+            if (SelectedModifiersCount >= _downLimit)
             {
-                modifiersCount += modifier.Count;
+                result = true;
             }
 
-            if (modifiersCount >= _downLimit && modifiersCount <= _upLimit)
+            return result;
+        }
+
+        public bool IsInUpLimit()
+        {
+            bool result = false;
+
+            if (SelectedModifiersCount < _upLimit || _upLimit == 0)
             {
                 result = true;
             }
