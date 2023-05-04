@@ -44,7 +44,7 @@
                 </Picker.Behaviors>
             </Picker>
 
-            <StackLayout Margin="30, 20, 30, 0">
+            <ScrollView Margin="30, 20, 30, 0">
                 <StackLayout BindableLayout.ItemsSource="{Binding ModifiersSheme.ModifiersGroups}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="viewmodel:ModifiersGroupViewModel">
@@ -97,7 +97,14 @@
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
-            </StackLayout>
+            </ScrollView>
+
+            <Button Text="Удалить из заказа"
+                    Margin="20, 0, 20, 20"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    VerticalOptions="EndAndExpand"
+                    Command="{Binding Remove}"/>
 
         </StackLayout>
     </ContentPage.Content>

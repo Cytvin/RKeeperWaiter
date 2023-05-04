@@ -23,5 +23,10 @@ namespace RKeeperWaiter.Models
         {
             _dishes.Add(dish);
         }
+
+        public void RemoveDish(Dish dish) 
+        {  
+            _dishes.Remove(dish);
+        }
     }
 }

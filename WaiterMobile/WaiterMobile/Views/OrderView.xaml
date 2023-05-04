@@ -116,14 +116,14 @@
                                     </Grid.RowDefinitions>
 
                                         <Label Text="{Binding Name}"
-                                        HorizontalOptions="Start"
-                                        VerticalOptions="Center"/>
+                                               HorizontalOptions="Start"
+                                               VerticalOptions="Center"/>
 
-                                    <Button Text="+"
-                                        HorizontalOptions="End"
-                                        VerticalOptions="Center"
-                                        Command="{Binding Source={x:Reference Name=_orderView}, Path=BindingContext.AddDish}"
-                                        CommandParameter="{Binding InsertDish}"/>
+                                        <Button Text="+"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Center"
+                                                Command="{Binding Source={x:Reference Name=_orderView}, Path=BindingContext.AddDish}"
+                                                CommandParameter="{Binding InsertDish}"/>
                                     </Grid>
 
                                     <StackLayout x:DataType="viewmodel:GuestViewModel" 

@@ -1,4 +1,5 @@
 ﻿using RKeeperWaiter.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace WaiterMobile.ViewModels
     public class DishViewModel : INotifyPropertyChanged
     {
         private Dish _dish;
+        private Func<DishViewModel, bool> _remove;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -17,6 +19,7 @@ namespace WaiterMobile.ViewModels
         public ICommand IncreaseModifierCount { get; private set; }
         public ICommand DecreaseModifierCount { get; private set; }
         public ICommand CourseSelected { get; private set; }
+        public ICommand Remove { get; private set; }
         public string Name => _dish.Name;
         public IEnumerable<Course> Courses => App.Waiter.Courses;
         public ModifiersShemeViewModel ModifiersSheme { get; private set; }
@@ -24,7 +27,7 @@ namespace WaiterMobile.ViewModels
         public Dish InternalDish => _dish;
         public decimal Price => _dish.Price;
 
-        public DishViewModel(Dish dish) 
+        public DishViewModel(Dish dish, Func<DishViewModel, bool> remove) 
         {
             _dish = dish;
             SelectedCourse = _dish.Course;
@@ -32,7 +35,10 @@ namespace WaiterMobile.ViewModels
             CourseSelected = new Command(OnCourseSelected);
             IncreaseModifierCount = new Command<ModifierViewModel>(OnIncreaseModifierCount);
             DecreaseModifierCount = new Command<ModifierViewModel>(OnDecreaseModifierCount);
+            Remove = new Command(OnRemove);
             ModifiersSheme = new ModifiersShemeViewModel(dish.ModifiersSheme);
+
+            _remove = remove;
         }
 
         private void OnGoToBack()
@@ -62,6 +68,12 @@ namespace WaiterMobile.ViewModels
         {
             _dish.Course = SelectedCourse;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedCourse)));
+        }
+
+        private void OnRemove()
+        {
+            _remove(this);
+            Shell.Current.Navigation.PopAsync(true);
         }
     }
 }

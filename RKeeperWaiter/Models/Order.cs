@@ -55,5 +55,10 @@ namespace RKeeperWaiter.Models
         {
             _commonDishes.Add(dish);
         }
+
+        public void RemoveCommonDish(Dish dish)
+        {
+            _commonDishes.Remove(dish);
+        }
     }
 }

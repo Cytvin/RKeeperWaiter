@@ -23,7 +23,8 @@ namespace WaiterMobile.ViewModels
         public ICommand SaveOrder { get; private set; }
         public ICommand AddCommentary { get; private set; }
         public ICommand AddGuest { get; private set; }
-        public Action<DishViewModel> AddDishToCommonDishes => CommonDishes.Add;
+        public Action<Dish> AddDishToCommonDishes => InsertCommonDish;
+        public Func<DishViewModel, bool> RemoveDishFromCommonDishes => RemoveCommonDish;
         public ObservableCollection<DishViewModel> CommonDishes { get; set; }
         public ObservableCollection<GuestViewModel> Guests { get; set; }
         public string OrderName => _order.Name;
@@ -32,18 +33,15 @@ namespace WaiterMobile.ViewModels
         {
             _order = order;
 
-            MakeDishViewModels();
-            MakeGuestViewOrder();
+            CommonDishes = MakeDishViewModels();
+            Guests = MakeGuestViewOrder();
 
             GoToBack = new Command(OnGoToBack);
-            AddDish = new Command<Action<DishViewModel>>(OnAddDish);
+            AddDish = new Command<Action<Dish>>(OnAddDish);
             EditDish = new Command<DishViewModel>(OnEditDish);
             SaveOrder = new Command(OnSaveOrder);
             AddCommentary = new Command(OnAddCommentary);
             AddGuest = new Command(OnGuestAdd);
-
-            CommonDishes = MakeDishViewModels();
-            Guests = MakeGuestViewOrder();
 
             CommonDishes.CollectionChanged += OnCommonDishesAdded;
             Guests.CollectionChanged += OnGuestAdded;
@@ -54,7 +52,7 @@ namespace WaiterMobile.ViewModels
             Shell.Current.Navigation.PopAsync(true);
         }
 
-        private void OnAddDish(Action<DishViewModel> action)
+        private void OnAddDish(Action<Dish> action)
         {
             Shell.Current.Navigation.PushAsync(new Dishes(action), true);
         }
@@ -66,9 +64,23 @@ namespace WaiterMobile.ViewModels
 
         private void OnCommonDishesAdded(object sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach(DishViewModel dish in e.NewItems)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                _order.InsertCommonDish(dish.InternalDish);
+                foreach (DishViewModel dish in e.NewItems)
+                {
+                    dish.InternalDish.Seat = "0";
+                    _order.InsertCommonDish(dish.InternalDish);
+                }
+
+                return;
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (DishViewModel dish in e.OldItems)
+                {
+                    _order.RemoveCommonDish(dish.InternalDish);
+                }
             }
         }
 
@@ -114,13 +126,24 @@ namespace WaiterMobile.ViewModels
             _order.Comment = comment;
         }
 
+        private void InsertCommonDish(Dish dish)
+        {
+            DishViewModel dishViewModel = new DishViewModel(dish, RemoveDishFromCommonDishes);
+            CommonDishes.Add(dishViewModel);
+        }
+
+        private bool RemoveCommonDish(DishViewModel dish)
+        {
+            return CommonDishes.Remove(dish);
+        }
+
         private ObservableCollection<DishViewModel> MakeDishViewModels()
         {
             ObservableCollection<DishViewModel> dishes = new ObservableCollection<DishViewModel>();
 
             foreach (Dish dish in _order.CommonDishes)
             {
-                dishes.Add(new DishViewModel(dish));
+                dishes.Add(new DishViewModel(dish, RemoveDishFromCommonDishes));
             }
 
             return dishes;

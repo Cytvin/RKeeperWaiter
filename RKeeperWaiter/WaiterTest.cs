@@ -126,7 +126,28 @@ namespace RKeeperWaiter
 
         public void TransferDish(Order source, Order destionation, Dish dish)
         {
-            throw new NotImplementedException();
+            if (dish.Seat == "0")
+            {
+                source.RemoveCommonDish(dish);
+                destionation.InsertCommonDish(dish);
+                return;
+            }
+
+            Guest sourceGuest = source.Guests.Single(g => g.Label == dish.Seat);
+            Guest destinationGuest = destionation.Guests.SingleOrDefault(g => g.Label == dish.Seat);
+
+            if (destinationGuest != null)
+            {
+                sourceGuest.RemoveDish(dish);
+                destinationGuest.InsertDish(dish);
+                return;
+            }
+
+            destinationGuest = new Guest(dish.Seat);
+            destinationGuest.InsertDish(dish);
+            sourceGuest.RemoveDish(dish);
+
+            destionation.InsertGuest(destinationGuest);
         }
 
         public void UserAuthorization(string userCode)
