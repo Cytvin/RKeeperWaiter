@@ -17,6 +17,8 @@ namespace RKeeperWaiter.Models
         private OrderType _type;
         private Table _table;
         private string _comment;
+        private bool _isSend;
+        private bool _isClosed = false;
 
         private List<Guest> _guests;
         private List<Dish> _commonDishes;
@@ -28,7 +30,22 @@ namespace RKeeperWaiter.Models
         public string Comment { get => _comment; set => _comment = value; }
         public Table Table { get => _table; set => _table = value; }
         public OrderType Type { get => _type; set => _type = value; }
-        public decimal Sum { get => _sum; set => _sum = value / 100; }
+        public decimal Sum 
+        { 
+            get 
+            {
+                if (_sum == 0)
+                {
+                    return CountSum();
+                }
+
+                return _sum;
+            } 
+            set => _sum = value / 100; 
+        }
+
+        public bool IsSend { get => _isSend; set => _isSend = value; }
+        public bool IsClosed { get => _isClosed; set => _isClosed = value; }
 
         public IEnumerable<Guest> Guests => _guests;
         public IEnumerable<Dish> CommonDishes => _commonDishes;
@@ -59,6 +76,18 @@ namespace RKeeperWaiter.Models
         public void RemoveCommonDish(Dish dish)
         {
             _commonDishes.Remove(dish);
+        }
+
+        public decimal CountSum()
+        {
+            decimal sum = 0;
+
+            foreach (Dish dish in _commonDishes)
+            {
+                sum += dish.Price;
+            }
+
+            return sum;
         }
     }
 }

@@ -8,6 +8,7 @@ using RKeeperWaiter.Models;
 using WaiterMobile.Views;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 namespace WaiterMobile.ViewModels
 {
@@ -23,6 +24,12 @@ namespace WaiterMobile.ViewModels
         public ICommand SaveOrder { get; private set; }
         public ICommand AddCommentary { get; private set; }
         public ICommand AddGuest { get; private set; }
+        public ICommand GoToCloseOrder { get; private set; }
+        public ICommand CloseOrder { get; private set;}
+        public bool ShowSendButton => !_order.IsSend;
+        public bool ShowTotalButton => _order.IsSend;
+        public decimal Total => _order.Sum;
+        public string ReceivedAmount { get; set; }
         public Action<Dish> AddDishToCommonDishes => InsertCommonDish;
         public Func<DishViewModel, bool> RemoveDishFromCommonDishes => RemoveCommonDish;
         public ObservableCollection<DishViewModel> CommonDishes { get; set; }
@@ -42,6 +49,8 @@ namespace WaiterMobile.ViewModels
             SaveOrder = new Command(OnSaveOrder);
             AddCommentary = new Command(OnAddCommentary);
             AddGuest = new Command(OnGuestAdd);
+            GoToCloseOrder = new Command<OrderViewModel>(OnGoToCloseOrder);
+            CloseOrder = new Command(OnCloseOrder);
 
             CommonDishes.CollectionChanged += OnCommonDishesAdded;
             Guests.CollectionChanged += OnGuestAdded;
@@ -112,6 +121,8 @@ namespace WaiterMobile.ViewModels
             }
 
             Shell.Current.DisplayAlert("Готово", "Заказ успешно отправлен", "ОК");
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShowSendButton)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShowTotalButton)));
         }
 
         private async void OnAddCommentary()
@@ -124,6 +135,32 @@ namespace WaiterMobile.ViewModels
             }
 
             _order.Comment = comment;
+        }
+
+        private void OnGoToCloseOrder(OrderViewModel order)
+        {
+            Shell.Current.Navigation.PushAsync(new OrderTotal(order));
+        }
+
+        private void OnCloseOrder()
+        {
+            decimal receivedAmount = 0;
+
+            if (decimal.TryParse(ReceivedAmount, out receivedAmount) == false)
+            {
+                Shell.Current.DisplayAlert("Ошибка", "Неверные данные в поле с суммой", "ОК");
+                return;
+            }
+
+            if (receivedAmount < _order.Sum)
+            {
+                Shell.Current.DisplayAlert("Ошибка", "Введенная сумма меньше суммы заказа", "ОК");
+                return;
+            }
+
+            App.Waiter.CloseOrder(_order);
+            Shell.Current.DisplayAlert("", $"Заказ успешно закрыт. Сдача: {receivedAmount - _order.Sum}", "ОК");
+            Shell.Current.Navigation.PushAsync(new Orders());
         }
 
         private void InsertCommonDish(Dish dish)

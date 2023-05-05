@@ -55,6 +55,7 @@ namespace WaiterMobile.ViewModels
                 if (modifierGroup.IsInUpLimit)
                 {
                     modifier.IncreaseCount.Execute(modifier);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Price)));
                 }
             }
         }
@@ -62,6 +63,7 @@ namespace WaiterMobile.ViewModels
         private void OnDecreaseModifierCount(ModifierViewModel modifier) 
         {
             modifier.DecreaseCount.Execute(modifier);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Price)));
         }
 
         private void OnCourseSelected()

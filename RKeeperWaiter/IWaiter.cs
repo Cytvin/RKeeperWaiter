@@ -20,6 +20,7 @@ namespace RKeeperWaiter
 
         void CreateLicense(Guid applicationGuid);
         void CreateNewOrder(Order newOrder, int guestCount);
+        void CloseOrder(Order order);
         void DeleteDish();
         void DownloadReferences();
         MenuCategory GetMenuCategory(int id);

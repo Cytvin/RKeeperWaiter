@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:WaiterMobile.ViewModels"
+             x:Class="WaiterMobile.Views.OrderTotal"
+             x:DataType="viewmodels:OrderViewModel"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid Margin="10,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+
+                <ImageButton BackgroundColor="White"
+                             Source="arrow_left_short.png"
+                             Command="{Binding GoToBack}"/>
+
+                <Label Text="Итог заказа"
+                       Grid.Column="1"
+                       FontSize="20"
+                       TextColor="Black"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </Grid>
+
+            <Grid Margin="10, 10, 10, 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Сумма заказа: "/>
+                <Label Text="{Binding Total}"
+                       Grid.Column="1"/>
+            </Grid>
+
+            <Label Text="Введите полученную сумму:"
+                   TextColor="Black"
+                   Margin="10, 10, 10, 0"/>
+            <Entry Text="{Binding ReceivedAmount}"
+                   Margin="10, 0, 10, 0"/>
+
+            <Button Text="Закрыть заказ"
+                    Margin="20, 0, 20, 20"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    VerticalOptions="EndAndExpand"
+                    Command="{Binding CloseOrder}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

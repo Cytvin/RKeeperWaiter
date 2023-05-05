@@ -185,7 +185,16 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Text="Отправить"
+                            IsVisible="{Binding ShowSendButton}"
+                            IsEnabled="{Binding ShowSendButton}"
                             Command="{Binding SaveOrder}"/>
+                    
+                    <Button Text="Итог"
+                            IsVisible="{Binding ShowTotalButton}"
+                            IsEnabled="{Binding ShowTotalButton}"
+                            Command="{Binding GoToCloseOrder}"
+                            CommandParameter="{Binding}"/>
+                    
                     <Button Text="+ гость"
                             Command="{Binding AddGuest}"
                          Grid.Column="1"/>

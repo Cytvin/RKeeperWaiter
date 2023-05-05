@@ -191,6 +191,11 @@ namespace RKeeperWaiter
             NetworkService.SendRequest(requestBuilder.GetXml());
         }
 
+        public void CloseOrder(Order order)
+        {
+
+        }
+
         public void DeleteDish()
         {
 

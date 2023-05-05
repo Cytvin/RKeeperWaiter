@@ -108,12 +108,12 @@ namespace RKeeperWaiter
 
         public List<Order> GetOrderList()
         {
-            return _orders;
+            return _orders.Where(o => o.IsClosed == false).ToList();
         }
 
         public void SaveOrder(Order order)
         {
-            
+            order.IsSend = true;
         }
 
         public void SetStationId(string stationId)
@@ -122,6 +122,11 @@ namespace RKeeperWaiter
             {
                 throw new Exception();
             }
+        }
+
+        public void CloseOrder(Order order)
+        {
+            order.IsClosed = true;
         }
 
         public void TransferDish(Order source, Order destionation, Dish dish)
@@ -452,11 +457,8 @@ namespace RKeeperWaiter
                 {
                     dish.SetPrice(prices[dishId]);
                 }
-            }
 
-            foreach (ModifiersSheme modifiersSheme in _modifiersShemes)
-            {
-                foreach (ModifiersGroup modifiersGroup in modifiersSheme.ModifiersGroups)
+                foreach (ModifiersGroup modifiersGroup in dish.ModifiersSheme.ModifiersGroups)
                 {
                     foreach (Modifier modifier in modifiersGroup.Modifiers)
                     {

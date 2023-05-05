@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace RKeeperWaiter.Models
 {
@@ -20,7 +21,7 @@ namespace RKeeperWaiter.Models
         public int ParentId => _parentId;
         public Guid Guid => _guid;
         public string Name => _name;
-        public decimal Price => _price;
+        public decimal Price => PriceCount();
         public Course Course { get => _course; set => _course = value; }
         public string Seat { get; set; }
         public ModifiersSheme ModifiersSheme { get => _modifiersSheme; set => _modifiersSheme = value; }
@@ -46,6 +47,21 @@ namespace RKeeperWaiter.Models
 
             _inMenu = true;
             _price = Math.Round(price / 100, 2);
+        }
+
+        private decimal PriceCount()
+        {
+            decimal sum = _price;
+
+            foreach (ModifiersGroup group in _modifiersSheme.ModifiersGroups)
+            {
+                foreach (Modifier modifier in group.Modifiers.Where(m => m.Selected)) 
+                {
+                    sum += modifier.Price * modifier.Count;
+                }
+            }
+
+            return sum;
         }
 
         public object Clone() => MemberwiseClone();
