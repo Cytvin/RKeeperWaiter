@@ -75,14 +75,33 @@ namespace RKeeperWaiter.Models
 
         public void RemoveCommonDish(Dish dish)
         {
+            if (_commonDishes.Contains(dish) == false)
+            {
+                return;
+            }
+
             _commonDishes.Remove(dish);
         }
 
-        public decimal CountSum()
+        private decimal CountSum()
         {
             decimal sum = 0;
 
-            foreach (Dish dish in _commonDishes)
+            sum += CountDishesSum(_commonDishes);
+
+            foreach (Guest guest in _guests)
+            {
+                sum += CountDishesSum(guest.Dishes);
+            }
+
+            return sum;
+        }
+
+        private decimal CountDishesSum(IEnumerable<Dish> dishes)
+        {
+            decimal sum = 0;
+
+            foreach (Dish dish in dishes)
             {
                 sum += dish.Price;
             }

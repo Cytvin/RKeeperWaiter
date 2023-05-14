@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 
 namespace WaiterMobile.ViewModels
@@ -12,6 +13,7 @@ namespace WaiterMobile.ViewModels
     {
         private Dish _dish;
         private Func<DishViewModel, bool> _remove;
+        private OrderViewModel _currentOrder;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,6 +22,7 @@ namespace WaiterMobile.ViewModels
         public ICommand DecreaseModifierCount { get; private set; }
         public ICommand CourseSelected { get; private set; }
         public ICommand Remove { get; private set; }
+        public ICommand Transfer { get; private set; }
         public string Name => _dish.Name;
         public IEnumerable<Course> Courses => App.Waiter.Courses;
         public ModifiersShemeViewModel ModifiersSheme { get; private set; }
@@ -36,6 +39,7 @@ namespace WaiterMobile.ViewModels
             IncreaseModifierCount = new Command<ModifierViewModel>(OnIncreaseModifierCount);
             DecreaseModifierCount = new Command<ModifierViewModel>(OnDecreaseModifierCount);
             Remove = new Command(OnRemove);
+            Transfer = new Command(OnTransfer);
             ModifiersSheme = new ModifiersShemeViewModel(dish.ModifiersSheme);
 
             _remove = remove;
@@ -76,6 +80,26 @@ namespace WaiterMobile.ViewModels
         {
             _remove(this);
             Shell.Current.Navigation.PopAsync(true);
+        }
+
+        private async void OnTransfer()
+        {
+            string transferType = await Shell.Current.DisplayActionSheet("Куда переносим блюдо?", "Отмена", null, "Другому гостю", "В другой заказ");
+
+            if (transferType == "Другому гостю")
+            {
+                string[] parameters = { "Новому гостю" };
+                await Shell.Current.DisplayActionSheet("Выберите гостя:", "Отмена", null, _currentOrder.Guests.Select(g => g.Name).ToArray());
+            }
+            else
+            {
+                
+            }
+        }
+
+        public void SetCurrentOrder(OrderViewModel order)
+        {
+            _currentOrder = order;
         }
     }
 }

@@ -68,7 +68,7 @@ namespace WaiterMobile.ViewModels
 
         private void OnEditDish(DishViewModel dish)
         {
-            Shell.Current.Navigation.PushAsync(new DishView(dish), true);
+            Shell.Current.Navigation.PushAsync(new DishView(dish, this), true);
         }
 
         private void OnCommonDishesAdded(object sender, NotifyCollectionChangedEventArgs e)

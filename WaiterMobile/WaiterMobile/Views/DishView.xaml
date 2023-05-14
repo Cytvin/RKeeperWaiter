@@ -99,13 +99,25 @@
                 </StackLayout>
             </ScrollView>
 
-            <Button Text="Удалить из заказа"
-                    Margin="20, 0, 20, 20"
+            <Grid Margin="20, 0, 20, 20"
+                  VerticalOptions="EndAndExpand"
+                  HorizontalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Text="Перенести"
                     BackgroundColor="Black"
                     TextColor="White"
-                    VerticalOptions="EndAndExpand"
-                    Command="{Binding Remove}"/>
+                    Command="{Binding Transfer}"/>
 
+                <Button Text="Удалить"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    Grid.Column="1"
+                    Command="{Binding Remove}"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
