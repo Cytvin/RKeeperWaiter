@@ -62,7 +62,8 @@ namespace WaiterMobile.ViewModels
 
             App.Waiter.CreateNewOrder(Order, guestCount);
 
-            Shell.Current.Navigation.PushAsync(new Orders());
+            PageRemover.Remove(3);
+            Shell.Current.Navigation.PushAsync(new Orders(), false);
         }
     }
 }

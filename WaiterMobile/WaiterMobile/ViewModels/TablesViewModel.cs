@@ -15,7 +15,7 @@ namespace WaiterMobile.ViewModels
         public ICommand GoToBack { get; private set; }
         public ICommand SelectHall { get; private set; }
         public ICommand TableSelected { get; private set; }
-        public Hall HallSelected { get; set; }
+        public Hall SelectedHall { get; set; }
         public IEnumerable<Hall> Halls { get { return App.Waiter.Halls; } }
         public ObservableCollection<Table> Tables { get; private set; }
 
@@ -35,8 +35,8 @@ namespace WaiterMobile.ViewModels
         private void OnHallSelected()
         {
             Tables.Clear();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HallSelected)));
-            foreach (Table table in HallSelected.Tables) 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedHall)));
+            foreach (Table table in SelectedHall.Tables) 
             {
                 Tables.Add(table);
             }
@@ -47,7 +47,7 @@ namespace WaiterMobile.ViewModels
             Order newOrder = new Order();
             newOrder.Table = table;
 
-            string hallTable = $"{HallSelected.Name} | {table.Name}";
+            string hallTable = $"{SelectedHall.Name} | {table.Name}";
 
             Shell.Current.Navigation.PushAsync(new GuestOrders(newOrder, hallTable));
         }

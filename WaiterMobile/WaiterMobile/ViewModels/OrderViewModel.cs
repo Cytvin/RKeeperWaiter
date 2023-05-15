@@ -26,6 +26,7 @@ namespace WaiterMobile.ViewModels
         public ICommand AddGuest { get; private set; }
         public ICommand GoToCloseOrder { get; private set; }
         public ICommand CloseOrder { get; private set;}
+        public ICommand RefreshOrder { get; private set; }
         public bool ShowSendButton => !_order.IsSend;
         public bool ShowTotalButton => _order.IsSend;
         public decimal Total => _order.Sum;
@@ -35,13 +36,14 @@ namespace WaiterMobile.ViewModels
         public ObservableCollection<DishViewModel> CommonDishes { get; set; }
         public ObservableCollection<GuestViewModel> Guests { get; set; }
         public string OrderName => _order.Name;
+        public Order InternalOrder => _order;
 
         public OrderViewModel(Order order)
         {
             _order = order;
 
             CommonDishes = MakeDishViewModels();
-            Guests = MakeGuestViewOrder();
+            Guests = MakeGuestViewModels();
 
             GoToBack = new Command(OnGoToBack);
             AddDish = new Command<Action<Dish>>(OnAddDish);
@@ -51,6 +53,7 @@ namespace WaiterMobile.ViewModels
             AddGuest = new Command(OnGuestAdd);
             GoToCloseOrder = new Command<OrderViewModel>(OnGoToCloseOrder);
             CloseOrder = new Command(OnCloseOrder);
+            RefreshOrder = new Command(OnRefreshOrder);
 
             CommonDishes.CollectionChanged += OnCommonDishesAdded;
             Guests.CollectionChanged += OnGuestAdded;
@@ -164,6 +167,14 @@ namespace WaiterMobile.ViewModels
             Shell.Current.Navigation.PushAsync(new Orders());
         }
 
+        private void OnRefreshOrder()
+        {
+            MakeDishViewModels();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CommonDishes)));
+            MakeGuestViewModels();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Guests)));
+        }
+
         private void InsertCommonDish(Dish dish)
         {
             DishViewModel dishViewModel = new DishViewModel(dish, RemoveDishFromCommonDishes);
@@ -187,7 +198,7 @@ namespace WaiterMobile.ViewModels
             return dishes;
         }
 
-        private ObservableCollection<GuestViewModel> MakeGuestViewOrder()
+        private ObservableCollection<GuestViewModel> MakeGuestViewModels()
         {
             ObservableCollection<GuestViewModel> guests = new ObservableCollection<GuestViewModel>();
 

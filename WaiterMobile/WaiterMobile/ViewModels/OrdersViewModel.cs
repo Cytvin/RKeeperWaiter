@@ -21,7 +21,6 @@ namespace WaiterMobile.ViewModels
         public ICommand Select { get; private set; }
 
         public IEnumerable<Order> Orders { get {  return _orders; } }
-
         public string UserName 
         {
             get { return App.Waiter.CurrentUser.Name; }

@@ -1,13 +1,123 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WaiterMobile.Views.TransferDish">
-    
+             x:Class="WaiterMobile.Views.TransferDish"
+             xmlns:viewmodel="clr-namespace:WaiterMobile.ViewModels"
+             xmlns:models="clr-namespace:RKeeperWaiter.Models;assembly=RKeeperWaiter"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Shell.NavBarIsVisible="False"
+             x:DataType="viewmodel:TransferDishViewModel"
+             x:Name="_transferDish">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="HasShadow" Value="False"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="BorderColor" Value="AliceBlue"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Grid Margin="10,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+
+                <ImageButton BackgroundColor="White"
+                             Source="arrow_left_short.png"
+                             Command="{Binding GoToBack}"/>
+
+                <Label Text="Выберите заказ"
+                       Grid.Column="1"
+                       FontSize="20"
+                       TextColor="Black"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </Grid>
+
+            <Picker Title="Выберите зал"
+                    Margin="10, 10 , 20, 10"
+                    ItemsSource="{Binding Halls}"
+                    SelectedItem="{Binding SelectedHall}"
+                    ItemDisplayBinding="{Binding Name}">
+
+                <Picker.Behaviors>
+                    <xct:EventToCommandBehavior EventName="SelectedIndexChanged"
+                                                Command="{Binding SelectHall}"/>
+                </Picker.Behaviors>
+            </Picker>
+
+            <Picker Title="Выберите стол"
+                    Margin="10, 10 , 20, 10"
+                    ItemsSource="{Binding Tables}"
+                    SelectedItem="{Binding SelectedTable}"
+                    ItemDisplayBinding="{Binding Name}">
+
+                <Picker.Behaviors>
+                    <xct:EventToCommandBehavior EventName="SelectedIndexChanged"
+                                                Command="{Binding SelectTable}"/>
+                </Picker.Behaviors>
+            </Picker>
+
+            <StackLayout BindableLayout.ItemsSource="{Binding Orders}"
+                         Margin="20, 0, 20, 0">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="models:Order">
+                        <Frame Style="{StaticResource FrameStyle}">
+                            <Grid HorizontalOptions="Center"
+                              BackgroundColor="AliceBlue">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Text="{Binding Name}"
+                                   Margin="10"
+                                   TextColor="Black"
+                                   FontAttributes="Bold"
+                                   FontSize="18"
+                                   VerticalOptions="Center"/>
+
+                                <Image Source="cash.png"
+                                   Grid.Column="1"/>
+
+                                <Label Text="{Binding Sum}"
+                                   TextColor="Black"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"
+                                   Grid.Column="2"/>
+
+                                <Image Source="people.png"
+                                   Grid.Column="3"/>
+
+                                <Label Text="{Binding GuestCount}"
+                                   TextColor="Black"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"
+                                   Grid.Column="4"/>
+                            </Grid>
+
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=_transferDish}, Path=BindingContext.SelectOrder}"
+                                                                              CommandParameter="{Binding}"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -35,7 +35,7 @@
                 <Picker Margin="10, 10 , 20, 10"
                     Title="Выберите зал"
                     ItemsSource="{Binding Halls}"
-                    SelectedItem="{Binding HallSelected}"
+                    SelectedItem="{Binding SelectedHall}"
                     ItemDisplayBinding="{Binding Name}">
 
                     <Picker.Behaviors>

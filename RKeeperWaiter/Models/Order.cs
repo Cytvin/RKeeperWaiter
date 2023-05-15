@@ -30,9 +30,25 @@ namespace RKeeperWaiter.Models
         public string Comment { get => _comment; set => _comment = value; }
         public Table Table { get => _table; set => _table = value; }
         public OrderType Type { get => _type; set => _type = value; }
-        public decimal Sum 
-        { 
+        public bool IsSend { get => _isSend; set => _isSend = value; }
+        public bool IsClosed { get => _isClosed; set => _isClosed = value; }
+        public IEnumerable<Guest> Guests => _guests;
+        public IEnumerable<Dish> CommonDishes => _commonDishes;
+        public int GuestCount 
+        {
             get 
+            {
+                if (_guests.Count == 0)
+                {
+                    return 1;
+                }
+
+                return _guests.Count;
+            }
+        }
+        public decimal Sum
+        {
+            get
             {
                 if (_sum == 0)
                 {
@@ -40,15 +56,9 @@ namespace RKeeperWaiter.Models
                 }
 
                 return _sum;
-            } 
-            set => _sum = value / 100; 
+            }
+            set => _sum = value / 100;
         }
-
-        public bool IsSend { get => _isSend; set => _isSend = value; }
-        public bool IsClosed { get => _isClosed; set => _isClosed = value; }
-
-        public IEnumerable<Guest> Guests => _guests;
-        public IEnumerable<Dish> CommonDishes => _commonDishes;
 
         public Order() { }
 
