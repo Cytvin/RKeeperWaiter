@@ -45,6 +45,11 @@ namespace WaiterMobile.ViewModels
             _remove = remove;
         }
 
+        public void SetCurrentOrder(OrderViewModel order)
+        {
+            _currentOrder = order;
+        }
+
         private void OnGoToBack()
         {
             Shell.Current.Navigation.PopAsync(true);
@@ -88,18 +93,73 @@ namespace WaiterMobile.ViewModels
 
             if (transferType == "Другому гостю")
             {
-                string[] parameters = { "Новому гостю" };
-                await Shell.Current.DisplayActionSheet("Выберите гостя:", "Отмена", null, _currentOrder.Guests.Select(g => g.Name).ToArray());
+                string[] parameters = { "Общие", "Новый гость"};
+                string[] guests = _currentOrder.Guests.Select(g => g.Name).ToArray();
+                parameters = parameters.Concat(guests).ToArray();
+
+                string guest = await Shell.Current.DisplayActionSheet("Выберите гостя:", "Отмена", null, parameters);
+
+                GuestViewModel source = null;
+                GuestViewModel destination = null;
+
+                if (_dish.Seat != "0")
+                {
+                    source = _currentOrder.Guests.Single(g => g.Label == _dish.Seat);
+                }
+
+                if (guest == "Общие")
+                {
+                    if (source == null)
+                    {
+                        await Shell.Current.DisplayToastAsync("Блюдо уже в группе \"общие\"", 2000);
+                        return;
+                    }
+
+                    source.RemoveDish(this);
+                    _currentOrder.AddDishToCommonDishes(_dish);
+                    await Shell.Current.DisplayToastAsync($"Блюдо пермещено в Общие", 2000);
+                    return;
+                }
+                else if (guest == "Новый гость")
+                {
+                    _currentOrder.AddGuest.Execute(_currentOrder);
+                    destination = _currentOrder.Guests.Last();
+
+                    if (source == null)
+                    {
+                        _currentOrder.CommonDishes.Remove(this);
+                        destination.InsertDish(_dish);
+                        await Shell.Current.DisplayToastAsync($"Блюдо пермещено к {destination.Name}", 2000);
+                        return;
+                    }
+                }
+                else
+                {
+                    destination = _currentOrder.Guests.Single(g => g.Name == guest);
+
+                    if (destination.Label == _dish.Seat)
+                    {
+                        await Shell.Current.DisplayToastAsync($"Блюдо уже у гостя {destination.Name}", 2000);
+                        return;
+                    }
+
+                    if (source == null)
+                    {
+                        _currentOrder.CommonDishes.Remove(this);
+                        destination.InsertDish(_dish);
+                        await Shell.Current.DisplayToastAsync($"Блюдо пермещено к {destination.Name}", 2000);
+                        return;
+                    }
+                }
+
+                source.RemoveDish(this);
+                destination.InsertDish(_dish);
+                await Shell.Current.DisplayToastAsync($"Блюдо пермещено к {destination.Name}", 2000);
             }
             else
             {
                 
             }
-        }
-
-        public void SetCurrentOrder(OrderViewModel order)
-        {
-            _currentOrder = order;
         }
     }
 }

@@ -105,7 +105,8 @@ namespace WaiterMobile.ViewModels
         {
             string guestName = (Guests.Count + 1).ToString();
             Guest newGuest = new Guest(guestName);
-            Guests.Add(new GuestViewModel(newGuest));
+            GuestViewModel newGuestViewModel = new GuestViewModel(newGuest);
+            Guests.Add(newGuestViewModel);
         }
 
         private void OnSaveOrder()

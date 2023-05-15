@@ -19,15 +19,16 @@ namespace WaiterMobile.ViewModels
         public Action<Dish> InsertDish => OnInsertDish;
         public Func<DishViewModel, bool> RemoveDish => OnRemoveDish;
         public Guest InternalGuest => _guest;
+        public string Label => _guest.Label;
         public GuestViewModel(Guest guest)
         {
             _guest = guest;
             Dishes = MakeDishViewModels();
 
-            Dishes.CollectionChanged += OnCommonDishesAdded;
+            Dishes.CollectionChanged += OnDishesAdded;
         }
 
-        private void OnCommonDishesAdded(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnDishesAdded(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
