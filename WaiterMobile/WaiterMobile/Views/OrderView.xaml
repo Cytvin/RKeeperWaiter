@@ -33,9 +33,9 @@
                        HorizontalOptions="Center"/>
 
                 <ImageButton BackgroundColor="White"
-                             Source="card_text.png"
+                             Source="gear.png"
                              Grid.Column="2"
-                             Command="{Binding AddCommentary}"/>
+                             Command="{Binding OpenOptions}"/>
             </Grid>
 
             <ScrollView>

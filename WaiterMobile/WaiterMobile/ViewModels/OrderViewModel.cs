@@ -9,6 +9,7 @@ using WaiterMobile.Views;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace WaiterMobile.ViewModels
 {
@@ -22,11 +23,11 @@ namespace WaiterMobile.ViewModels
         public ICommand AddDish { get; private set; }
         public ICommand EditDish { get; private set; }
         public ICommand SaveOrder { get; private set; }
-        public ICommand AddCommentary { get; private set; }
         public ICommand AddGuest { get; private set; }
         public ICommand GoToCloseOrder { get; private set; }
         public ICommand CloseOrder { get; private set;}
         public ICommand RefreshOrder { get; private set; }
+        public ICommand OpenOptions { get; private set; }
         public bool ShowSendButton => !_order.IsSend;
         public bool ShowTotalButton => _order.IsSend;
         public decimal Total => _order.Sum;
@@ -49,11 +50,11 @@ namespace WaiterMobile.ViewModels
             AddDish = new Command<Action<Dish>>(OnAddDish);
             EditDish = new Command<DishViewModel>(OnEditDish);
             SaveOrder = new Command(OnSaveOrder);
-            AddCommentary = new Command(OnAddCommentary);
             AddGuest = new Command(OnGuestAdd);
             GoToCloseOrder = new Command<OrderViewModel>(OnGoToCloseOrder);
             CloseOrder = new Command(OnCloseOrder);
             RefreshOrder = new Command(OnRefreshOrder);
+            OpenOptions = new Command(OnOpenOptions);
 
             CommonDishes.CollectionChanged += OnCommonDishesAdded;
             Guests.CollectionChanged += OnGuestAdded;
@@ -129,18 +130,6 @@ namespace WaiterMobile.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShowTotalButton)));
         }
 
-        private async void OnAddCommentary()
-        {
-            string comment = await Shell.Current.DisplayPromptAsync("Введите комментарий к заказу", message: "", initialValue: _order.Comment);
-            
-            if (comment == null)
-            {
-                return;
-            }
-
-            _order.Comment = comment;
-        }
-
         private void OnGoToCloseOrder(OrderViewModel order)
         {
             Shell.Current.Navigation.PushAsync(new OrderTotal(order));
@@ -173,6 +162,40 @@ namespace WaiterMobile.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CommonDishes)));
             MakeGuestViewModels();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Guests)));
+        }
+
+        private async void OnOpenOptions()
+        {
+            string optionsType = await Shell.Current.DisplayActionSheet("Опции", "Назад", null, "Добавить комментарий", "Перенести заказ", "Удалить заказ");
+
+            if (optionsType == "Добавить комментарий")
+            {
+                string comment = await Shell.Current.DisplayPromptAsync("Введите комментарий к заказу", message: "", initialValue: _order.Comment);
+
+                if (comment == null)
+                {
+                    return;
+                }
+
+                _order.Comment = comment;
+            }    
+            else if (optionsType == "Перенести заказ")
+            {
+
+            }
+            else if (optionsType == "Удалить заказ")
+            {
+                bool deleteOrder = await Shell.Current.DisplayAlert("", "Удалить заказ?", "Да", "Нет");
+
+                if (deleteOrder == false)
+                {
+                    return;
+                }
+
+                App.Waiter.DeleteOrder(_order);
+                Shell.Current.DisplayToastAsync($"Заказ {_order.Name} удалён");
+                Shell.Current.Navigation.PopAsync(true);
+            }
         }
 
         private void InsertCommonDish(Dish dish)

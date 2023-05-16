@@ -129,6 +129,11 @@ namespace RKeeperWaiter
             order.IsClosed = true;
         }
 
+        public void DeleteOrder(Order order)
+        {
+            _orders.Remove(order);
+        }
+
         public void TransferDish(Order source, Order destionation, Dish dish)
         {
             if (dish.Seat == "0")

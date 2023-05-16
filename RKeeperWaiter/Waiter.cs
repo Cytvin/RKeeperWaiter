@@ -196,6 +196,11 @@ namespace RKeeperWaiter
 
         }
 
+        public void DeleteOrder(Order order)
+        {
+
+        }
+
         public void DeleteDish()
         {
 
