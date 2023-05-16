@@ -201,6 +201,11 @@ namespace RKeeperWaiter
 
         }
 
+        public void TransferOrder(Order transferOrder, Table table)
+        {
+
+        }
+
         public void DeleteDish()
         {
 

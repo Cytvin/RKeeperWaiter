@@ -160,6 +160,11 @@ namespace RKeeperWaiter
             destionation.InsertGuest(destinationGuest);
         }
 
+        public void TransferOrder(Order transferOrder, Table table)
+        {
+            transferOrder.Table = table;
+        }
+
         public void UserAuthorization(string userCode)
         {
             XDocument usersList = XDocument.Load(TestData.GetUserAuthorizationTR());

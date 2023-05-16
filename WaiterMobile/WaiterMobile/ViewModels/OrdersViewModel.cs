@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
 using WaiterMobile.Views;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 
 namespace WaiterMobile.ViewModels
@@ -19,7 +20,7 @@ namespace WaiterMobile.ViewModels
 
         public ICommand Create { get; private set; }
         public ICommand Select { get; private set; }
-
+        public ICommand OpenOptions { get; private set; }
         public IEnumerable<Order> Orders { get {  return _orders; } }
         public string UserName 
         {
@@ -32,6 +33,7 @@ namespace WaiterMobile.ViewModels
 
             Create = new Command(CreateOrder);
             Select = new Command<Order>(SelectOrder);
+            OpenOptions = new Command(OnOpenOptions);
             _ordersGrid = ordersGrid;
 
             CreateOrderButtons();
@@ -45,6 +47,22 @@ namespace WaiterMobile.ViewModels
         private void SelectOrder(Order order)
         {
             Shell.Current.Navigation.PushAsync(new OrderView(order));
+        }
+
+        private async void OnOpenOptions()
+        {
+            string options = await Shell.Current.DisplayActionSheet("Опции", "Отмена", null, "Закрыть общую смену");
+
+            if (options != "Закрыть общую смену") 
+            {
+                bool closeOut = await Shell.Current.DisplayAlert("", "Закрыть смену?", "Да", "Нет");
+
+                if (closeOut)
+                {
+                    Shell.Current.DisplayToastAsync("Смена успешно закрыта", 3000);
+                    Shell.Current.Navigation.PopAsync();
+                }
+            }
         }
 
         private void CreateOrderButtons()

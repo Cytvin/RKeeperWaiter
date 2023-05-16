@@ -181,7 +181,7 @@ namespace WaiterMobile.ViewModels
             }    
             else if (optionsType == "Перенести заказ")
             {
-
+                Shell.Current.Navigation.PushAsync(new Tables(_order));
             }
             else if (optionsType == "Удалить заказ")
             {

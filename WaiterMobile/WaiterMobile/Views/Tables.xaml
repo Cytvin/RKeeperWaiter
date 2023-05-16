@@ -24,7 +24,7 @@
                         Source="arrow_left_short.png"
                         Command="{Binding GoToBack}"/>
 
-                <Label Text="Новый заказ"
+                <Label Text="{Binding Title}"
                        Grid.Column="1"
                        FontSize="20"
                        TextColor="Black"

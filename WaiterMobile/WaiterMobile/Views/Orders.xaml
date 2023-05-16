@@ -5,6 +5,7 @@
              x:DataType="viewmodel:OrdersViewModel"
              x:Class="WaiterMobile.Views.Orders"
              Shell.NavBarIsVisible="false">
+
     <ContentPage.Content>
         <StackLayout>
             <Grid>
@@ -13,8 +14,8 @@
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
                 
                 <Label Text="{Binding UserName}"
@@ -23,6 +24,11 @@
                        Margin="20, 15, 0, 10"
                        TextColor="Black"
                        FontSize="20"/>
+
+                <ImageButton BackgroundColor="White"
+                             Source="gear.png"
+                             Grid.Column="2"
+                             Command="{Binding OpenOptions}"/>
             </Grid>
 
             <StackLayout>

@@ -30,5 +30,6 @@ namespace RKeeperWaiter
         void TransferDish(Order source, Order destionation, Dish dish);
         void UserAuthorization(string userCode);
         void DeleteOrder(Order order);
+        void TransferOrder(Order transferOrder, Table table);
     }
 }
