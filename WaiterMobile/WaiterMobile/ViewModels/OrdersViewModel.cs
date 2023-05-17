@@ -53,7 +53,7 @@ namespace WaiterMobile.ViewModels
         {
             string options = await Shell.Current.DisplayActionSheet("Опции", "Отмена", null, "Закрыть общую смену");
 
-            if (options != "Закрыть общую смену") 
+            if (options == "Закрыть общую смену") 
             {
                 bool closeOut = await Shell.Current.DisplayAlert("", "Закрыть смену?", "Да", "Нет");
 

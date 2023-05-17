@@ -8,6 +8,7 @@
              x:Class="WaiterMobile.Views.Tables"
              x:Name="_tablesView"
              Shell.NavBarIsVisible="false">
+    
     <ContentPage.Content>
         <StackLayout>
             <Grid Margin="10,10,0,0">
@@ -45,13 +46,24 @@
                     </Picker.Behaviors>
                 </Picker>
 
+                <Label Text="Столы в зале:"
+                       Margin="14, 0, 10, 0"
+                       TextColor="Black"
+                       FontSize="16"/>
+                
                 <StackLayout BindableLayout.ItemsSource="{Binding Tables}"
-                             Margin="20, 0, 20, 0">
+                             Margin="10, 0, 10, 0">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="models:Table">
                             <Button Text="{Binding Name}"
                                     Command="{Binding Source={x:Reference Name=_tablesView}, Path=BindingContext.TableSelected}"
-                                    CommandParameter="{Binding}"/>
+                                    CommandParameter="{Binding}"
+                                    BorderColor="Black"
+                                    BorderWidth="3"
+                                    BackgroundColor="White"
+                                    CornerRadius="20"
+                                    Margin="3, 0, 0, 3"/>
+                            
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>

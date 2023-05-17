@@ -18,6 +18,7 @@ namespace WaiterMobile.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Order _order;
+        private string _receivedAmount;
 
         public ICommand GoToBack { get; private set; }
         public ICommand AddDish { get; private set; }
@@ -28,16 +29,28 @@ namespace WaiterMobile.ViewModels
         public ICommand CloseOrder { get; private set;}
         public ICommand RefreshOrder { get; private set; }
         public ICommand OpenOptions { get; private set; }
+        public ICommand ChangeCount { get; private set; }
+        public ICommand PrintPrecheck { get; private set; }
         public bool ShowSendButton => !_order.IsSend;
         public bool ShowTotalButton => _order.IsSend;
         public decimal Total => _order.Sum;
-        public string ReceivedAmount { get; set; }
+        public decimal Change { get; private set; }
         public Action<Dish> AddDishToCommonDishes => InsertCommonDish;
         public Func<DishViewModel, bool> RemoveDishFromCommonDishes => RemoveCommonDish;
         public ObservableCollection<DishViewModel> CommonDishes { get; set; }
         public ObservableCollection<GuestViewModel> Guests { get; set; }
         public string OrderName => _order.Name;
         public Order InternalOrder => _order;
+        public string ReceivedAmount 
+        {
+            get => _receivedAmount;
+            set
+            {
+                _receivedAmount = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReceivedAmount)));
+            }
+        }
+
 
         public OrderViewModel(Order order)
         {
@@ -55,6 +68,8 @@ namespace WaiterMobile.ViewModels
             CloseOrder = new Command(OnCloseOrder);
             RefreshOrder = new Command(OnRefreshOrder);
             OpenOptions = new Command(OnOpenOptions);
+            ChangeCount = new Command(OnChangeCount);
+            PrintPrecheck = new Command(OnPrintPrecheck);
 
             CommonDishes.CollectionChanged += OnCommonDishesAdded;
             Guests.CollectionChanged += OnGuestAdded;
@@ -153,7 +168,10 @@ namespace WaiterMobile.ViewModels
 
             App.Waiter.CloseOrder(_order);
             Shell.Current.DisplayAlert("", $"Заказ успешно закрыт. Сдача: {receivedAmount - _order.Sum}", "ОК");
-            Shell.Current.Navigation.PushAsync(new Orders());
+
+            PageRemover.Remove(3);
+
+            Shell.Current.Navigation.PushAsync(new Orders(), false);
         }
 
         private void OnRefreshOrder()
@@ -193,9 +211,54 @@ namespace WaiterMobile.ViewModels
                 }
 
                 App.Waiter.DeleteOrder(_order);
+
+                PageRemover.Remove(2);
+
                 Shell.Current.DisplayToastAsync($"Заказ {_order.Name} удалён");
-                Shell.Current.Navigation.PopAsync(true);
+                Shell.Current.Navigation.PushAsync(new Orders(), false);
             }
+        }
+
+        private void OnChangeCount()
+        {
+            if (ReceivedAmount.Length == 0)
+            {
+                return;
+            }
+
+            decimal receivedAmount = 0;
+
+            ReceivedAmount = ReceivedAmount.Replace(',', '.');
+
+            if (decimal.TryParse(ReceivedAmount, out receivedAmount) == false)
+            {
+                ReceivedAmount = ReceivedAmount.Remove(ReceivedAmount.Length - 1);
+                return;
+            }
+
+            decimal change = receivedAmount - _order.Sum;
+
+            if (change <= 0)
+            {
+                Change = 0;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Change)));
+                return;
+            }
+
+            Change = change;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Change)));
+        }
+
+        private async void OnPrintPrecheck()
+        {
+            bool printPrecheck = await Shell.Current.DisplayAlert("", "Распечатать пречек?", "Да", "Нет");
+
+            if (printPrecheck == false)
+            {
+                return;
+            }
+
+            await Shell.Current.DisplayAlert("Готово", "Пречек распечатан", "ок");
         }
 
         private void InsertCommonDish(Dish dish)
