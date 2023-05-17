@@ -53,12 +53,9 @@ namespace RKeeperWaiter.Models
         {
             decimal sum = _price;
 
-            foreach (ModifiersGroup group in _modifiersSheme.ModifiersGroups)
+            foreach (Modifier modifier in _modifiersSheme.SelectedModifiers)
             {
-                foreach (Modifier modifier in group.Modifiers.Where(m => m.Selected)) 
-                {
-                    sum += modifier.Price * modifier.Count;
-                }
+                sum += modifier.Price * modifier.Count;
             }
 
             return sum;

@@ -50,7 +50,7 @@ namespace WaiterMobile.ViewModels
         {
             _currentOrder = order;
         }
-
+        
         private void OnGoToBack()
         {
             Shell.Current.Navigation.PopAsync(true);
@@ -58,7 +58,12 @@ namespace WaiterMobile.ViewModels
 
         private void OnIncreaseModifierCount(ModifierViewModel modifier)
         {
-            ModifiersGroupViewModel modifierGroup = ModifiersSheme.ModifiersGroups.Single(g => g.Modifiers.Contains(modifier));
+            ModifiersGroupViewModel modifierGroup = ModifiersSheme.RequiredModifiersGroups.SingleOrDefault(g => g.Modifiers.Contains(modifier));
+
+            if (modifierGroup == null)
+            {
+                modifierGroup = ModifiersSheme.OptionalModifiersGroups.SingleOrDefault(g => g.Modifiers.Contains(modifier));
+            }
 
             if (modifierGroup != null)
             {
@@ -68,12 +73,14 @@ namespace WaiterMobile.ViewModels
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Price)));
                 }
             }
+            _currentOrder.OnPropertyChanged(nameof(_currentOrder.Total));
         }
 
         private void OnDecreaseModifierCount(ModifierViewModel modifier) 
         {
             modifier.DecreaseCount.Execute(modifier);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Price)));
+            _currentOrder.OnPropertyChanged(nameof(_currentOrder.Total));
         }
 
         private void OnCourseSelected()

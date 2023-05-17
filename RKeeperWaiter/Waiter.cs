@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 using RKeeperWaiter.Models;
 using RKeeperWaiter.XmlRequests;
@@ -405,16 +407,22 @@ namespace RKeeperWaiter
 
             foreach (ModifiersSheme modifiersSheme in _modifiersShemes)
             {
-                foreach (ModifiersGroup modifiersGroup in modifiersSheme.ModifiersGroups)
-                {
-                    foreach (Modifier modifier in modifiersGroup.Modifiers)
-                    {
-                        int modifierId = modifier.Id;
+                SetPriceToModifiersGroups(modifiersSheme.RequiredModifiersGroups, prices);
+                SetPriceToModifiersGroups(modifiersSheme.OptionalModifiersGroups, prices);
+            }
+        }
 
-                        if (prices.ContainsKey(modifierId))
-                        {
-                            modifier.SetPrice(prices[modifierId]);
-                        }
+        private void SetPriceToModifiersGroups(IEnumerable<ModifiersGroup> modifiersGroups, Dictionary<int, decimal> prices)
+        {
+            foreach (ModifiersGroup modifiersGroup in modifiersGroups)
+            {
+                foreach (Modifier modifier in modifiersGroup.Modifiers)
+                {
+                    int modifierId = modifier.Id;
+
+                    if (prices.ContainsKey(modifierId))
+                    {
+                        modifier.SetPrice(prices[modifierId]);
                     }
                 }
             }
@@ -595,7 +603,7 @@ namespace RKeeperWaiter
 
                         if (modifiersGroup != null)
                         {
-                            modifiersSheme.InsertModifiersGroup(modifiersGroup);
+                            //modifiersSheme.InsertModifiersGroup(modifiersGroup);
                         }
                     }
                 }

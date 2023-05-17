@@ -27,7 +27,6 @@ namespace WaiterMobile.ViewModels
         public ICommand AddGuest { get; private set; }
         public ICommand GoToCloseOrder { get; private set; }
         public ICommand CloseOrder { get; private set;}
-        public ICommand RefreshOrder { get; private set; }
         public ICommand OpenOptions { get; private set; }
         public ICommand ChangeCount { get; private set; }
         public ICommand PrintPrecheck { get; private set; }
@@ -51,7 +50,6 @@ namespace WaiterMobile.ViewModels
             }
         }
 
-
         public OrderViewModel(Order order)
         {
             _order = order;
@@ -66,7 +64,6 @@ namespace WaiterMobile.ViewModels
             AddGuest = new Command(OnGuestAdd);
             GoToCloseOrder = new Command<OrderViewModel>(OnGoToCloseOrder);
             CloseOrder = new Command(OnCloseOrder);
-            RefreshOrder = new Command(OnRefreshOrder);
             OpenOptions = new Command(OnOpenOptions);
             ChangeCount = new Command(OnChangeCount);
             PrintPrecheck = new Command(OnPrintPrecheck);
@@ -98,8 +95,13 @@ namespace WaiterMobile.ViewModels
                 {
                     dish.InternalDish.Seat = "0";
                     _order.InsertCommonDish(dish.InternalDish);
+                    if (dish.ModifiersSheme.HasRequiredModifiersGroups)
+                    {
+                        Shell.Current.Navigation.PushAsync(new DishView(dish, this));
+                    }
                 }
 
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Total)));
                 return;
             }
 
@@ -109,6 +111,7 @@ namespace WaiterMobile.ViewModels
                 {
                     _order.RemoveCommonDish(dish.InternalDish);
                 }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Total)));
             }
         }
 
@@ -124,7 +127,12 @@ namespace WaiterMobile.ViewModels
         {
             string guestName = (Guests.Count + 1).ToString();
             Guest newGuest = new Guest(guestName);
-            GuestViewModel newGuestViewModel = new GuestViewModel(newGuest);
+            GuestViewModel newGuestViewModel = new GuestViewModel(newGuest, this);
+            newGuestViewModel.Dishes.CollectionChanged += (s, e) =>
+            {
+                OnPropertyChanged(nameof(Total));
+            };
+
             Guests.Add(newGuestViewModel);
         }
 
@@ -150,36 +158,24 @@ namespace WaiterMobile.ViewModels
             Shell.Current.Navigation.PushAsync(new OrderTotal(order));
         }
 
-        private void OnCloseOrder()
+        private async void OnCloseOrder()
         {
-            decimal receivedAmount = 0;
-
-            if (decimal.TryParse(ReceivedAmount, out receivedAmount) == false)
-            {
-                Shell.Current.DisplayAlert("Ошибка", "Неверные данные в поле с суммой", "ОК");
-                return;
-            }
+            decimal receivedAmount = decimal.Parse(ReceivedAmount);
 
             if (receivedAmount < _order.Sum)
             {
-                Shell.Current.DisplayAlert("Ошибка", "Введенная сумма меньше суммы заказа", "ОК");
+                await Shell.Current.DisplayAlert("Ошибка", "Введенная сумма меньше суммы заказа", "ОК");
                 return;
             }
 
+            string payType = await Shell.Current.DisplayActionSheet("Выберите тип оплаты", "Отмена", null, "Наличными", "Картой");
+
             App.Waiter.CloseOrder(_order);
-            Shell.Current.DisplayAlert("", $"Заказ успешно закрыт. Сдача: {receivedAmount - _order.Sum}", "ОК");
+            await Shell.Current.DisplayAlert("", $"Заказ успешно закрыт. Сдача: {receivedAmount - _order.Sum}", "ОК");
 
             PageRemover.Remove(3);
 
             Shell.Current.Navigation.PushAsync(new Orders(), false);
-        }
-
-        private void OnRefreshOrder()
-        {
-            MakeDishViewModels();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CommonDishes)));
-            MakeGuestViewModels();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Guests)));
         }
 
         private async void OnOpenOptions()
@@ -290,10 +286,22 @@ namespace WaiterMobile.ViewModels
 
             foreach (Guest guest in _order.Guests)
             {
-                guests.Add(new GuestViewModel(guest));
+                GuestViewModel guestViewModel = new GuestViewModel(guest, this);
+
+                guestViewModel.Dishes.CollectionChanged += (s, e) =>
+                {
+                    OnPropertyChanged(nameof(Total));
+                };
+
+                guests.Add(guestViewModel);
             }
 
             return guests;
+        }
+
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

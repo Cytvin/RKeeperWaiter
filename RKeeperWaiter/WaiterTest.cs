@@ -364,10 +364,7 @@ namespace RKeeperWaiter
 
             ModifiersSheme commonSheme = new ModifiersSheme(0, 0, "Общие");
             ModifiersGroup commonGroup = modifiersGroups.SingleOrDefault(g => g.CommonModifier);
-            if (commonGroup != null)
-            {
-                commonSheme.InsertModifiersGroup(commonGroup);
-            }
+            InsertModifiersGroupToModifiersSheme(commonSheme, commonGroup);
 
             modifiersShemes.Add(commonSheme);
 
@@ -397,22 +394,31 @@ namespace RKeeperWaiter
                         modifiersGroup.UpLimit = upLimit;
                         modifiersGroup.DownLimit = downLimit;
 
-                        if (modifiersGroup != null)
-                        {
-                            modifiersSheme.InsertModifiersGroup(modifiersGroup);
-                        }
+                        InsertModifiersGroupToModifiersSheme(modifiersSheme, modifiersGroup);
                     }
                 }
 
-                if (commonGroup != null)
-                {
-                    modifiersSheme.InsertModifiersGroup(commonGroup);
-                }
+                InsertModifiersGroupToModifiersSheme(modifiersSheme, commonGroup);
 
                 modifiersShemes.Add(modifiersSheme);
             }
 
             return modifiersShemes;
+        }
+
+        private void InsertModifiersGroupToModifiersSheme(ModifiersSheme modifiersSheme, ModifiersGroup modifiersGroup)
+        {
+            if (modifiersGroup != null)
+            {
+                if (modifiersGroup.DownLimit == 0)
+                {
+                    modifiersSheme.InsertOptionalModifiersGroup(modifiersGroup);
+                }
+                else
+                {
+                    modifiersSheme.InsertRequiredModifiersGroup(modifiersGroup);
+                }
+            }
         }
 
         private List<Dish> GetDishes()
@@ -468,16 +474,22 @@ namespace RKeeperWaiter
                     dish.SetPrice(prices[dishId]);
                 }
 
-                foreach (ModifiersGroup modifiersGroup in dish.ModifiersSheme.ModifiersGroups)
-                {
-                    foreach (Modifier modifier in modifiersGroup.Modifiers)
-                    {
-                        int modifierId = modifier.Id;
+                SetPriceToModifiersGroups(dish.ModifiersSheme.OptionalModifiersGroups, prices);
+                SetPriceToModifiersGroups(dish.ModifiersSheme.RequiredModifiersGroups, prices);
+            }
+        }
 
-                        if (prices.ContainsKey(modifierId))
-                        {
-                            modifier.SetPrice(prices[modifierId]);
-                        }
+        private void SetPriceToModifiersGroups(IEnumerable<ModifiersGroup> modifiersGroups, Dictionary<int, decimal> prices)
+        {
+            foreach (ModifiersGroup modifiersGroup in modifiersGroups)
+            {
+                foreach (Modifier modifier in modifiersGroup.Modifiers)
+                {
+                    int modifierId = modifier.Id;
+
+                    if (prices.ContainsKey(modifierId))
+                    {
+                        modifier.SetPrice(prices[modifierId]);
                     }
                 }
             }

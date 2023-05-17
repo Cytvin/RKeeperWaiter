@@ -40,7 +40,7 @@
 
             <ScrollView>
                 <StackLayout>
-                    <Grid Margin="30, 0, 25, 0">
+                    <Grid Margin="30, 0, 15, 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="50"/>
@@ -64,7 +64,7 @@
                                      Command="{Binding AddDish}"
                                      CommandParameter="{Binding AddDishToCommonDishes}"/>
                     </Grid>
-                    
+
                     <StackLayout BindableLayout.ItemsSource="{Binding CommonDishes}"
                                  Margin="30, 0, 30, 0">
                         <BindableLayout.ItemTemplate>
@@ -74,7 +74,7 @@
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    
+
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="50"/>
@@ -109,7 +109,7 @@
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="viewmodel:GuestViewModel">
                                 <StackLayout>
-                                    <Grid Margin="30, 0, 25, 0">
+                                    <Grid Margin="30, 0, 15, 0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="50"/>
@@ -164,7 +164,7 @@
                                                            Grid.RowSpan="1"
                                                            Grid.Column="1"
                                                            HorizontalOptions="End"/>
-                                                    
+
                                                     <Grid.GestureRecognizers>
                                                         <TapGestureRecognizer Command="{Binding Source={x:Reference Name=_orderView}, Path=BindingContext.EditDish}"
                                                                               CommandParameter="{Binding}"/>
@@ -180,10 +180,34 @@
                 </StackLayout>
             </ScrollView>
 
-            <StackLayout VerticalOptions="EndAndExpand"
-                       HorizontalOptions="Center"
-                       Margin="10, 0, 10, 30">
-                <Grid>
+            <StackLayout Margin="10, 0, 10, 10"
+                         VerticalOptions="EndAndExpand"
+                         HorizontalOptions="Center">
+
+                <Grid Margin="10, 0, 10, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="Итого:"
+                           TextColor="Black"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+
+                    <Label Text="{Binding Total}"
+                           TextColor="Black"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           Grid.Column="1"
+                           HorizontalOptions="End"/>
+                </Grid>
+
+                <Grid HorizontalOptions="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"/>
                     </Grid.RowDefinitions>

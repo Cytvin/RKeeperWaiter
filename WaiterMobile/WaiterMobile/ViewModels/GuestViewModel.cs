@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
 using WaiterMobile.Views;
@@ -10,9 +11,12 @@ using Xamarin.Forms;
 
 namespace WaiterMobile.ViewModels
 {
-    public class GuestViewModel
+    public class GuestViewModel : INotifyPropertyChanged
     {
         private Guest _guest;
+        private OrderViewModel _order;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public string Name => _guest.Name;
         public ObservableCollection<DishViewModel> Dishes { get; private set; }
@@ -20,9 +24,10 @@ namespace WaiterMobile.ViewModels
         public Func<DishViewModel, bool> RemoveDish => OnRemoveDish;
         public Guest InternalGuest => _guest;
         public string Label => _guest.Label;
-        public GuestViewModel(Guest guest)
+        public GuestViewModel(Guest guest, OrderViewModel order)
         {
             _guest = guest;
+            _order = order;
             Dishes = MakeDishViewModels();
 
             Dishes.CollectionChanged += OnDishesAdded;
@@ -36,6 +41,10 @@ namespace WaiterMobile.ViewModels
                 {
                     dish.InternalDish.Seat = _guest.Label;
                     _guest.InsertDish(dish.InternalDish);
+                    if (dish.ModifiersSheme.HasRequiredModifiersGroups)
+                    {
+                        Shell.Current.Navigation.PushAsync(new DishView(dish, _order));
+                    }
                 }
                 return;
             }

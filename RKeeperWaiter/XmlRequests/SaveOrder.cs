@@ -85,19 +85,13 @@ namespace RKeeperWaiter.XmlRequests
             builder.AddAttribute("quantity", "1000");
             builder.AddAttribute("seat", dish.Seat);
 
-            foreach (ModifiersGroup modifiersGroup in dish.ModifiersSheme.ModifiersGroups)
+            foreach (Modifier modifier in dish.ModifiersSheme.SelectedModifiers)
             {
-                foreach (Modifier modifier in modifiersGroup.Modifiers)
-                {
-                    if (modifier.Selected)
-                    {
-                        builder.AddElement("Modi");
-                        builder.AddAttribute("id", modifier.Id.ToString());
-                        builder.AddAttribute("count", modifier.Count.ToString());
-                        builder.AddAttribute("price", modifier.Price.ToString());
-                        builder.SelectPreviousElement();
-                    }
-                }
+                builder.AddElement("Modi");
+                builder.AddAttribute("id", modifier.Id.ToString());
+                builder.AddAttribute("count", modifier.Count.ToString());
+                builder.AddAttribute("price", modifier.Price.ToString());
+                builder.SelectPreviousElement();
             }
 
             builder.SelectPreviousElement();
